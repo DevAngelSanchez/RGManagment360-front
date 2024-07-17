@@ -7,8 +7,6 @@ const apiUrl = process.env.API_URL || "http://localhost:3001/";
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
     Credentials({
-      // You can specify which fields should be submitted, by adding keys to the `credentials` object.
-      // e.g. domain, username, password, 2FA token, etc.
       credentials: {
         email: {
           label: 'Email',
@@ -27,7 +25,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           return null;
         }
 
-        const res = await fetch(`${process.env.API_URL}auth/login`, {
+        const res = await fetch(`${apiUrl}auth/login`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -56,4 +54,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       },
     }),
   ],
+  pages: {
+    signIn: "/auth/login"
+  }
 })
