@@ -1,15 +1,25 @@
-"use client"
 import { auth } from "@/auth";
-import { signOut } from "next-auth/react";
 
-function Dashboard() {
+export default async function Dashboard() {
+
+  const session = await auth();
+  console.log(session)
+
+  if (session === null) {
+    return (
+      <section className="h-[calc(100vh-7rem)] flex justify-center items-center flex-col">
+        <h1 className="text-4xl">No autorizado, por favor inicia sesion</h1>
+        <a href="/auth/login">Login</a>
+      </section>
+    )
+  }
 
   return (
     <section className="h-[calc(100vh-7rem)] flex justify-center items-center flex-col">
       <h1 className="text-4xl">Dashboard</h1>
-      <button onClick={() => signOut()} className="bg-white text-black px-4 py-2 rounded-md mt-4">Logout</button>
+      <p>Bienvenido a tu panel de administrador
+        <span className="text-indigo-600 font-semibold"> {session.user?.email}</span>
+      </p>
     </section>
   )
 }
-
-export default Dashboard;

@@ -1,4 +1,5 @@
 import NextAuth from "next-auth"
+import "next-auth/jwt";
 import Credentials from "next-auth/providers/credentials"
 // Your own logic for dealing with plaintext password strings; be careful!
 
@@ -34,20 +35,20 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           })
         });
 
-        console.log(res);
-
         if (!res.ok) {
           console.error('Hubo un error en la consulta');
           return null;
         }
 
-        const user = await res.json();
-
-        console.log(user)
+        const data = await res.json();
 
         // Si la API devuelve un objeto de usuario válido, devuélvelo
-        if (user) {
-          return user;
+        if (data) {
+          return {
+            id: `${data.id}`,
+            username: data.name,
+            email: data.email
+          };
         } else {
           return null;
         }
@@ -56,5 +57,32 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   ],
   pages: {
     signIn: "/auth/login"
+  },
+  callbacks: {
+    jwt({ token, trigger, session, account }) {
+      if (trigger === "update") token.name = session.user.name
+      if (account?.provider === "keycloak") {
+        return { ...token, accessToken: account.access_token }
+      }
+      return token
+    },
+    async session({ session, token }) {
+      if (token?.accessToken) {
+        session.accessToken = token.accessToken
+      }
+      return session
+    },
   }
 })
+
+declare module "next-auth" {
+  interface Session {
+    accessToken?: string
+  }
+}
+
+declare module "next-auth/jwt" {
+  interface JWT {
+    accessToken?: string
+  }
+}
