@@ -18,18 +18,18 @@ import { Input } from "@/components/ui/input"
 
 const formSchema = z.object({
   username: z.string().min(3, {
-    message: "Username debe tener al menos 3 caracteres",
+    message: "Username has to be at least 3 characters long",
   }),
   email: z.string().email({
-    message: "Este email no es valido",
+    message: "Not valid email",
   }).trim(),
   passwordForm: z.object({
     password: z.string().min(6, {
-      message: "La contraseña debe tener al menos 6 caracteres"
+      message: "Password has to be at least 6 characters long"
     }),
     confirm: z.string(),
   }).refine((data) => data.password === data.confirm, {
-    message: "La contraña no coincide",
+    message: "Passwords don't match",
     path: ["confirm"],
   })
 })
@@ -86,7 +86,7 @@ export function RegisterForm() {
           name="passwordForm.password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Contraseña</FormLabel>
+              <FormLabel>Password</FormLabel>
               <FormControl>
                 <Input type="password" placeholder="john.doe$2" {...field} />
               </FormControl>
@@ -99,7 +99,7 @@ export function RegisterForm() {
           name="passwordForm.confirm"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Confirmar contraseña</FormLabel>
+              <FormLabel>Confirm password</FormLabel>
               <FormControl>
                 <Input type="password" placeholder="john.doe$2" {...field} />
               </FormControl>
@@ -108,7 +108,7 @@ export function RegisterForm() {
           )
           }
         />
-        < Button className="w-full" type="submit" >Crear usuario</Button >
+        < Button className="w-full" type="submit" >Create user</Button >
       </form >
     </Form >
   )

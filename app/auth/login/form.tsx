@@ -17,7 +17,7 @@ import { Input } from "@/components/ui/input"
 
 const formSchema = z.object({
   email: z.string().email({
-    message: "Este email no es valido",
+    message: "Not valid email",
   }).trim(),
   password: z.string().trim(),
 })
@@ -78,7 +78,7 @@ export function LoginForm() {
           name="password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Contraseña</FormLabel>
+              <FormLabel>Password</FormLabel>
               <FormControl>
                 <Input type="password" placeholder="john.doe$2" {...field} />
               </FormControl>
@@ -86,7 +86,7 @@ export function LoginForm() {
             </FormItem>
           )}
         />
-        < Button className="w-full" type="submit" >Inicia Sesión</Button >
+        < Button className="w-full" type="submit" >Login</Button >
       </form >
     </Form >
   )
