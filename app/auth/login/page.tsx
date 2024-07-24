@@ -1,87 +1,27 @@
-"use client"
-import { useForm } from "react-hook-form";
-import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import Link from "next/link";
+import { LoginForm } from "./form";
+import AuthLayout from "@/components/AuthLayout";
 
-function LoginPage() {
-
-  const { register, handleSubmit, formState: { errors } } = useForm();
-  const [error, setError] = useState('');
-  const router = useRouter();
-
-  const onSubmit = handleSubmit(async data => {
-    const res = await signIn("credentials", {
-      email: data.email,
-      password: data.password,
-      redirect: false
-    });
-
-    if (res?.error) {
-      setError(res?.error)
-    } else {
-      router.push('/dashboard');
-    }
-  })
-
+export default function LoginPage() {
   return (
-    <div className="h-[calc(100vh-7rem)] flex justify-center items-center">
-      <form onSubmit={onSubmit} className="w-1/4">
-
-        {error && (
-          <p className="bg-red-500 text-lg">{error}</p>
-        )}
-
-        <h1 className="text-slate-200 font-bold text-4xl mb-4">Login</h1>
-
-        <label htmlFor="email" className="text-slate-500 mb-2 block text-sm">
-          Email:
-        </label>
-        <input
-          type="email"
-          {...register("email", {
-            required: {
-              value: true,
-              message: "Este campo es requerido",
-            },
-          })}
-          className="p-3 rounded block mb-2 bg-slate-900 text-slate-300 w-full"
-          placeholder="johndoe@gmail.com"
-        />
-
-        {errors.email && (
-          <span className="text-red-500 text-xs">
-            {errors.email.message?.toString()}
-          </span>
-        )}
-
-        <label htmlFor="password" className="text-slate-500 mb-2 block text-sm">
-          Contraseña:
-        </label>
-        <input
-          type="password"
-          {...register("password", {
-            required: {
-              value: true,
-              message: "Este campo es requerido",
-            },
-          })}
-          className="p-3 rounded block mb-2 bg-slate-900 text-slate-300 w-full"
-          placeholder="********"
-        />
-
-        {errors.password && (
-          <span className="text-red-500 text-xs">
-            {errors.password.message?.toString()}
-          </span>
-        )}
-
-        <button className="w-full bg-blue-500 text-white p-3 rounded-lg mt-2">
-          Login
-        </button>
-      </form>
-    </div>
-  )
+    <AuthLayout>
+      <div className="flex flex-col gap-2 items-center justify-between p-8">
+        <h1 className="text-primary font-semibold text-2xl text-center">
+          ¡Bienvenido de vuelta!
+        </h1>
+        <LoginForm />
+        <div className="flex flex-col gap-2 items-center">
+          <p className="text-center text-sm">
+            ¿No tienes una cuenta? <Link className="text-indigo-500 font-semibold hover:underline" href="/auth/register">Registrate Ahora</Link>
+          </p>
+          <Link className="text-sm hover:text-indigo-500 hover:underline transition" href="/forgot-password">¿Olvidaste tu contraseña?</Link>
+        </div>
+      </div>
+      <div className="flex flex-col items-center gap-8 w-full bg-primary p-8 rounded-tr-xl rounded-br-xl">
+        <h2 className="text-2xl font-bold text-center max-w-[290px] text-primary-foreground">Property Managment Customer</h2>
+        <img src="/img/register.jpg" alt="office background" className="w-full rounded-xl shadow-md" />
+        <p className="text-sm font-semibold text-center max-w-[300px] text-primary-foreground">Inicia Sesión para manejar tus propiedades</p>
+      </div>
+    </AuthLayout>
+  );
 }
-
-export default LoginPage;
