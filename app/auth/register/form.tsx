@@ -14,7 +14,9 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
+import { Input } from "@/components/ui/input";
+import { useRouter } from "next/navigation";
+import { apiUrl } from "@/auth"
 
 const formSchema = z.object({
   username: z.string().min(3, {
@@ -35,6 +37,9 @@ const formSchema = z.object({
 })
 
 export function RegisterForm() {
+
+  const router = useRouter();
+
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -46,10 +51,38 @@ export function RegisterForm() {
   })
 
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values)
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    try {
+      const response = await fetch(`${apiUrl}auth/register`, {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          username: values?.username,
+          email: values?.email,
+          password: values?.passwordForm.password
+        })
+      });
+
+      if (!response.ok) {
+        console.log(`Error al registrar el usuario. Status Error: ${response.status}`);
+        return null;
+      }
+
+      const data = await response.json();
+
+      if (data.type !== 'success') {
+        alert(data.msg);
+        return;
+      }
+
+      alert(data.msg);
+      router.push('/auth/login');
+    } catch (error) {
+      console.log("Hubo un error al crear el usuario", error);
+      return;
+    }
   }
 
   return (

@@ -12,8 +12,10 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { useRouter } from "next/navigation";
+import { apiUrl } from "@/auth";
 
 const formSchema = z.object({
   email: z.string().email({
@@ -23,6 +25,8 @@ const formSchema = z.object({
 })
 
 export function LoginForm() {
+  const router = useRouter();
+
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -33,29 +37,32 @@ export function LoginForm() {
   })
 
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values)
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    try {
+      const response = await fetch(`${apiUrl}auth/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          email: values?.email,
+          password: values?.password
+        })
+      });
+
+      if (!response.ok) {
+        console.log(`Error al iniciar sesion. Status Error: ${response.status}`);
+        return null;
+      }
+
+      await response.json();
+      router.push('/dashboard');
+
+    } catch (error) {
+      console.log("Hubo un error al iniciar sesion", error);
+      return null;
+    }
   }
-
-  // const { register, handleSubmit, formState: { errors } } = useForm();
-  // const [error, setError] = useState('');
-  // const router = useRouter();
-
-  // const onSubmit = handleSubmit(async data => {
-  //   const res = await signIn("credentials", {
-  //     email: data.email,
-  //     password: data.password,
-  //     redirect: false
-  //   });
-
-  //   if (res?.error) {
-  //     setError(res?.error)
-  //   } else {
-  //     router.push('/dashboard');
-  //   }
-  // })
 
   return (
     <Form {...form}>
