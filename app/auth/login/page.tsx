@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { LoginForm } from "./form";
-import AuthLayout from "@/components/AuthLayout";
+import AuthLayout from "@/components/custom/AuthLayout";
 
 export default function LoginPage() {
   return (
