@@ -16,6 +16,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
 import { apiUrl } from "@/auth";
+import React from "react"
+import { signIn } from "next-auth/react"
 
 const formSchema = z.object({
   email: z.string().email({
@@ -38,29 +40,18 @@ export function LoginForm() {
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    try {
-      const response = await fetch(`${apiUrl}auth/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          email: values?.email,
-          password: values?.password
-        })
-      });
 
-      if (!response.ok) {
-        console.log(`Error al iniciar sesion. Status Error: ${response.status}`);
-        return null;
-      }
+    const result = await signIn('credentials', {
+      redirect: false,
+      email: values?.email,
+      password: values?.password
+    });
 
-      await response.json();
-      router.push('/dashboard');
-
-    } catch (error) {
-      console.log("Hubo un error al iniciar sesion", error);
+    if (result?.error) {
+      console.log("Error al iniciar sesion, verifique sus credenciales");
       return null;
+    } else {
+      router.push('/dashboard')
     }
   }
 
