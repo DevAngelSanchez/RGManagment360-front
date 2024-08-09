@@ -1,10 +1,11 @@
 import Link from "next/link";
 import { LoginForm } from "./form";
 import AuthLayout from "@/components/custom/AuthLayout";
+import LayoutSelector from "@/components/custom/LayoutSelector";
 
 export default function LoginPage() {
   return (
-    <AuthLayout>
+    <LayoutSelector layout="login/register">
       <div className="flex flex-col gap-2 items-center justify-between p-8">
         <h1 className="text-primary font-semibold text-2xl text-center">
           Welcome back!
@@ -41,6 +42,6 @@ export default function LoginPage() {
           Log in to manage your properties
         </p>
       </div>
-    </AuthLayout>
+    </LayoutSelector>
   );
 }

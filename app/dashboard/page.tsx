@@ -2,6 +2,7 @@ import { auth } from "@/auth";
 import Header from "@/components/custom/dashboard/Header";
 import Sidebar from "@/components/custom/dashboard/Sidebar";
 import { DashboardTable } from "@/components/custom/dashboard/Table";
+import LayoutSelector from "@/components/custom/LayoutSelector";
 
 export default async function Dashboard() {
 
@@ -18,6 +19,7 @@ export default async function Dashboard() {
 
   return (
     <main>
+      <LayoutSelector layout="default">
       <Header email={session.user?.email} />
       <Sidebar />
       <section className="h-[calc(100vh-5.6rem)] max-w-[calc(100vw-240px)] ml-[240px] flex flex-col overflow-y-auto p-4">
@@ -36,6 +38,7 @@ export default async function Dashboard() {
         </div>
 
       </section>
+      </LayoutSelector>
     </main>
   )
 }

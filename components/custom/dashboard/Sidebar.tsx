@@ -1,8 +1,20 @@
 import SidebarItemLink from "../Sidebar/SidebarItemLink";
 import SidebarItemsLinkContainer from "../Sidebar/SidebarItemsLinkContainer";
 import { SidebarLinkIconSize } from "@/lib/measurementUnits";
+import Link from "next/link";
 
-import { IconBuildingEstate, IconFileInvoice, IconPackages, IconSettings, IconTools, IconUserCircle, IconUserStar, IconUsersGroup, IconHome } from "@tabler/icons-react";
+import {
+  IconBuildingEstate,
+  IconFileInvoice,
+  IconPackages,
+  IconSettings,
+  IconTools,
+  IconUserCircle,
+  IconUserStar,
+  IconUsersGroup,
+  IconHome,
+  IconUser,
+} from "@tabler/icons-react";
 
 export default function Sidebar() {
   return (
@@ -18,10 +30,19 @@ export default function Sidebar() {
                 Home
               </SidebarItemLink>
             </SidebarItemsLinkContainer>
+
+            <SidebarItemsLinkContainer>
+              <SidebarItemLink href="/manage-users">
+                
+                  <IconUser />
+                  Manage Users
+                
+              </SidebarItemLink>
+            </SidebarItemsLinkContainer>
           </div>
           <div>
             <SidebarItemsLinkContainer>
-              <SidebarItemLink href='#'>
+              <SidebarItemLink href="#">
                 <IconTools size={SidebarLinkIconSize} />
                 Employees
               </SidebarItemLink>
@@ -66,5 +87,5 @@ export default function Sidebar() {
         </div>
       </div>
     </div>
-  )
+  );
 }

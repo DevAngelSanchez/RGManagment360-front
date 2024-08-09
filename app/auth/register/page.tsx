@@ -1,10 +1,9 @@
 import Link from "next/link";
 import { RegisterForm } from "./form";
-import AuthLayout from "@/components/custom/AuthLayout";
-
+import LayoutSelector from "@/components/custom/LayoutSelector";
 export default function RegisterPage() {
   return (
-    <AuthLayout>
+    <LayoutSelector layout="login/register">
       <div className="flex flex-col gap-2 justify-center items-center p-8">
         <div className="flex items-center justify-center gap-2 flex-col">
           <h1 className="text-primary font-semibold text-2xl text-center">
@@ -21,6 +20,6 @@ export default function RegisterPage() {
         <img src="/img/register.jpg" alt="office background" className="w-full rounded-xl shadow-md" />
         <p className="text-sm font-semibold text-center max-w-[300px] text-primary-foreground">Create an account in order to access the administrator panel</p>
       </div>
-    </AuthLayout>
+    </LayoutSelector>
   );
 }
