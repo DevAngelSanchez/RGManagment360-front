@@ -11,10 +11,13 @@ type DashboardLayoutProps = {
   children: ReactNode;
 };
 
-const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
+
+const  DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
+
   return (
     <div>
-    
+         <Header email={"jose"} />
+          <Sidebar />
       {children}
     </div>
   );
