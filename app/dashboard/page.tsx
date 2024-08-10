@@ -20,8 +20,7 @@ export default async function Dashboard() {
   return (
     <main>
       <LayoutSelector layout="default">
-      <Header email={session.user?.email} />
-      <Sidebar />
+      {/* <Header email={session.user?.email} /> */}
       <section className="h-[calc(100vh-5.6rem)] max-w-[calc(100vw-240px)] ml-[240px] flex flex-col overflow-y-auto p-4">
 
         <h1 className="text-4xl font-bold mb-4">Dashboard</h1>
