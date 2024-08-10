@@ -7,7 +7,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { IconUsersGroup } from '@tabler/icons-react';
-import { ScrollArea } from "@/components/ui/scroll-area"
+import { ScrollArea } from "@/components/ui/scroll-area";
 import DirectoryItem from '@/components/custom/dashboard/DirectoryItem';
 import { ScrollBar } from '@/components/ui/scroll-area';
 

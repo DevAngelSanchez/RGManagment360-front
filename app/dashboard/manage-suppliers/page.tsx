@@ -15,28 +15,13 @@ import { IconPlus } from "@tabler/icons-react";
 import { CreateSupplierForm } from "./form";
 import SuppliersList, { Supplier } from "./SuppliersList";
 import { DialogClose } from "@radix-ui/react-dialog";
-import { apiUrl } from "@/auth";
 import { headers } from "next/headers";
+import { fetchSuppliers } from "@/lib/fetch";
 
 export default async function ManageSuppliers() {
 
   let suppliers: Supplier[] = [];
   const headerList = headers()
-
-
-  const fetchSuppliers = async () => {
-    try {
-      const response = await fetch(`${apiUrl}api/suppliers`, {
-        method: "GET",
-        headers: headerList
-      });
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      console.log(error);
-      return;
-    }
-  }
 
   suppliers = await fetchSuppliers();
 
