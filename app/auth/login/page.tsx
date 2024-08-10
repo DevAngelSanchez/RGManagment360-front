@@ -2,6 +2,7 @@ import Link from "next/link";
 import { LoginForm } from "./form";
 import AuthLayout from "@/components/custom/AuthLayout";
 import LayoutSelector from "@/components/custom/LayoutSelector";
+import Image from "next/image";
 
 export default function LoginPage() {
   return (
@@ -13,7 +14,7 @@ export default function LoginPage() {
         <LoginForm />
         <div className="flex flex-col gap-2 items-center">
           <p className="text-center text-sm">
-            Don't have an account?{" "}
+            Dont have an account?{" "}
             <Link
               className="text-indigo-500 font-semibold hover:underline"
               href="/auth/register"
@@ -33,7 +34,7 @@ export default function LoginPage() {
         <h2 className="text-2xl font-bold text-center max-w-[290px] text-primary-foreground">
           Property Managment Customer
         </h2>
-        <img
+        <Image
           src="/img/register.jpg"
           alt="office background"
           className="w-full rounded-xl shadow-md"

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { RegisterForm } from "./form";
+import Image from "next/image";
 import LayoutSelector from "@/components/custom/LayoutSelector";
 export default function RegisterPage() {
   return (
@@ -17,7 +18,7 @@ export default function RegisterPage() {
       </div>
       <div className="flex flex-col items-center gap-8 w-full bg-primary p-8 rounded-tr-xl rounded-br-xl">
         <h2 className="text-2xl font-bold text-center max-w-[290px] text-primary-foreground">Property Managment Customer</h2>
-        <img src="/img/register.jpg" alt="office background" className="w-full rounded-xl shadow-md" />
+        <Image src="/img/register.jpg" alt="office background" className="w-full rounded-xl shadow-md" />
         <p className="text-sm font-semibold text-center max-w-[300px] text-primary-foreground">Create an account in order to access the administrator panel</p>
       </div>
     </LayoutSelector>
