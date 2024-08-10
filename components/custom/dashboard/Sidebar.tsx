@@ -40,17 +40,21 @@ export default function Sidebar() {
           </div>
           <div>
             <SidebarItemsLinkContainer>
-              <SidebarItemLink href="#">
+              <SidebarItemLink href="/dashboard/manage-employees">
                 <IconTools size={SidebarLinkIconSize} />
                 Employees
               </SidebarItemLink>
-              <SidebarItemLink href="">
+              <SidebarItemLink href="/dashboard/manage-customers">
                 <IconUserStar size={SidebarLinkIconSize} />
-                Clients
+                Customers
               </SidebarItemLink>
-              <SidebarItemLink href="">
+              <SidebarItemLink href="/dashboard/manage-suppliers">
                 <IconUsersGroup size={SidebarLinkIconSize} />
-                Providers
+                Suppliers
+              </SidebarItemLink>
+              <SidebarItemLink href="/dashbaord/manage-properties">
+                <IconBuildingEstate />
+                Properties
               </SidebarItemLink>
             </SidebarItemsLinkContainer>
           </div>
@@ -63,10 +67,6 @@ export default function Sidebar() {
               <SidebarItemLink href="">
                 <IconFileInvoice />
                 Invoices
-              </SidebarItemLink>
-              <SidebarItemLink href="">
-                <IconBuildingEstate />
-                Properties
               </SidebarItemLink>
             </SidebarItemsLinkContainer>
           </div>
