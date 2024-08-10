@@ -25,7 +25,7 @@ export default function Sidebar() {
 
           <div>
             <SidebarItemsLinkContainer>
-              <SidebarItemLink href="">
+              <SidebarItemLink href="/dashboard">
                 <IconHome />
                 Home
               </SidebarItemLink>
@@ -33,10 +33,8 @@ export default function Sidebar() {
 
             <SidebarItemsLinkContainer>
               <SidebarItemLink href="/manage-users">
-                
-                  <IconUser />
-                  Manage Users
-                
+                <IconUser />
+                Manage Users
               </SidebarItemLink>
             </SidebarItemsLinkContainer>
           </div>
