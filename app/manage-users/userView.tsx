@@ -118,13 +118,13 @@ export function UserView() {
           <TableBody>
             {userList.map((value) => (
               <TableRow key={value.userName}>
-                {/* <TableCell className="font-medium flex">
-                   {invoice.invoice}
+               <TableCell className="font-medium flex">
+                   {value.userName}
                   <Avatar>
                     <AvatarImage src="https://github.com/shadcn.png" />
                     <AvatarFallback>CN</AvatarFallback>
                   </Avatar>
-                </TableCell> */}
+                </TableCell>
                 <TableCell>{value.firstName}</TableCell>
                 <TableCell>{value.lastName}</TableCell>
                 <TableCell>{value.email}</TableCell>
