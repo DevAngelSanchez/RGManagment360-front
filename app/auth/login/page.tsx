@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { LoginForm } from "./form";
-import AuthLayout from "@/components/custom/AuthLayout";
 import LayoutSelector from "@/components/custom/LayoutSelector";
 import Image from "next/image";
 
