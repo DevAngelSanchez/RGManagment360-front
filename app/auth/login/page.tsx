@@ -38,6 +38,7 @@ export default function LoginPage() {
           src="/img/register.jpg"
           alt="office background"
           className="w-full rounded-xl shadow-md"
+          width={400} height={300}
         />
         <p className="text-sm font-semibold text-center max-w-[300px] text-primary-foreground">
           Log in to manage your properties

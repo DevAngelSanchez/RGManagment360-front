@@ -26,7 +26,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
- 
+
 const userList = [
   {
     userName: "INV001",
@@ -102,56 +102,56 @@ export function UserView() {
       </CardHeader>
       <CardContent>
         {/*se renderiza la tabla*/}
-         <Table>
-     {/*  <TableCaption>A list of your users.</TableCaption> */}
-      <TableHeader>
-        <TableRow>
-          <TableHead className="w-[100px]">User</TableHead>
-          <TableHead>First Name</TableHead>
-          <TableHead>Last Name</TableHead>
-          <TableHead>Email</TableHead>
-          <TableHead>Address</TableHead>
-          <TableHead>Phone Number</TableHead>
-           <TableHead >Role</TableHead>
-          <TableHead>Accions</TableHead>
-         
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {userList.map((value) => (
-          <TableRow key={value.userName}>
-            <TableCell className="font-medium flex">
-               {/*  {invoice.invoice} */}
-                <Avatar>
-                <AvatarImage src="https://github.com/shadcn.png" />
-                <AvatarFallback>CN</AvatarFallback>
-</Avatar>
-            </TableCell>
-            <TableCell>{value.firstName}</TableCell>
-            <TableCell>{value.lastName}</TableCell>
-            <TableCell>{value.email}</TableCell>
-            <TableCell>{value.address}</TableCell>
-            <TableCell>{value.phoneNumber}</TableCell>
-            <TableCell>{value.role}</TableCell>
-            <TableCell>
-                <div className="flex justify-between items-center">
-                    <Button variant="secondary"  className="w-8 h-8 p-0"><IconEdit className="p-0"  height={17}/></Button>
-                    <Button variant="destructive"  className="w-8 h-8 p-0"><IconTrash className="p-0"  height={17}/></Button>
+        <Table>
+          {/*  <TableCaption>A list of your users.</TableCaption> */}
+          <TableHeader>
+            <TableRow>
+              <TableHead className="w-[100px]">User</TableHead>
+              <TableHead>First Name</TableHead>
+              <TableHead>Last Name</TableHead>
+              <TableHead>Email</TableHead>
+              <TableHead>Address</TableHead>
+              <TableHead>Phone Number</TableHead>
+              <TableHead >Role</TableHead>
+              <TableHead>Accions</TableHead>
 
-                </div>
-            </TableCell>
-            
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {userList.map((value) => (
+              <TableRow key={value.userName}>
+                <TableCell className="font-medium flex">
+                  {/*  {invoice.invoice} */}
+                  <Avatar>
+                    <AvatarImage src="https://github.com/shadcn.png" />
+                    <AvatarFallback>CN</AvatarFallback>
+                  </Avatar>
+                </TableCell>
+                <TableCell>{value.firstName}</TableCell>
+                <TableCell>{value.lastName}</TableCell>
+                <TableCell>{value.email}</TableCell>
+                <TableCell>{value.address}</TableCell>
+                <TableCell>{value.phoneNumber}</TableCell>
+                <TableCell>{value.role}</TableCell>
+                <TableCell>
+                  <div className="flex justify-between items-center">
+                    <Button variant="secondary" className="w-8 h-8 p-0"><IconEdit className="p-0" height={17} /></Button>
+                    <Button variant="destructive" className="w-8 h-8 p-0"><IconTrash className="p-0" height={17} /></Button>
 
-          </TableRow>
-        ))}
-      </TableBody>
-      <TableFooter>
-        <TableRow>
-          <TableCell colSpan={3}>Total users</TableCell>
-          <TableCell className="text-right">{userList.length} Users</TableCell>
-        </TableRow>
-      </TableFooter>
-    </Table>
+                  </div>
+                </TableCell>
+
+
+              </TableRow>
+            ))}
+          </TableBody>
+          <TableFooter>
+            <TableRow>
+              <TableCell colSpan={7}>Total users</TableCell>
+              <TableCell className="text-right">{userList.length} Users</TableCell>
+            </TableRow>
+          </TableFooter>
+        </Table>
       </CardContent>
       <CardFooter className="flex justify-between">
       </CardFooter>
