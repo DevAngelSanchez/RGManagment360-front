@@ -92,7 +92,7 @@ const userList = [
 
 interface User {
   id: number;
-  username: string;
+  name: string;
   email: string;
   phone: string;
   address: string;
@@ -130,7 +130,7 @@ export const UserView: React.FC<UserViewProps> = ({ users }) => {
           <TableBody>
             {users && users.map((value) => (
               <TableRow key={value.id}>
-                <TableCell>{value.username}</TableCell>
+                <TableCell>{value.name}</TableCell>
                 <TableCell>{value.email}</TableCell>
                 <TableCell>{value.address}</TableCell>
                 <TableCell>{value.phone}</TableCell>
@@ -152,7 +152,7 @@ export const UserView: React.FC<UserViewProps> = ({ users }) => {
             <TableRow>
               <TableCell colSpan={3}>Total users</TableCell>
               <TableCell className="text-right">
-                {userList.length} Users
+                {userList.length + 1} Users
               </TableCell>
             </TableRow>
           </TableFooter>

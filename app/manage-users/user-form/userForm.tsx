@@ -84,7 +84,7 @@ export default function UserForm() {
           email: values?.email,
           password: values?.password,
           address: values?.address,
-          phone: values?.phone,
+          phoneNumber: values?.phone,
           role: values?.role
         })
       });
