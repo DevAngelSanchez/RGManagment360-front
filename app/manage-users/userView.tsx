@@ -90,7 +90,20 @@ const userList = [
   },
 ];
 
-export function UserView() {
+interface User {
+  id: number;
+  name: string;
+  email: string;
+  phone: string;
+  address: string;
+  role: string;
+}
+
+type UserViewProps = {
+  users: User[];
+}
+
+export const UserView: React.FC<UserViewProps> = ({ users }) => {
   return (
     <Card className="w-3/4">
       <CardHeader className="bg-green-200 rounded-t-md">
@@ -106,8 +119,7 @@ export function UserView() {
           <TableHeader>
             <TableRow>
               {/* <TableHead className="w-[100px]">User</TableHead> */}
-              <TableHead>First Name</TableHead>
-              <TableHead>Last Name</TableHead>
+              <TableHead>Username</TableHead>
               <TableHead>Email</TableHead>
               <TableHead>Address</TableHead>
               <TableHead>Phone Number</TableHead>
@@ -116,20 +128,12 @@ export function UserView() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {userList.map((value) => (
-              <TableRow key={value.userName}>
-               <TableCell className="font-medium flex">
-                   {value.userName}
-                  <Avatar>
-                    <AvatarImage src="https://github.com/shadcn.png" />
-                    <AvatarFallback>CN</AvatarFallback>
-                  </Avatar>
-                </TableCell>
-                <TableCell>{value.firstName}</TableCell>
-                <TableCell>{value.lastName}</TableCell>
+            {users && users.map((value) => (
+              <TableRow key={value.id}>
+                <TableCell>{value.name}</TableCell>
                 <TableCell>{value.email}</TableCell>
                 <TableCell>{value.address}</TableCell>
-                <TableCell>{value.phoneNumber}</TableCell>
+                <TableCell>{value.phone}</TableCell>
                 <TableCell>{value.role}</TableCell>
                 <TableCell>
                   <div className="flex justify-between items-center">
@@ -148,7 +152,7 @@ export function UserView() {
             <TableRow>
               <TableCell colSpan={3}>Total users</TableCell>
               <TableCell className="text-right">
-                {userList.length} Users
+                {userList.length + 1} Users
               </TableCell>
             </TableRow>
           </TableFooter>

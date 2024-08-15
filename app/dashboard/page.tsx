@@ -3,7 +3,7 @@ import { auth } from "@/auth";
 
 import { ChartComponent } from "@/components/custom/dashboard/Chart";
 import { DashboardTable } from "@/components/custom/dashboard/Table";
-import { ScrollArea } from "@/components/ui/scroll-area"
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import LayoutSelector from "@/components/custom/LayoutSelector";
 import {
   Card,
@@ -15,7 +15,8 @@ import {
 import { IconUsersGroup } from "@tabler/icons-react";
 import DirectoryItem from "@/components/custom/dashboard/DirectoryItem";
 
-import { dataContacts } from "@/lib/mockData";
+import { Supplier } from "./manage-suppliers/SuppliersList";
+import { fetchSuppliers } from "@/lib/fetch";
 
 export default async function Dashboard() {
 
@@ -24,6 +25,9 @@ export default async function Dashboard() {
   if (session === null) {
     return redirect("/auth/login");
   }
+
+  let suppliers: Supplier[] = [];
+  suppliers = await fetchSuppliers();
 
   return (
     <main>
@@ -53,10 +57,13 @@ export default async function Dashboard() {
                   <CardDescription>A list of the most important suppliers</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <ScrollArea className="max-h-[490px] w-full">
-                    {dataContacts.map(item => (
-                      <DirectoryItem name={item.name} email={item.email} phone={item.phone} />
-                    ))}
+                  <ScrollArea className="h-[490px]">
+                    <div className='h-max pr-4'>
+                      {suppliers && suppliers.map(item => (
+                        <DirectoryItem key={item.id} name={item.name} email={item.email} phone={item.phone} />
+                      ))}
+                    </div>
+                    <ScrollBar />
                   </ScrollArea>
                 </CardContent>
               </Card>

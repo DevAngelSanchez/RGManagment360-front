@@ -3,8 +3,13 @@ import React from "react";
 import { UserView } from "./userView";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { fetchUsers } from "@/lib/fetch";
 
-const ManageUsers = () => {
+const ManageUsers = async () => {
+
+  const users = await fetchUsers();
+  console.log(users)
+
   return (
     <main>
       <LayoutSelector layout="default">
@@ -17,7 +22,7 @@ const ManageUsers = () => {
           </div>
 
           <div className="flex justify-center">
-            <UserView />
+            <UserView users={users} />
           </div>
         </section>
       </LayoutSelector>
