@@ -19,6 +19,12 @@ import { useRouter } from "next/navigation";
 import { apiUrl } from "@/auth"
 
 const formSchema = z.object({
+  name: z.string().min(3, {
+    message: "Username has to be at least 3 characters long",
+  }),
+  lastname: z.string().min(3, {
+    message: "Username has to be at least 3 characters long",
+  }),
   username: z.string().min(3, {
     message: "Username has to be at least 3 characters long",
   }),
@@ -44,6 +50,8 @@ export function RegisterForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      name: "",
+      lastname: "",
       username: "",
       email: "",
       passwordForm: {}
@@ -59,6 +67,8 @@ export function RegisterForm() {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
+          name: values?.name,
+          lastname: values?.lastname,
           username: values?.username,
           email: values?.email,
           password: values?.passwordForm.password
@@ -88,6 +98,40 @@ export function RegisterForm() {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 min-w-[360px]">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
+          <div className="w-full">
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Name</FormLabel>
+                  <FormControl>
+                    <Input placeholder="John" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+
+          <div className="w-full">
+            <FormField
+              control={form.control}
+              name="lastname"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Lastname</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Doe" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+
+        </div>
         <FormField
           control={form.control}
           name="username"
