@@ -12,18 +12,16 @@ import {
 
 import { IconPlus } from "@tabler/icons-react";
 
-import { CreateSupplierForm } from "./form";
-import SuppliersList, { Supplier } from "./SuppliersList";
+import { CreateServiceProviderForm } from "./form";
+import ServiceProvidersList, { ServiceProvider } from "./ServiceProvidersList";
 import { DialogClose } from "@radix-ui/react-dialog";
-import { headers } from "next/headers";
-import { fetchSuppliers } from "@/lib/fetch";
+import { fetchServicesProviders } from "@/lib/fetch";
 
 export default async function ManageSuppliers() {
 
-  let suppliers: Supplier[] = [];
-  const headerList = headers()
+  let serviceProviders: ServiceProvider[] = [];
 
-  suppliers = await fetchSuppliers();
+  serviceProviders = await fetchServicesProviders();
 
   return (
     <LayoutSelector layout="default">
@@ -31,20 +29,20 @@ export default async function ManageSuppliers() {
         <section className="h-[calc(100vh-5.6rem)] max-w-[calc(100vw-240px)] ml-[240px] flex flex-col overflow-y-auto p-4">
 
           <div className="flex items-center justify-between w-full gap-2 mb-6">
-            <h1 className="text-4xl font-bold mb-4">Suppliers</h1>
+            <h1 className="text-4xl font-bold mb-4">Service Providers</h1>
             <Dialog>
               <DialogTrigger className="px-4 py-2 flex items-center gap-2 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition-all">
                 <IconPlus size={24} />
-                Create Supplier
+                Create Provider
               </DialogTrigger>
               <DialogContent>
                 <DialogHeader>
-                  <DialogTitle>Fill each field</DialogTitle>
+                  <DialogTitle>Create Provider</DialogTitle>
                   <DialogDescription>
                     Lorem, ipsum dolor sit amet consectetur adipisicing elit. Sint nihil aperiam nostrum eos molestias ipsa vero.
                   </DialogDescription>
                   <DialogClose asChild >
-                    <CreateSupplierForm />
+                    <CreateServiceProviderForm />
                   </DialogClose>
                 </DialogHeader>
               </DialogContent>
@@ -54,7 +52,7 @@ export default async function ManageSuppliers() {
 
           <div className="grid grid-cols-5 gap-4 mb-6">
             <div className="col-span-2">
-              <SuppliersList suppliers={suppliers} />
+              <ServiceProvidersList ServiceProviders={serviceProviders} />
             </div>
             <div className="col-span-3 flex flex-col gap-2 border rounded-lg border-gray-200 shadow-md p-3">
               <h2 className="text-xl font-semibold">Last invoices</h2>

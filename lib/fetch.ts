@@ -1,8 +1,8 @@
 import { apiUrl } from "@/auth";
 import { headers } from "next/headers";
+const headersList = headers();
 
 export const fetchSuppliers = async () => {
-  const headersList = headers();
   try {
     const response = await fetch(`${apiUrl}api/suppliers`, {
       method: "GET",
@@ -17,13 +17,55 @@ export const fetchSuppliers = async () => {
 }
 
 export const fetchUsers = async () => {
-  const headersList = headers();
   try {
     const response = await fetch(`${apiUrl}api/users`, {
       method: "GET",
       headers: headersList
     })
-    const data = response.json();
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.log(error);
+    return;
+  }
+}
+
+export const fetchServicesProviders = async () => {
+
+  try {
+    const response = await fetch(`${apiUrl}api/users/by-role/SERVICE_PROVIDER`, {
+      method: "GET",
+      headers: headersList
+    });
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.log(error);
+    return;
+  }
+}
+
+export const fetchCategories = async () => {
+  try {
+    const response = await fetch(`${apiUrl}api/categories`, {
+      method: "GET",
+      headers: headersList
+    });
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.log(error);
+    return;
+  }
+}
+
+export const fetchSubcategories = async () => {
+  try {
+    const response = await fetch(`${apiUrl}api/subcategories`, {
+      method: "GET",
+      headers: headersList
+    });
+    const data = await response.json();
     return data;
   } catch (error) {
     console.log(error);

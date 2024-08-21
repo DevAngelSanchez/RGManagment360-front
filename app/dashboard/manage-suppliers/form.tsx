@@ -69,7 +69,7 @@ const formSchema = z.object({
   password: z.string().trim(),
 });
 
-export function CreateSupplierForm() {
+export function CreateServiceProviderForm() {
   const router = useRouter();
   const [categories, setCategories] = useState<Category[]>([]);
   const [subcategories, setSubcategories] = useState<Subcategory[]>([]);
@@ -143,7 +143,8 @@ export function CreateSupplierForm() {
         subcategory: values?.subcategory,
         email: values?.email,
         address: values?.address,
-        phone: values?.phone
+        phone: values?.phone,
+        password: values?.password
       })
     });
 

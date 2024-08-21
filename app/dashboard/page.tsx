@@ -15,7 +15,7 @@ import {
 import { IconUsersGroup } from "@tabler/icons-react";
 import DirectoryItem from "@/components/custom/dashboard/DirectoryItem";
 
-import { Supplier } from "./manage-suppliers/SuppliersList";
+import { ServiceProvider } from "./manage-suppliers/ServiceProvidersList";
 import { fetchSuppliers } from "@/lib/fetch";
 
 export default async function Dashboard() {
@@ -26,7 +26,7 @@ export default async function Dashboard() {
     return redirect("/auth/login");
   }
 
-  let suppliers: Supplier[] = [];
+  let suppliers: ServiceProvider[] = [];
   suppliers = await fetchSuppliers();
 
   return (
