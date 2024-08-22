@@ -19,7 +19,6 @@ import { Supplier } from "./manage-suppliers/SuppliersList";
 import { fetchSuppliers } from "@/lib/fetch";
 
 export default async function Dashboard() {
-
   const session = await auth();
 
   if (session === null) {
@@ -32,8 +31,7 @@ export default async function Dashboard() {
   return (
     <main>
       <LayoutSelector layout="default">
-        <section className="h-[calc(100vh-5.6rem)] max-w-[calc(100vw-240px)] ml-[240px] flex flex-col overflow-y-auto p-4">
-
+        <section className="h-[calc(100vh-5.6rem)] md:max-w-[calc(100vw-240px)] md:ml-[240px] flex flex-col overflow-y-auto p-4">
           <h1 className="text-4xl font-bold mb-4">Dashboard</h1>
 
           <div className="grid grid-cols-5 gap-4 mb-6">
@@ -42,7 +40,7 @@ export default async function Dashboard() {
                 <CardHeader>
                   <CardTitle>Last 6 months data chart</CardTitle>
                 </CardHeader>
-                <CardContent >
+                <CardContent>
                   <ChartComponent />
                 </CardContent>
               </Card>
@@ -54,14 +52,22 @@ export default async function Dashboard() {
                     <IconUsersGroup size="24" />
                     List of Suppliers
                   </CardTitle>
-                  <CardDescription>A list of the most important suppliers</CardDescription>
+                  <CardDescription>
+                    A list of the most important suppliers
+                  </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <ScrollArea className="h-[490px]">
-                    <div className='h-max pr-4'>
-                      {suppliers && suppliers.map(item => (
-                        <DirectoryItem key={item.id} name={item.name} email={item.email} phone={item.phone} />
-                      ))}
+                    <div className="h-max pr-4">
+                      {suppliers &&
+                        suppliers.map((item) => (
+                          <DirectoryItem
+                            key={item.id}
+                            name={item.name}
+                            email={item.email}
+                            phone={item.phone}
+                          />
+                        ))}
                     </div>
                     <ScrollBar />
                   </ScrollArea>
@@ -80,9 +86,8 @@ export default async function Dashboard() {
               <DashboardTable />
             </div>
           </div>
-
         </section>
       </LayoutSelector>
     </main>
-  )
+  );
 }
