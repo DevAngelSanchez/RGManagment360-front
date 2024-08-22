@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, FC } from "react";
 import { z } from "zod";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -22,34 +22,62 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { apiUrl } from "@/auth";
 
-type TCategory = {
+interface ISubcategory {
   name: string;
   id: number;
+}
+type TSubcategoryProps = {
+  category: ISubcategory[];
 };
 
 const formSchema = z.object({
   subcategory: z.string().min(2, {
     message: "Category must be at least 2 characters.",
   }),
-  category: z.string({
-    message: "Select a category",
+  categoryId: z.string({
+    message: "Select a id",
   }),
 });
 
-export function DialogSubcategoryForm() {
+export const DialogSubcategoryForm: FC<TSubcategoryProps> = ({ category }) => {
   const router = useRouter();
-  const [categories, setCategories] = useState<TCategory[]>([]);
+  console.log(category, 111);
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    console.log(values, 22);
+    try {
+      const result = await fetch(
+        `${apiUrl}api/subcategories/create-subcategory`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name: values?.subcategory,
+            categoryId: Number(values?.categoryId),
+          }),
+        }
+      );
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    router.push("/services");
+      if (!result.ok) {
+        console.log("Error trying to create a new subcategory");
+        return null;
+      } else {
+        router.push("/services");
+      }
+    } catch (error) {
+      console.log(error);
+      return;
+    }
   }
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       subcategory: "",
-      category: "",
+      categoryId: "",
     },
   });
 
@@ -76,7 +104,7 @@ export function DialogSubcategoryForm() {
         <div className="w-full">
           <FormField
             control={form.control}
-            name="category"
+            name="categoryId"
             render={({ field }) => (
               <FormItem className="">
                 <FormLabel>Category</FormLabel>
@@ -90,10 +118,10 @@ export function DialogSubcategoryForm() {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {categories &&
-                      categories.map((category) => (
-                        <SelectItem key={category.id} value={category.name}>
-                          {category.name}
+                    {category &&
+                      category.map((value, index) => (
+                        <SelectItem key={index} value={value.id?.toString()}>
+                          {value.name}
                         </SelectItem>
                       ))}
                   </SelectContent>
@@ -107,6 +135,6 @@ export function DialogSubcategoryForm() {
       </form>
     </Form>
   );
-}
+};
 
 export default DialogSubcategoryForm;

@@ -13,8 +13,12 @@ import {
 } from "@/components/ui/dialog";
 import DialogCategoryForm from "./DialogCategoryForm";
 import DialogSubcategoryForm from "./DialogSubcategoryForm";
+import { fetchCategories, fetchSubcategories } from "@/lib/fetch";
 
-export default function Services() {
+const Services = async () => {
+  const categories = await fetchCategories();
+  const subcategories = await fetchSubcategories();
+
   return (
     <LayoutSelector layout="default">
       <main>
@@ -69,7 +73,7 @@ export default function Services() {
                       </DialogDescription>
                     </div>
                     <DialogClose asChild>
-                      <DialogSubcategoryForm />
+                      <DialogSubcategoryForm category={categories} />
                     </DialogClose>
                   </DialogHeader>
                 </DialogContent>
@@ -78,14 +82,16 @@ export default function Services() {
           </div>
           <div className="flex flex-col items-start w-full p-4 gap-8 mb-6 md:flex-row">
             <div className="lg:w-2/5 xl:w-2/5 w-full">
-              <CategoryTable />
+              <CategoryTable category={categories} />
             </div>
             <div className="lg:w-3/5 w-full">
-              <SubCategoryTable />
+              <SubCategoryTable subcategories={subcategories} />
             </div>
           </div>
         </section>
       </main>
     </LayoutSelector>
   );
-}
+};
+
+export default Services;

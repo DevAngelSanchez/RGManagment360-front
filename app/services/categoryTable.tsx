@@ -1,3 +1,4 @@
+import React, { FC } from "react";
 import {
   Table,
   TableBody,
@@ -16,19 +17,15 @@ import {
   CardDescription,
 } from "@/components/ui/card";
 
-const categoryList = [
-  {
-    categoryName: "Gardening",
-  },
-  {
-    categoryName: "Electricity",
-  },
-  {
-    categoryName: "Plumbing",
-  },
-];
+interface ICategory {
+  name: string;
+}
 
-export function CategoryTable() {
+type TCategory = {
+  category: ICategory[];
+};
+
+export const CategoryTable: FC<TCategory> = ({ category }) => {
   return (
     <div>
       <Card>
@@ -49,19 +46,20 @@ export function CategoryTable() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {categoryList.map((value, index) => (
-                <TableRow key={index}>
-                  <TableCell className="font-bold text-base">
-                    {value.categoryName}
-                  </TableCell>
-                </TableRow>
-              ))}
+              {category &&
+                category.map((value, index) => (
+                  <TableRow key={index}>
+                    <TableCell className="font-bold text-base">
+                      {value.name}
+                    </TableCell>
+                  </TableRow>
+                ))}
             </TableBody>
             <TableFooter>
               <TableRow>
                 <TableCell colSpan={3}>Total</TableCell>
                 <TableCell className="text-right">
-                  {categoryList.length}
+                  {category && category.length}
                 </TableCell>
               </TableRow>
             </TableFooter>
@@ -70,4 +68,4 @@ export function CategoryTable() {
       </Card>
     </div>
   );
-}
+};

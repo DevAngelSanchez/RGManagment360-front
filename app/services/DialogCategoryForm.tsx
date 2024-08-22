@@ -4,6 +4,7 @@ import { z } from "zod";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { apiUrl } from "@/auth";
 import {
   Form,
   FormControl,
@@ -24,8 +25,30 @@ const formSchema = z.object({
 
 export function DialogCategoryForm() {
   const router = useRouter();
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    router.push("/services");
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    console.log(values);
+    try {
+      const result = await fetch(`${apiUrl}api/categories/create-category`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: values?.category,
+        }),
+      });
+
+      if (!result.ok) {
+        console.log("Error trying to create a new category");
+        return null;
+      } else {
+        router.push("/services");
+        console.log("categoria creada", values.category);
+      }
+    } catch (error) {
+      console.log(error);
+      return;
+    }
   }
 
   const form = useForm<z.infer<typeof formSchema>>({

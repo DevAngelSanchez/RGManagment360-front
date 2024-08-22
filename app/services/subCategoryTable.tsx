@@ -1,3 +1,4 @@
+import React, { FC } from "react";
 import {
   Table,
   TableBody,
@@ -16,30 +17,16 @@ import {
   CardDescription,
 } from "@/components/ui/card";
 
-const subCategoryList = [
-  {
-    subCategoryName: "Leaks",
-    categoryAssociated: "Plumbing",
-  },
-  {
-    subCategoryName: "High voltage",
-    categoryAssociated: "Electricity",
-  },
-  {
-    subCategoryName: "Pools",
-    categoryAssociated: "Plumbing",
-  },
-  {
-    subCategoryName: "Planting",
-    categoryAssociated: "Gardening",
-  },
-  {
-    subCategoryName: "White goods",
-    categoryAssociated: "Electricity",
-  },
-];
+interface ISubcategory {
+  name: string;
+  categoryId: string;
+}
 
-export function SubCategoryTable() {
+type TSubcategory = {
+  subcategories: ISubcategory[];
+};
+
+export const SubCategoryTable: FC<TSubcategory> = ({ subcategories }) => {
   return (
     <div>
       <Card>
@@ -63,22 +50,23 @@ export function SubCategoryTable() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {subCategoryList.map((value, index) => (
-                <TableRow key={index}>
-                  <TableCell className="font-bold text-base">
-                    {value.subCategoryName}
-                  </TableCell>
-                  <TableCell className="font-bold text-base">
-                    {value.categoryAssociated}
-                  </TableCell>
-                </TableRow>
-              ))}
+              {subcategories &&
+                subcategories.map((value, index) => (
+                  <TableRow key={index}>
+                    <TableCell className="font-bold text-base">
+                      {value.name}
+                    </TableCell>
+                    <TableCell className="font-bold text-base">
+                      {value.categoryId}
+                    </TableCell>
+                  </TableRow>
+                ))}
             </TableBody>
             <TableFooter>
               <TableRow>
                 <TableCell colSpan={3}>Total</TableCell>
                 <TableCell className="text-right">
-                  {subCategoryList.length}
+                  {subcategories && subcategories.length}
                 </TableCell>
               </TableRow>
             </TableFooter>
@@ -87,4 +75,4 @@ export function SubCategoryTable() {
       </Card>
     </div>
   );
-}
+};
