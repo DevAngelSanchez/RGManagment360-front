@@ -80,7 +80,8 @@ export default function UserForm() {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          username: `${values?.name} ${values?.lastname}`,
+          name: values?.name,
+          lastname: values?.lastname,
           email: values?.email,
           password: values?.password,
           address: values?.address,
@@ -216,10 +217,9 @@ export default function UserForm() {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value="ADMINISTRATOR">Manager</SelectItem>
+                    <SelectItem value="MANAGER">Manager</SelectItem>
                     <SelectItem value="ASSISTANT">Assistant</SelectItem>
-                    <SelectItem value="CLIENT">Customer</SelectItem>
-                    <SelectItem value="SERVICE_PROVIDER">Provider</SelectItem>
+                    <SelectItem value="CUSTOMER">Customer</SelectItem>
                   </SelectContent>
                 </Select>
                 <FormMessage />

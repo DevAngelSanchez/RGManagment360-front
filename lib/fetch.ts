@@ -72,3 +72,31 @@ export const fetchSubcategories = async () => {
     return;
   }
 }
+
+export const fetchCustomers = async () => {
+  try {
+    const response = await fetch(`${apiUrl}api/users/by-role/CUSTOMER`, {
+      method: "GET",
+      headers: headersList
+    });
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.log(error);
+    return;
+  }
+}
+
+export const fetchProperties = async () => {
+  try {
+    const response = await fetch(`${apiUrl}api/properties`, {
+      method: "GET",
+      headers: headersList
+    });
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.log(error);
+    return;
+  }
+}
