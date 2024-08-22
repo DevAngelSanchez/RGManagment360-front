@@ -13,7 +13,7 @@ import { IconPlus } from "@tabler/icons-react";
 
 import { DialogClose } from "@radix-ui/react-dialog";
 import { CreatePropertyForm } from '@/app/dashboard/manage-properties/createForm';
-import { PropertiesTable } from "./propertiesTable";
+import { PropertiesTable } from "@/app/dashboard/manage-properties/propertiesTable";
 import { fetchProperties } from "@/lib/fetch";
 
 export default async function ManageProperties() {
