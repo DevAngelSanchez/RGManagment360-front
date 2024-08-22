@@ -8,7 +8,6 @@ import { fetchUsers } from "@/lib/fetch";
 const ManageUsers = async () => {
 
   const users = await fetchUsers();
-  console.log(users)
 
   return (
     <main>
