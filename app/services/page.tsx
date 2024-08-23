@@ -51,6 +51,7 @@ const Services = async () => {
                   </DialogHeader>
                 </DialogContent>
               </Dialog>
+
               <Dialog>
                 <DialogTrigger className="hidden px-4 py-2 md:flex items-center gap-2 rounded-md bg-teal-600 text-primary-foreground hover:bg-teal-500 transition-all">
                   <IconPlus size={24} />

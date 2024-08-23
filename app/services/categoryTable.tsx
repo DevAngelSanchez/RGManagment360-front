@@ -16,9 +16,22 @@ import {
   CardTitle,
   CardDescription,
 } from "@/components/ui/card";
+import { IconTrash, IconEdit } from "@tabler/icons-react";
+import { Button } from "@/components/ui/button";
+import { DialogClose } from "@radix-ui/react-dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import EdirFormCategory from "./EditFormCategory";
 
 interface ICategory {
   name: string;
+  id: string;
 }
 
 type TCategory = {
@@ -51,6 +64,38 @@ export const CategoryTable: FC<TCategory> = ({ category }) => {
                   <TableRow key={index}>
                     <TableCell className="font-bold text-base">
                       {value.name}
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex justify-end items-center gap-2">
+                        <Dialog>
+                          <DialogTrigger asChild>
+                            <Button variant="secondary" className="w-8 h-8 p-0">
+                              <IconEdit className="p-0" height={17} />
+                            </Button>
+                          </DialogTrigger>
+                          <DialogContent>
+                            <DialogHeader>
+                              <div className="mb-2">
+                                <DialogTitle className="mb-2">
+                                  Fill each field
+                                </DialogTitle>
+                                <DialogDescription>
+                                  Edit the category
+                                </DialogDescription>
+                              </div>
+                              <DialogClose asChild>
+                                <EdirFormCategory
+                                  name={value.name}
+                                  id={value.id}
+                                />
+                              </DialogClose>
+                            </DialogHeader>
+                          </DialogContent>
+                        </Dialog>
+                        <Button variant="destructive" className="w-8 h-8 p-0">
+                          <IconTrash className="p-0" height={17} />
+                        </Button>
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))}

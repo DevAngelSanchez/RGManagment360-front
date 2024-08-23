@@ -43,7 +43,6 @@ const formSchema = z.object({
 
 export const DialogSubcategoryForm: FC<TSubcategoryProps> = ({ category }) => {
   const router = useRouter();
-  console.log(category, 111);
   async function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values, 22);
     try {

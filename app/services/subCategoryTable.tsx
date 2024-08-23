@@ -16,10 +16,16 @@ import {
   CardTitle,
   CardDescription,
 } from "@/components/ui/card";
+import { IconTrash, IconEdit } from "@tabler/icons-react";
+import { Button } from "@/components/ui/button";
 
 interface ISubcategory {
   name: string;
   categoryId: string;
+  mayorCategory: {
+    id: number;
+    name: string;
+  };
 }
 
 type TSubcategory = {
@@ -27,6 +33,8 @@ type TSubcategory = {
 };
 
 export const SubCategoryTable: FC<TSubcategory> = ({ subcategories }) => {
+  console.log(subcategories);
+
   return (
     <div>
       <Card>
@@ -57,7 +65,17 @@ export const SubCategoryTable: FC<TSubcategory> = ({ subcategories }) => {
                       {value.name}
                     </TableCell>
                     <TableCell className="font-bold text-base">
-                      {value.categoryId}
+                      {value.mayorCategory.name}
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex justify-end items-center gap-2">
+                        <Button variant="secondary" className="w-8 h-8 p-0">
+                          <IconEdit className="p-0" height={17} />
+                        </Button>
+                        <Button variant="destructive" className="w-8 h-8 p-0">
+                          <IconTrash className="p-0" height={17} />
+                        </Button>
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))}
