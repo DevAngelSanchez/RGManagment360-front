@@ -34,18 +34,10 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
 import { DeletePropertyForm } from "./deleteForm";
+import { EditPropertyForm } from "./editForm";
 
-interface User {
+export interface User {
   id: number;
   name: string;
   lastname: string;
@@ -54,10 +46,11 @@ interface User {
   phone: string;
 }
 
-interface Property {
+export interface Property {
   id: number;
   name: string;
   owner?: User;
+  ownerId?: string;
   phone: string;
   address: string;
   city: string;
@@ -108,9 +101,24 @@ export const PropertiesTable: React.FC<PropertiesTableProps> = ({ properties }) 
                 <TableCell>{value.zipPostalCode}</TableCell>
                 <TableCell>
                   <div className="flex justify-between items-center">
-                    <Button variant="secondary" className="w-8 h-8 p-0">
-                      <IconEdit className="p-0" height={17} />
-                    </Button>
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <Button variant="secondary" className="w-8 h-8 p-0">
+                          <IconEdit className="p-0" height={17} />
+                        </Button>
+                      </DialogTrigger>
+                      <DialogContent>
+                        <DialogHeader>
+                          <DialogTitle>Edit Property?</DialogTitle>
+                          <DialogDescription>
+                            Make the changes that you want to this property
+                          </DialogDescription>
+                        </DialogHeader>
+                        <DialogClose asChild>
+                          <EditPropertyForm property={value} />
+                        </DialogClose>
+                      </DialogContent>
+                    </Dialog>
                     <Dialog>
                       <DialogTrigger asChild>
                         <Button variant="destructive" className="w-8 h-8 p-0">

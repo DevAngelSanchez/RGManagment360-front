@@ -26,7 +26,12 @@ import {
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
 import { apiUrl } from "@/auth";
-import { IconPlus } from "@tabler/icons-react";
+import { IconEdit } from "@tabler/icons-react";
+import { type Property } from '@/app/dashboard/manage-properties/propertiesTable';
+
+interface EditPropertyFormProps {
+  property: Property;
+}
 
 interface Customer {
   id: number;
@@ -38,16 +43,12 @@ interface Customer {
 }
 
 const formSchema = z.object({
+  id: z.number(),
   name: z.string().min(3, {
     message: "The property name must have more than 3 characters"
   }).trim(),
   address: z.string().min(3, {
     message: "The property address must have more than 3 characters"
-  }).trim(),
-  phone: z.string().min(7, {
-    message: "The phone field must have more than 7 characters"
-  }).regex(/^\+?(\d{1,3})?[-.\s]?(\(?\d{1,4}\)?[-.\s]?)?(\d{1,4}[-.\s]?){1,3}\d{1,4}$/, {
-    message: "This is not a format valid"
   }).trim(),
   city: z.string().min(2, {
     message: "The property city field must have more than 2 characters"
@@ -63,7 +64,7 @@ const formSchema = z.object({
   })
 });
 
-export function CreatePropertyForm() {
+export const EditPropertyForm: FC<EditPropertyFormProps> = ({ property }) => {
   const router = useRouter();
 
   const [customers, setCustomers] = useState<Customer[]>([]);
@@ -86,28 +87,28 @@ export function CreatePropertyForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
-      address: "",
-      phone: "",
-      city: "",
-      state: "",
-      zipPostalCode: "",
-      ownerId: ""
+      id: property.id,
+      name: property.name,
+      address: property.address,
+      city: property.city,
+      state: property.state,
+      zipPostalCode: property.zipPostalCode,
+      ownerId: property.ownerId
     },
   })
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
 
-    const result = await fetch(`${apiUrl}api/properties/create-property`, {
-      method: "POST",
+    const result = await fetch(`${apiUrl}api/properties/update-property`, {
+      method: "PUT",
       headers: {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
+        id: values?.id,
         name: values?.name,
         address: values?.address,
-        phone: values?.phone,
         city: values?.city,
         state: values?.state,
         zipPostalCode: values?.zipPostalCode,
@@ -116,7 +117,7 @@ export function CreatePropertyForm() {
     });
 
     if (!result.ok) {
-      alert("Error trying to create this property");
+      alert("Error trying to update this property");
       return;
     }
 
@@ -128,6 +129,18 @@ export function CreatePropertyForm() {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 min-w-[360px]">
+        <FormField
+          control={form.control}
+          name="id"
+          render={({ field }) => (
+            <FormItem className="hidden">
+              <FormControl>
+                <Input disabled {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         <FormField
           control={form.control}
           name="name"
@@ -220,25 +233,10 @@ export function CreatePropertyForm() {
               )}
             />
           </div>
-          <div className="w-full">
-            <FormField
-              control={form.control}
-              name="phone"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Owner Phone</FormLabel>
-                  <FormControl>
-                    <Input type="text" placeholder="+188844444" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
         </div>
         < Button className="w-full" type="submit" >
-          <IconPlus size={24} />
-          Add property
+          <IconEdit size={24} />
+          Edit property
         </Button >
       </form >
     </Form >
