@@ -52,7 +52,7 @@ export default function Sidebar() {
                 <IconUsersGroup size={SidebarLinkIconSize} />
                 Suppliers
               </SidebarItemLink>
-              <SidebarItemLink href="/dashbaord/manage-properties">
+              <SidebarItemLink href="/dashboard/manage-properties">
                 <IconBuildingEstate />
                 Properties
               </SidebarItemLink>
