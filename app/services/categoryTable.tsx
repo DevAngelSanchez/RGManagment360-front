@@ -18,16 +18,17 @@ import {
 } from "@/components/ui/card";
 import { IconTrash, IconEdit } from "@tabler/icons-react";
 import { Button } from "@/components/ui/button";
-import { DialogClose } from "@radix-ui/react-dialog";
 import {
   Dialog,
   DialogContent,
+  DialogClose,
   DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
 import EdirFormCategory from "./EditFormCategory";
+import { DeleteCategoryForm } from "./DeleteCategory";
 
 interface ICategory {
   name: string;
@@ -92,9 +93,21 @@ export const CategoryTable: FC<TCategory> = ({ category }) => {
                             </DialogHeader>
                           </DialogContent>
                         </Dialog>
-                        <Button variant="destructive" className="w-8 h-8 p-0">
-                          <IconTrash className="p-0" height={17} />
-                        </Button>
+                        <Dialog>
+                          <DialogTrigger asChild>
+                            <Button variant="destructive" className="w-8 h-8 p-0">
+                              <IconTrash className="p-0" height={17} />
+                            </Button>
+                          </DialogTrigger>
+                          <DialogContent>
+                            <DialogHeader>
+                              <DialogTitle>Delete Category</DialogTitle>
+                              <DialogClose asChild >
+                                <DeleteCategoryForm id={Number(value.id)} name={value.name} />
+                              </DialogClose>
+                            </DialogHeader>
+                          </DialogContent>
+                        </Dialog>
                       </div>
                     </TableCell>
                   </TableRow>

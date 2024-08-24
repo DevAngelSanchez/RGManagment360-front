@@ -16,10 +16,23 @@ import {
   CardTitle,
   CardDescription,
 } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogClose,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { IconTrash, IconEdit } from "@tabler/icons-react";
 import { Button } from "@/components/ui/button";
+import EditFormSubCategory from "./EditFormSubCategory";
+import { fetchCategories } from "@/lib/fetch";
+import { DeleteSubcategoryForm } from "./DeleteSubcategoryForm";
 
 interface ISubcategory {
+  id: string;
   name: string;
   categoryId: string;
   mayorCategory: {
@@ -32,8 +45,9 @@ type TSubcategory = {
   subcategories: ISubcategory[];
 };
 
-export const SubCategoryTable: FC<TSubcategory> = ({ subcategories }) => {
-  console.log(subcategories);
+export const SubCategoryTable: FC<TSubcategory> = async ({ subcategories }) => {
+
+  const categories = await fetchCategories();
 
   return (
     <div>
@@ -69,12 +83,39 @@ export const SubCategoryTable: FC<TSubcategory> = ({ subcategories }) => {
                     </TableCell>
                     <TableCell>
                       <div className="flex justify-end items-center gap-2">
-                        <Button variant="secondary" className="w-8 h-8 p-0">
-                          <IconEdit className="p-0" height={17} />
-                        </Button>
-                        <Button variant="destructive" className="w-8 h-8 p-0">
-                          <IconTrash className="p-0" height={17} />
-                        </Button>
+
+                        <Dialog>
+                          <DialogTrigger asChild>
+                            <Button variant="secondary" className="w-8 h-8 p-0">
+                              <IconEdit className="p-0" height={17} />
+                            </Button>
+                          </DialogTrigger>
+                          <DialogContent>
+                            <DialogHeader>
+                              <DialogTitle>Edit Subcategory</DialogTitle>
+                              <DialogDescription>Are you sure that you want to delete this category?</DialogDescription>
+                              <DialogClose asChild >
+                                <EditFormSubCategory categories={categories} subcategory={value} />
+                              </DialogClose>
+                            </DialogHeader>
+                          </DialogContent>
+                        </Dialog>
+
+                        <Dialog>
+                          <DialogTrigger asChild>
+                            <Button variant="destructive" className="w-8 h-8 p-0">
+                              <IconTrash className="p-0" height={17} />
+                            </Button>
+                          </DialogTrigger>
+                          <DialogContent>
+                            <DialogHeader>
+                              <DialogTitle>Delete Subcategory</DialogTitle>
+                              <DialogClose asChild >
+                                <DeleteSubcategoryForm id={Number(value.id)} name={value.name} />
+                              </DialogClose>
+                            </DialogHeader>
+                          </DialogContent>
+                        </Dialog>
                       </div>
                     </TableCell>
                   </TableRow>
