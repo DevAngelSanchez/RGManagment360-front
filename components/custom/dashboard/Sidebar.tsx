@@ -48,7 +48,7 @@ export default function Sidebar() {
                 <IconUserStar size={SidebarLinkIconSize} />
                 Customers
               </SidebarItemLink>
-              <SidebarItemLink href="/dashboard/manage-suppliers">
+              <SidebarItemLink href="/dashboard/manage-service-providers">
                 <IconUsersGroup size={SidebarLinkIconSize} />
                 Suppliers
               </SidebarItemLink>

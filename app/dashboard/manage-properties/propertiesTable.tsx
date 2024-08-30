@@ -36,29 +36,8 @@ import {
 
 import { DeletePropertyForm } from "./deleteForm";
 import { EditPropertyForm } from "./editForm";
+import { Property } from "@/lib/types";
 
-export interface User {
-  id: number;
-  name: string;
-  lastname: string;
-  username: string;
-  email: string;
-  phone: string;
-}
-
-export interface Property {
-  id: number;
-  name: string;
-  owner?: User;
-  ownerId?: string;
-  phone: string;
-  address: string;
-  city: string;
-  state: string;
-  zipPostalCode: string;
-  inventory?: [];
-  tasks?: [];
-}
 
 type PropertiesTableProps = {
   properties: Property[];

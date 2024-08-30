@@ -1,5 +1,6 @@
-import * as React from "react";
+"use client"
 
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -43,6 +44,9 @@ type Props = {
 };
 
 export const UserView: React.FC<Props> = ({ users }) => {
+
+  const [selectedUsers, setSelectedUsers] = useState(users);
+
   return (
     <>
       <div className="flex flex-row justify-between pr-8">
@@ -92,8 +96,8 @@ export const UserView: React.FC<Props> = ({ users }) => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {users &&
-                  users.map((value) => (
+                {selectedUsers &&
+                  selectedUsers.map((value) => (
                     <TableRow key={value.id}>
                       <TableCell>{value.name}</TableCell>
                       <TableCell>{value.lastname}</TableCell>
@@ -157,7 +161,7 @@ export const UserView: React.FC<Props> = ({ users }) => {
                 <TableRow>
                   <TableCell colSpan={3}>Total users</TableCell>
                   <TableCell className="text-right">
-                    {users.length + 1} Users
+                    {selectedUsers.length} Users
                   </TableCell>
                 </TableRow>
               </TableFooter>

@@ -2,13 +2,13 @@ import { Button } from "@/components/ui/button";
 import { UserAvatar } from "./UserAvatar";
 import { IconBrandWhatsapp } from "@tabler/icons-react";
 
-type DirectoryItemProps = {
+type Props = {
   name: string;
   email: string;
-  phone: string;
+  phone?: string;
 }
 
-const DirectoryItem: React.FC<DirectoryItemProps> = ({ name, email, phone }) => {
+const DirectoryItem: React.FC<Props> = ({ name, email, phone }) => {
   return (
     <div className="flex items-center justify-between gap-4 mb-4">
       <div className="flex items-center gap-4">

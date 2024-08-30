@@ -15,8 +15,8 @@ import {
 import { IconUsersGroup } from "@tabler/icons-react";
 import DirectoryItem from "@/components/custom/dashboard/DirectoryItem";
 
-import { ServiceProvider } from "./manage-suppliers/ServiceProvidersList";
-import { fetchSuppliers } from "@/lib/fetch";
+import { fetchServiceProviders } from "@/lib/fetch";
+import { User } from "@/lib/types";
 
 export default async function Dashboard() {
   const session = await auth();
@@ -25,8 +25,8 @@ export default async function Dashboard() {
     return redirect("/auth/login");
   }
 
-  let suppliers: ServiceProvider[] = [];
-  suppliers = await fetchSuppliers();
+  const serviceProvidersResult = await fetchServiceProviders();
+  const servicesProviders: User[] = serviceProvidersResult.data || [];
 
   return (
     <main>
@@ -59,8 +59,8 @@ export default async function Dashboard() {
                 <CardContent>
                   <ScrollArea className="h-[490px]">
                     <div className="h-max pr-4">
-                      {suppliers &&
-                        suppliers.map((item) => (
+                      {servicesProviders &&
+                        servicesProviders.map((item) => (
                           <DirectoryItem
                             key={item.id}
                             name={item.name}

@@ -10,20 +10,13 @@ import { IconUsersGroup } from '@tabler/icons-react';
 import { ScrollArea } from "@/components/ui/scroll-area";
 import DirectoryItem from '@/components/custom/dashboard/DirectoryItem';
 import { ScrollBar } from '@/components/ui/scroll-area';
+import { User } from '@/lib/types';
 
-export interface ServiceProvider {
-  id: number;
-  name: string;
-  email: string;
-  phone: string;
+interface Props {
+  serviceProviders: User[]
 }
 
-type ServiceProviderListProps = {
-  ServiceProviders: ServiceProvider[]
-}
-
-
-const ServiceProvidersList: React.FC<ServiceProviderListProps> = ({ ServiceProviders }) => {
+const ServiceProvidersList: React.FC<Props> = ({ serviceProviders }) => {
 
   return (
     <Card>
@@ -37,7 +30,7 @@ const ServiceProvidersList: React.FC<ServiceProviderListProps> = ({ ServiceProvi
       <CardContent>
         <ScrollArea className="h-[490px]">
           <div className='h-max pr-4'>
-            {ServiceProviders && ServiceProviders.map(item => (
+            {serviceProviders && serviceProviders.map(item => (
               <DirectoryItem key={item.id} name={item.name} email={item.email} phone={item.phone} />
             ))}
           </div>

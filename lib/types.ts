@@ -45,6 +45,8 @@ export interface Property {
   city: string;
   state: string;
   zipPostalCode: string;
+  owner?: User;
+  ownerId?: string;
 }
 
 export interface Task {

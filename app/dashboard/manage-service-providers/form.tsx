@@ -154,7 +154,7 @@ export function CreateServiceProviderForm() {
     }
 
     const data = await result.json();
-    router.push("/dashboard/manage-suppliers")
+    router.push("/dashboard/manage-service-providers")
     return;
   }
 
