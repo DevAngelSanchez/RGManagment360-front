@@ -1,102 +1,45 @@
 import { apiUrl } from "@/auth";
 import { headers } from "next/headers";
-const headersList = headers();
+import { Category, Property, Subcategory, Supplier, User } from "./types";
+// const headersList = headers();
 
-export const fetchSuppliers = async () => {
+interface FetchResult<Type> {
+  data?: Type;
+  error?: string;
+}
+
+const fetchData = async <Type>(url: string): Promise<FetchResult<Type>> => {
   try {
-    const response = await fetch(`${apiUrl}api/suppliers`, {
+    const response = await fetch(url, {
       method: "GET",
-      headers: headersList
+      headers: {
+        "Content-Type": "application/json"
+      },
     });
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.log(error);
-    return;
+
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status} - ${response.statusText}`);
+    }
+
+    const data: Type = await response.json();
+
+    if (data && Object.keys(data).length === 0) {
+      return { error: "Data is empty" }
+    }
+
+    return { data }
+
+  } catch (error: any) {
+    console.error("Fetch Error: ", error.message);
+    return { error: error.message }
   }
 }
 
-export const fetchUsers = async () => {
-  try {
-    const response = await fetch(`${apiUrl}api/users`, {
-      method: "GET",
-      headers: headersList
-    })
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.log(error);
-    return;
-  }
-}
+export const fetchUsers = () => fetchData<User[]>(`${apiUrl}api/users`);
+export const fetchCategories = () => fetchData<Category[]>(`${apiUrl}api/categories`);
+export const fetchSuppliers = () => fetchData<Supplier[]>(`${apiUrl}api/suppliers`);
+export const fetchSubcategories = () => fetchData<Subcategory[]>(`${apiUrl}api/subcategories`);
+export const fetchProperties = () => fetchData<Property[]>(`${apiUrl}api/properties`);
+export const fetchServiceProviders = () => fetchData<User[]>(`${apiUrl}api/users/by-role/SERVICE_PROVIDER`);
+export const fetchCustomers = () => fetchData<User[]>(`${apiUrl}api/users/by-role/CUSTOMER`);
 
-export const fetchServicesProviders = async () => {
-
-  try {
-    const response = await fetch(`${apiUrl}api/users/by-role/SERVICE_PROVIDER`, {
-      method: "GET",
-      headers: headersList
-    });
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.log(error);
-    return;
-  }
-}
-
-export const fetchCategories = async () => {
-  try {
-    const response = await fetch(`${apiUrl}api/categories`, {
-      method: "GET",
-      headers: headersList
-    });
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.log(error);
-    return;
-  }
-}
-
-export const fetchSubcategories = async () => {
-  try {
-    const response = await fetch(`${apiUrl}api/subcategories`, {
-      method: "GET",
-      headers: headersList
-    });
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.log(error);
-    return;
-  }
-}
-
-export const fetchCustomers = async () => {
-  try {
-    const response = await fetch(`${apiUrl}api/users/by-role/CUSTOMER`, {
-      method: "GET",
-      headers: headersList
-    });
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.log(error);
-    return;
-  }
-}
-
-export const fetchProperties = async () => {
-  try {
-    const response = await fetch(`${apiUrl}api/properties`, {
-      method: "GET",
-      headers: headersList
-    });
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.log(error);
-    return;
-  }
-}

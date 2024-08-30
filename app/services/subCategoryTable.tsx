@@ -30,24 +30,14 @@ import { Button } from "@/components/ui/button";
 import EditFormSubCategory from "./EditFormSubCategory";
 import { fetchCategories } from "@/lib/fetch";
 import { DeleteSubcategoryForm } from "./DeleteSubcategoryForm";
-
-interface ISubcategory {
-  id: string;
-  name: string;
-  categoryId: string;
-  mayorCategory: {
-    id: number;
-    name: string;
-  };
-}
+import { Category, Subcategory } from "@/lib/types";
 
 type TSubcategory = {
-  subcategories: ISubcategory[];
+  categories: Category[] | null;
+  subcategories: Subcategory[] | null;
 };
 
-export const SubCategoryTable: FC<TSubcategory> = async ({ subcategories }) => {
-
-  const categories = await fetchCategories();
+export const SubCategoryTable: FC<TSubcategory> = async ({ categories, subcategories }) => {
 
   return (
     <div>

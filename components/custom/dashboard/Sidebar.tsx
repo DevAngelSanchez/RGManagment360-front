@@ -32,7 +32,7 @@ export default function Sidebar() {
             </SidebarItemsLinkContainer>
 
             <SidebarItemsLinkContainer>
-              <SidebarItemLink href="/manage-users">
+              <SidebarItemLink href="/dashboard/manage-users">
                 <IconUser />
                 Manage Users
               </SidebarItemLink>

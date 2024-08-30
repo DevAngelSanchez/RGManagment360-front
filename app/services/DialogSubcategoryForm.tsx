@@ -23,13 +23,14 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { apiUrl } from "@/auth";
+import { Category } from "@/lib/types";
 
-interface ISubcategory {
-  name: string;
-  id: number;
-}
+// interface ISubcategory {
+//   name: string;
+//   id: number;
+// }
 type TSubcategoryProps = {
-  category: ISubcategory[];
+  category: Category[] | null;
 };
 
 const formSchema = z.object({

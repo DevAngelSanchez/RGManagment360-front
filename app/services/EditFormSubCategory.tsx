@@ -23,24 +23,25 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Category, Subcategory } from "@/lib/types";
 
-interface ISubcategory {
-  id: string;
-  name: string;
-  mayorCategory: {
-    id: number;
-    name: string;
-  }
-};
+// interface ISubcategory {
+//   id: string;
+//   name: string;
+//   mayorCategory: {
+//     id: number;
+//     name: string;
+//   }
+// };
 
-interface ICategory {
-  id: string;
-  name: string;
-};
+// interface ICategory {
+//   id: string;
+//   name: string;
+// };
 
 interface EditSubCategoryProps {
-  categories: ICategory[];
-  subcategory: ISubcategory;
+  categories: Category[] | null;
+  subcategory: Subcategory;
 }
 
 const formSchema = z.object({

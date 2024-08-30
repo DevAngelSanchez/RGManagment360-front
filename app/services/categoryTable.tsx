@@ -29,14 +29,10 @@ import {
 } from "@/components/ui/dialog";
 import EdirFormCategory from "./EditFormCategory";
 import { DeleteCategoryForm } from "./DeleteCategory";
-
-interface ICategory {
-  name: string;
-  id: string;
-}
+import { Category } from "@/lib/types";
 
 type TCategory = {
-  category: ICategory[];
+  category: Category[] | null;
 };
 
 export const CategoryTable: FC<TCategory> = ({ category }) => {
@@ -87,7 +83,7 @@ export const CategoryTable: FC<TCategory> = ({ category }) => {
                               <DialogClose asChild>
                                 <EdirFormCategory
                                   name={value.name}
-                                  id={value.id}
+                                  id={value.id.toString()}
                                 />
                               </DialogClose>
                             </DialogHeader>

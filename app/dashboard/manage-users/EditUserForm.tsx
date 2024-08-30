@@ -1,11 +1,11 @@
-"use client"
+"use client";
 
 import React, { useState, useEffect, FC } from "react";
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -22,51 +22,57 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Label } from "@/components/ui/label"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
 import { apiUrl } from "@/auth";
 import { IconEdit } from "@tabler/icons-react";
+import { User } from "@/lib/types";
 
 interface Props {
   user: User;
   id: number;
 }
 
-interface User {
-  id: number;
-  name: string;
-  lastname: string;
-  username: string;
-  email: string;
-  phone: string;
-  address: string;
-  role: string;
-  isActive: string;
-}
-
 const formSchema = z.object({
-  name: z.string().min(3, {
-    message: "The user name must have more than 3 characters"
-  }).trim(),
-  lastname: z.string().min(3, {
-    message: "The user lastname must have more than 3 characters"
-  }).trim(),
-  username: z.string().min(3, {
-    message: "The user nickname must have more than 3 characters"
-  }).trim(),
-  email: z.string().min(3, {
-    message: "The user email must have more than 3 characters"
-  }).trim(),
-  phone: z.string().min(3, {
-    message: "The user phone must have more than 3 characters"
-  }).trim(),
-  address: z.string().min(3, {
-    message: "The user address must have more than 3 characters"
-  }).trim(),
+  name: z
+    .string()
+    .min(3, {
+      message: "The user name must have more than 3 characters",
+    })
+    .trim(),
+  lastname: z
+    .string()
+    .min(3, {
+      message: "The user lastname must have more than 3 characters",
+    })
+    .trim(),
+  username: z
+    .string()
+    .min(3, {
+      message: "The user nickname must have more than 3 characters",
+    })
+    .trim(),
+  email: z
+    .string()
+    .min(3, {
+      message: "The user email must have more than 3 characters",
+    })
+    .trim(),
+  phone: z
+    .string()
+    .min(3, {
+      message: "The user phone must have more than 3 characters",
+    })
+    .trim(),
+  address: z
+    .string()
+    .min(3, {
+      message: "The user address must have more than 3 characters",
+    })
+    .trim(),
   role: z.string(),
   isActive: z.string(),
 });
@@ -85,17 +91,16 @@ export const EditUserForm: FC<Props> = ({ user, id }) => {
       phone: user.phone,
       address: user.address,
       role: user.role,
-      isActive: user.isActive
+      isActive: user.isActive,
     },
-  })
+  });
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
-
     const result = await fetch(`${apiUrl}api/users/update-user`, {
       method: "PUT",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         id: user.id,
@@ -106,8 +111,8 @@ export const EditUserForm: FC<Props> = ({ user, id }) => {
         phone: values?.phone,
         address: values?.address,
         role: values?.role,
-        isActive: values?.isActive
-      })
+        isActive: values?.isActive,
+      }),
     });
 
     if (!result.ok) {
@@ -116,14 +121,17 @@ export const EditUserForm: FC<Props> = ({ user, id }) => {
     }
 
     const data = await result.json();
-    console.log(data)
+    console.log(data);
     router.push("/dashboard/manage-users");
     return;
   }
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 min-w-[360px]">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="space-y-4 min-w-[360px] "
+      >
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
           <div className="w-full">
             <FormField
@@ -157,32 +165,40 @@ export const EditUserForm: FC<Props> = ({ user, id }) => {
           </div>
         </div>
 
-        <FormField
-          control={form.control}
-          name="username"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Username</FormLabel>
-              <FormControl>
-                <Input placeholder="JohnDoe2" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Email</FormLabel>
-              <FormControl>
-                <Input type="email" placeholder="john@gmail.com" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
+          <div className="w-full">
+            <FormField
+              control={form.control}
+              name="username"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Username</FormLabel>
+                  <FormControl>
+                    <Input placeholder="JohnDoe2" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+
+          <div className="w-full">
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email</FormLabel>
+                  <FormControl>
+                    <Input type="email" placeholder="john@gmail.com" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+        </div>
+
         <FormField
           control={form.control}
           name="address"
@@ -190,7 +206,10 @@ export const EditUserForm: FC<Props> = ({ user, id }) => {
             <FormItem>
               <FormLabel>Address</FormLabel>
               <FormControl>
-                <Input placeholder="P. Sherman, wallaby street, 42, sidney" {...field} />
+                <Input
+                  placeholder="P. Sherman, wallaby street, 42, sidney"
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -217,22 +236,19 @@ export const EditUserForm: FC<Props> = ({ user, id }) => {
               render={({ field }) => (
                 <FormItem className="">
                   <FormLabel>Role</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder="Select a Role" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="MANAGER">
-                        Manager
-                      </SelectItem>
-                      <SelectItem value="ASISSTANT">
-                        Assistant
-                      </SelectItem>
-                      <SelectItem value="CUSTOMER">
-                        CUSTOMER
-                      </SelectItem>
+                      <SelectItem value="MANAGER">Manager</SelectItem>
+                      <SelectItem value="ASISSTANT">Assistant</SelectItem>
+                      <SelectItem value="CUSTOMER">CUSTOMER</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />
@@ -247,9 +263,12 @@ export const EditUserForm: FC<Props> = ({ user, id }) => {
               render={({ field }) => (
                 <FormItem className="">
                   <FormLabel>Account Status</FormLabel>
-                  <FormControl >
-                    <RadioGroup onValueChange={field.onChange}
-                      defaultValue={field.value} className="flex items-center gap-2 py-2">
+                  <FormControl>
+                    <RadioGroup
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                      className="flex items-center gap-2 py-2"
+                    >
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem value="active" id="active" />
                         <Label htmlFor="active">Active</Label>
@@ -266,11 +285,11 @@ export const EditUserForm: FC<Props> = ({ user, id }) => {
             />
           </div>
         </div>
-        < Button className="w-full" type="submit" >
+        <Button className="w-full" type="submit">
           <IconEdit size={24} />
           Save user
-        </Button >
-      </form >
-    </Form >
-  )
-}
+        </Button>
+      </form>
+    </Form>
+  );
+};
