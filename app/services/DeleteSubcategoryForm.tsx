@@ -20,6 +20,7 @@ import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
 import { apiUrl } from "@/auth";
 import { IconTrash } from "@tabler/icons-react";
+import { DeleteSubcategory } from "./actions";
 
 const formSchema = z.object({
   id: z.number(),
@@ -46,24 +47,8 @@ export const DeleteSubcategoryForm: FC<Props> = ({ id, name }) => {
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
 
-    const result = await fetch(`${apiUrl}api/subcategories/delete-subcategory`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        id: values?.id,
-      })
-    });
-
-    if (!result.ok) {
-      alert("Error trying to delete this category");
-      return;
-    }
-
-    await result.json();
-    router.push("/services");
-    return;
+    const result = await DeleteSubcategory(id);
+    router.refresh();
   }
 
   return (

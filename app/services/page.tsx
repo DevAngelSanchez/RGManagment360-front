@@ -22,6 +22,8 @@ export default async function Page() {
   const categoriesResult = await fetchCategories();
   const categories: Category[] = categoriesResult.data || [];
 
+  console.log(categories);
+
   return (
     <LayoutSelector layout="default">
       <main>
@@ -54,7 +56,7 @@ export default async function Page() {
               </Dialog>
 
               <Dialog>
-                {!categories || categories.length === 0 ? (
+                {/* {!categories || categories.length === 0 ? (
                   <DialogTrigger
                     disabled
                     className="hidden px-4 py-2 md:flex items-center gap-2 rounded-md bg-gray-500 text-primary-foreground cursor"
@@ -67,7 +69,11 @@ export default async function Page() {
                     <IconPlus size={24} />
                     Create Subcategory
                   </DialogTrigger>
-                )}
+                )} */}
+                <DialogTrigger className="hidden px-4 py-2 md:flex items-center gap-2 rounded-md bg-teal-600 text-primary-foreground hover:bg-teal-500 transition-all">
+                  <IconPlus size={24} />
+                  Create Subcategory
+                </DialogTrigger>
                 <DialogTrigger className="md:hidden px-2 py-1 flex items-center rounded-md bg-teal-600 text-primary-foreground hover:bg-teal-500 transition-all">
                   <IconPlus size={18} />
                   Subcategory

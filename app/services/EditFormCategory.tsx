@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { EditCategory } from "./actions";
 
 type TCategory = {
   name: string;
@@ -29,33 +30,11 @@ const formSchema = z.object({
 });
 
 export const EditFormCategory: FC<TCategory> = ({ id, name }) => {
-  console.log(id, name, 1111);
   const router = useRouter();
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    try {
-      const result = await fetch(`${apiUrl}api/categories/update-category`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          id: id,
-          name: values?.category,
-        }),
-      });
-      console.log(await result);
 
-      if (!result.ok) {
-        console.log("Error trying to create a new category");
-        return null;
-      } else {
-        router.push("/services");
-        console.log("categoria creada", values.category);
-      }
-    } catch (error) {
-      console.log(error);
-      return;
-    }
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    const result = await EditCategory(Number(id), values.category);
+    router.refresh();
   }
 
   const form = useForm<z.infer<typeof formSchema>>({

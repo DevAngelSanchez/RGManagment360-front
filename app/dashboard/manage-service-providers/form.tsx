@@ -27,6 +27,7 @@ import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
 import { apiUrl } from "@/auth";
 import { IconPlus } from "@tabler/icons-react";
+import { CreateServiceProvider } from "./actions";
 
 interface Category {
   id: number;
@@ -130,32 +131,9 @@ export function CreateServiceProviderForm() {
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
 
-    const result = await fetch(`${apiUrl}api/users/create-service-provider`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        name: values?.name,
-        lastname: values?.lastname,
-        username: values?.username,
-        category: values?.category,
-        subcategory: values?.subcategory,
-        email: values?.email,
-        address: values?.address,
-        phone: values?.phone,
-        password: values?.password
-      })
-    });
-
-    if (!result.ok) {
-      alert("Error trying to create a supplier");
-      return;
-    }
-
-    const data = await result.json();
-    router.push("/dashboard/manage-service-providers")
-    return;
+    const { name, lastname, username, category, subcategory, address, email, phone, password } = values;
+    const result = await CreateServiceProvider(name, lastname, username, category, subcategory, address, email, phone, password);
+    router.refresh();
   }
 
   return (

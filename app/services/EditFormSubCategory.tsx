@@ -24,6 +24,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Category, Subcategory } from "@/lib/types";
+import { EditSubcategory } from "./actions";
 
 // interface ISubcategory {
 //   id: string;
@@ -46,7 +47,7 @@ interface EditSubCategoryProps {
 
 const formSchema = z.object({
   name: z.string().min(2, {
-    message: "Category must be at least 2 characters.",
+    message: "Subcategory must be at least 2 characters.",
   }),
   parentCategoryId: z.string(),
 });
@@ -54,29 +55,8 @@ const formSchema = z.object({
 export const EditFormSubCategory: FC<EditSubCategoryProps> = ({ categories, subcategory }) => {
   const router = useRouter();
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    try {
-      const result = await fetch(`${apiUrl}api/subcategories/update-subcategory`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          id: subcategory.id,
-          name: values?.name,
-        }),
-      });
-
-      if (!result.ok) {
-        console.log("Error trying toupdate this category");
-        return null;
-      } else {
-        router.push("/services");
-        console.log("Subcategory updated", values.name);
-      }
-    } catch (error) {
-      console.log(error);
-      return;
-    }
+    const result = await EditSubcategory(subcategory.id, values.name, values.parentCategoryId);
+    router.refresh()
   }
 
   const form = useForm<z.infer<typeof formSchema>>({

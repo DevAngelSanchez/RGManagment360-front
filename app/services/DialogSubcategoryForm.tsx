@@ -24,6 +24,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { apiUrl } from "@/auth";
 import { Category } from "@/lib/types";
+import { CreateSubcategory } from "./actions";
 
 // interface ISubcategory {
 //   name: string;
@@ -45,32 +46,8 @@ const formSchema = z.object({
 export const DialogSubcategoryForm: FC<TSubcategoryProps> = ({ category }) => {
   const router = useRouter();
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values, 22);
-    try {
-      const result = await fetch(
-        `${apiUrl}api/subcategories/create-subcategory`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            name: values?.subcategory,
-            categoryId: Number(values?.categoryId),
-          }),
-        }
-      );
-
-      if (!result.ok) {
-        console.log("Error trying to create a new subcategory");
-        return null;
-      } else {
-        router.push("/services");
-      }
-    } catch (error) {
-      console.log(error);
-      return;
-    }
+    const result = await CreateSubcategory(values.subcategory, values.categoryId);
+    router.refresh();
   }
 
   const form = useForm<z.infer<typeof formSchema>>({

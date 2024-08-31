@@ -31,7 +31,7 @@ export default function LoginPage() {
       </div>
       <div className="flex flex-col items-center gap-8 w-full bg-primary p-8 rounded-tr-xl rounded-br-xl">
         <h2 className="text-2xl font-bold text-center max-w-[290px] text-primary-foreground">
-          Property Managment Customer
+          Property Managment
         </h2>
         <Image
           src="/img/register.jpg"
