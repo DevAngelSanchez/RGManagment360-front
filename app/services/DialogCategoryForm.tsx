@@ -28,8 +28,8 @@ export function DialogCategoryForm() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
       const result = await createCategory(values.category);
-      router.push("/services");
       console.log("categoria creada", values.category);
+      router.refresh();
     } catch (error) {
       console.log(error);
       return;
