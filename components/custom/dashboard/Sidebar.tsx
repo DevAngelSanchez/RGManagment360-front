@@ -1,16 +1,10 @@
 import SidebarItemLink from "../Sidebar/SidebarItemLink";
 import SidebarItemsLinkContainer from "../Sidebar/SidebarItemsLinkContainer";
 import { SidebarLinkIconSize } from "@/lib/measurementUnits";
-import Link from "next/link";
 
 import {
   IconBuildingEstate,
-  IconFileInvoice,
-  IconPackages,
-  IconSettings,
   IconTools,
-  IconUserCircle,
-  IconUserStar,
   IconUsersGroup,
   IconHome,
   IconUser,
@@ -31,26 +25,22 @@ export default function Sidebar() {
               </SidebarItemLink>
             </SidebarItemsLinkContainer>
 
+          </div>
+          <div>
             <SidebarItemsLinkContainer>
               <SidebarItemLink href="/dashboard/manage-users">
                 <IconUser />
                 Manage Users
               </SidebarItemLink>
             </SidebarItemsLinkContainer>
-          </div>
-          <div>
             <SidebarItemsLinkContainer>
               <SidebarItemLink href="/services">
                 <IconTools size={SidebarLinkIconSize} />
                 Services
               </SidebarItemLink>
-              <SidebarItemLink href="/dashboard/manage-customers">
-                <IconUserStar size={SidebarLinkIconSize} />
-                Customers
-              </SidebarItemLink>
               <SidebarItemLink href="/dashboard/manage-service-providers">
                 <IconUsersGroup size={SidebarLinkIconSize} />
-                Suppliers
+                Serevices Providers
               </SidebarItemLink>
               <SidebarItemLink href="/dashboard/manage-properties">
                 <IconBuildingEstate />
@@ -58,20 +48,8 @@ export default function Sidebar() {
               </SidebarItemLink>
             </SidebarItemsLinkContainer>
           </div>
-          <div>
-            <SidebarItemsLinkContainer>
-              <SidebarItemLink href="">
-                <IconPackages size={SidebarLinkIconSize} />
-                Inventory
-              </SidebarItemLink>
-              <SidebarItemLink href="">
-                <IconFileInvoice />
-                Invoices
-              </SidebarItemLink>
-            </SidebarItemsLinkContainer>
-          </div>
         </div>
-        <div>
+        {/* <div>
           <SidebarItemsLinkContainer>
             <SidebarItemLink href="">
               <IconUserCircle />
@@ -82,7 +60,7 @@ export default function Sidebar() {
               Settings
             </SidebarItemLink>
           </SidebarItemsLinkContainer>
-        </div>
+        </div> */}
       </div>
     </div>
   );

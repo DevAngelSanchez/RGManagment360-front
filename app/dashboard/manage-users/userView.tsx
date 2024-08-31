@@ -1,6 +1,3 @@
-"use client"
-
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -11,9 +8,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { IconTrash, IconEdit } from "@tabler/icons-react";
-
-import { IconPlus } from "@tabler/icons-react";
-import CreateUserForm from "./CreateUserForm";
 
 //empieza la tabla
 import {
@@ -38,37 +32,15 @@ import {
 import { DeleteUserForm } from "./DeleteUserForm";
 import { EditUserForm } from "./EditUserForm";
 import { User } from "@/lib/types";
+import { fetchUsers } from "@/lib/fetch";
 
-type Props = {
-  users: User[];
-};
+export async function UserView() {
 
-export const UserView: React.FC<Props> = ({ users }) => {
-
-  const [selectedUsers, setSelectedUsers] = useState(users);
+  const usersResult = await fetchUsers();
+  const users: User[] = usersResult.data || [];
 
   return (
     <>
-      <div className="flex flex-row justify-between pr-8">
-        <h1 className="text-4xl font-bold mb-4">USERS</h1>
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button>
-              <IconPlus className="p-0" height={17} />
-              Create User
-            </Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Add a new User</DialogTitle>
-              <DialogClose asChild>
-                <CreateUserForm />
-              </DialogClose>
-            </DialogHeader>
-          </DialogContent>
-        </Dialog>
-      </div>
-
       <div className="flex justify-center">
         <Card className="w-full">
           <CardHeader className="bg-green-200 rounded-t-md">
@@ -96,8 +68,8 @@ export const UserView: React.FC<Props> = ({ users }) => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {selectedUsers &&
-                  selectedUsers.map((value) => (
+                {users &&
+                  users.map((value) => (
                     <TableRow key={value.id}>
                       <TableCell>{value.name}</TableCell>
                       <TableCell>{value.lastname}</TableCell>
@@ -161,7 +133,7 @@ export const UserView: React.FC<Props> = ({ users }) => {
                 <TableRow>
                   <TableCell colSpan={3}>Total users</TableCell>
                   <TableCell className="text-right">
-                    {selectedUsers.length} Users
+                    {users.length} Users
                   </TableCell>
                 </TableRow>
               </TableFooter>

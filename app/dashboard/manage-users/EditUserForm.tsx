@@ -30,6 +30,7 @@ import { useRouter } from "next/navigation";
 import { apiUrl } from "@/auth";
 import { IconEdit } from "@tabler/icons-react";
 import { User } from "@/lib/types";
+import { EditUser } from "./actions";
 
 interface Props {
   user: User;
@@ -97,32 +98,12 @@ export const EditUserForm: FC<Props> = ({ user, id }) => {
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    const result = await fetch(`${apiUrl}api/users/update-user`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        id: user.id,
-        name: values?.name,
-        lastname: values?.lastname,
-        username: values?.username,
-        email: values?.email,
-        phone: values?.phone,
-        address: values?.address,
-        role: values?.role,
-        isActive: values?.isActive,
-      }),
-    });
+    const { name, lastname, username, email, phone, address, role, isActive } = values;
 
-    if (!result.ok) {
-      alert("Error trying to update this user");
-      return;
-    }
+    const result = await EditUser(user.id, name, lastname, username, email, phone, address, role, isActive);
 
-    const data = await result.json();
-    console.log(data);
-    router.push("/dashboard/manage-users");
+    console.log(result);
+    router.refresh();
     return;
   }
 

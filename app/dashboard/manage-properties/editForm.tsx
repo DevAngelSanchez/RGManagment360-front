@@ -28,6 +28,7 @@ import { useRouter } from "next/navigation";
 import { apiUrl } from "@/auth";
 import { IconEdit } from "@tabler/icons-react";
 import { Property } from "@/lib/types";
+import { EditProperty } from "./actions";
 
 interface EditPropertyFormProps {
   property: Property;
@@ -100,28 +101,9 @@ export const EditPropertyForm: FC<EditPropertyFormProps> = ({ property }) => {
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
 
-    const result = await fetch(`${apiUrl}api/properties/update-property`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        id: values?.id,
-        name: values?.name,
-        address: values?.address,
-        city: values?.city,
-        state: values?.state,
-        zipPostalCode: values?.zipPostalCode,
-        ownerId: Number(values?.ownerId)
-      })
-    });
-
-    if (!result.ok) {
-      alert("Error trying to update this property");
-      return;
-    }
-
-    const data = await result.json();
+    const { id, name, address, city, state, zipPostalCode, ownerId } = values;
+    const result = await EditProperty(id, name, address, city, state, zipPostalCode, ownerId);
+    console.log(result);
     router.push("/dashboard/manage-properties");
     return;
   }

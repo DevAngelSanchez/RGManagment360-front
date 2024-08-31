@@ -27,6 +27,7 @@ import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
 import { apiUrl } from "@/auth";
 import { IconPlus, IconTrash } from "@tabler/icons-react";
+import { DeleteProperty } from "./actions";
 
 const formSchema = z.object({
   id: z.number(),
@@ -53,23 +54,9 @@ export const DeletePropertyForm: FC<DeletePropertyFormProps> = ({ id, name }) =>
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
 
-    const result = await fetch(`${apiUrl}api/properties/delete-property`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        id: values?.id,
-      })
-    });
-
-    if (!result.ok) {
-      alert("Error trying to create this property");
-      return;
-    }
-
-    const data = await result.json();
-    router.push("/dashboard/manage-properties");
+    const result = await DeleteProperty(values.id);
+    console.log(result)
+    router.refresh();
     return;
   }
 

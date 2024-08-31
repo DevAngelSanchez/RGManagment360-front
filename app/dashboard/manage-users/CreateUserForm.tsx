@@ -28,6 +28,7 @@ import { apiUrl } from "@/auth";
 import { phoneNumberValidation } from "@/lib/utils";
 import { IconPlus } from "@tabler/icons-react";
 import AlertComponent from "@/components/custom/alert";
+import { CreateUser } from "./actions";
 
 const formSchema = z.object({
 	name: z.string().min(3, {
@@ -62,6 +63,7 @@ export default function CreateUserForm() {
 		defaultValues: {
 			name: "",
 			lastname: "",
+			username: '',
 			email: "",
 			password: "",
 			address: "",
@@ -72,30 +74,11 @@ export default function CreateUserForm() {
 
 	async function onSubmit(values: z.infer<typeof formSchema>) {
 		try {
-			const result = await fetch(`${apiUrl}api/users/create-user`, {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json"
-				},
-				body: JSON.stringify({
-					name: values?.name,
-					lastname: values?.lastname,
-					email: values?.email,
-					password: values?.password,
-					address: values?.address,
-					phoneNumber: values?.phone,
-					role: values?.role
-				})
-			});
-
-			if (!result.ok) {
-				console.log("Error trying to create a new user");
-				return null;
-			} else {
-				const data = await result.json();
-				setAlert({ title: "Success!", msg: data.msg, show: true });
-				router.push("/dashboard/manage-users");
-			}
+			const { name, lastname, username, email, password, address, phone, role } = values;
+			const result = await CreateUser(name, lastname, username, email, password, address, phone, role);
+			console.log(result)
+			setAlert({ title: "Success!", msg: result.msg, show: true });
+			router.refresh();
 		} catch (error) {
 			console.log(error);
 			return;

@@ -20,6 +20,7 @@ import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
 import { apiUrl } from "@/auth";
 import { IconTrash } from "@tabler/icons-react";
+import { DeleteUser } from "./actions";
 
 const formSchema = z.object({
   id: z.number(),
@@ -45,24 +46,9 @@ export const DeleteUserForm: FC<Props> = ({ id, name }) => {
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
-
-    const result = await fetch(`${apiUrl}api/users/delete-user`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        id: values?.id,
-      })
-    });
-
-    if (!result.ok) {
-      alert("Error trying to delete this user");
-      return;
-    }
-
-    await result.json();
-    router.push("/manage-users");
+    const result = await DeleteUser(values.id);
+    alert("User deleted successfully")
+    router.refresh();
     return;
   }
 

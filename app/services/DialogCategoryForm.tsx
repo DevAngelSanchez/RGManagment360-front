@@ -26,10 +26,8 @@ const formSchema = z.object({
 export function DialogCategoryForm() {
   const router = useRouter();
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
     try {
       const result = await createCategory(values.category);
-      console.log(result)
       router.push("/services");
       console.log("categoria creada", values.category);
     } catch (error) {

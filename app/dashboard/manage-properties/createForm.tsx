@@ -27,6 +27,7 @@ import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
 import { apiUrl } from "@/auth";
 import { IconPlus } from "@tabler/icons-react";
+import { CreateProperty } from "./actions";
 
 interface Customer {
   id: number;
@@ -98,30 +99,10 @@ export function CreatePropertyForm() {
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
-
-    const result = await fetch(`${apiUrl}api/properties/create-property`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        name: values?.name,
-        address: values?.address,
-        phone: values?.phone,
-        city: values?.city,
-        state: values?.state,
-        zipPostalCode: values?.zipPostalCode,
-        ownerId: Number(values?.ownerId)
-      })
-    });
-
-    if (!result.ok) {
-      alert("Error trying to create this property");
-      return;
-    }
-
-    const data = await result.json();
-    router.push("/dashboard/manage-properties");
+    const { name, address, phone, city, state, zipPostalCode, ownerId } = values;
+    const result = await CreateProperty(name, address, phone, city, state, zipPostalCode, ownerId);
+    console.log(result);
+    router.refresh();
     return;
   }
 
