@@ -1,5 +1,6 @@
 "use client";
 
+import React, { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -24,9 +25,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
 import { apiUrl } from "@/auth";
-import React from "react";
 import { phoneNumberValidation } from "@/lib/utils";
 import { IconPlus } from "@tabler/icons-react";
+import AlertComponent from "@/components/custom/alert";
 
 const formSchema = z.object({
 	name: z.string().min(3, {
@@ -54,6 +55,7 @@ const formSchema = z.object({
 
 export default function CreateUserForm() {
 	const router = useRouter();
+	const [alert, setAlert] = useState({ title: "", msg: "", show: false });
 
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
@@ -91,7 +93,7 @@ export default function CreateUserForm() {
 				return null;
 			} else {
 				const data = await result.json();
-				console.log(data)
+				setAlert({ title: "Success!", msg: data.msg, show: true });
 				router.push("/dashboard/manage-users");
 			}
 		} catch (error) {
@@ -250,6 +252,7 @@ export default function CreateUserForm() {
 					Create
 				</Button >
 			</form >
+			<AlertComponent title={alert.title} msg={alert.msg} show={alert.show} />
 		</Form >
 	);
 }

@@ -1,7 +1,5 @@
 import { apiUrl } from "@/auth";
-import { headers } from "next/headers";
 import { Category, Property, Subcategory, Supplier, User } from "./types";
-// const headersList = headers();
 
 interface FetchResult<Type> {
   data?: Type;
