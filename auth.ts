@@ -3,7 +3,7 @@ import "next-auth/jwt";
 import Credentials from "next-auth/providers/credentials"
 // Your own logic for dealing with plaintext password strings; be careful!
 
-export const apiUrl = process.env.API_URL;
+export const apiUrl = process.env.API_URL || "https://rgmanagment360-backend.onrender.com/";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
