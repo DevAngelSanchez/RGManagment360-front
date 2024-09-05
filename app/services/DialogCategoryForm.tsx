@@ -1,5 +1,5 @@
 "use client"
-import React from "react";
+import React, { useState } from "react";
 import { z } from "zod";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -16,6 +16,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { createCategory } from "./actions";
+import AlertComponent from "@/components/custom/alert";
 
 const formSchema = z.object({
   category: z.string().min(2, {
@@ -25,12 +26,36 @@ const formSchema = z.object({
 
 export function DialogCategoryForm() {
   const router = useRouter();
+  const [alert, setAlert] = useState({ title: "", description: "", type: "default", show: false });
+
+
+  function resetAlert() {
+    return setAlert({ title: "", description: "", type: "default", show: false });
+  }
+
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
       const result = await createCategory(values.category);
+      if (result.type === "error") {
+        resetAlert();
+        setAlert({ title: result.title, description: result.msg, type: result.type, show: true });
+        setTimeout(() => {
+          resetAlert();
+        }, 3000);
+        return null;
+      }
+      setAlert({ title: result.title, description: result.msg, type: result.type, show: true });
+      setTimeout(() => {
+        resetAlert();
+      }, 3000);
       console.log("categoria creada", values.category);
       router.refresh();
     } catch (error) {
+      resetAlert();
+      setAlert({ title: "Error!", description: "Error trying to create a new Category", type: "error", show: true });
+      setTimeout(() => {
+        resetAlert()
+      }, 3000);
       console.log(error);
       return;
     }
@@ -64,6 +89,9 @@ export function DialogCategoryForm() {
         />
         <Button type="submit">Submit</Button>
       </form>
+      {alert.show && (
+        <AlertComponent title={alert.title} msg={alert.description} type={alert.type} show={true} />
+      )}
     </Form>
   );
 }

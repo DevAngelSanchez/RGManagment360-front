@@ -12,11 +12,11 @@ export async function createCategory(category: string) {
       }),
     });
 
-    if (!result.ok) {
-      throw new Error("Error trying to create a new category");
-    }
+    const data = await result.json();
+    console.log(data)
+    console.log(result)
 
-    return result.json();
+    return data;
   } catch (error) {
     console.error(error);
     throw error;

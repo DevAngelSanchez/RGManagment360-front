@@ -40,7 +40,7 @@ export default function Sidebar() {
               </SidebarItemLink>
               <SidebarItemLink href="/dashboard/manage-service-providers">
                 <IconUsersGroup size={SidebarLinkIconSize} />
-                Serevices Providers
+                Services Providers
               </SidebarItemLink>
               <SidebarItemLink href="/dashboard/manage-properties">
                 <IconBuildingEstate />
