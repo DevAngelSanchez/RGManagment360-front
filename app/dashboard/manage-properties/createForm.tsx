@@ -28,6 +28,7 @@ import { useRouter } from "next/navigation";
 import { apiUrl } from "@/auth";
 import { IconPlus } from "@tabler/icons-react";
 import { CreateProperty } from "./actions";
+import AlertComponent from "@/components/custom/alert";
 
 interface Customer {
   id: number;
@@ -67,14 +68,24 @@ const formSchema = z.object({
 export function CreatePropertyForm() {
   const router = useRouter();
 
+  const [alert, setAlert] = useState({ title: "", description: "", type: "default", show: false });
+
+  function resetAlert() {
+    return setAlert({ title: "", description: "", type: "default", show: false });
+  }
+
   const [customers, setCustomers] = useState<Customer[]>([]);
 
   useEffect(() => {
     const fetchCustomers = async () => {
       const response = await fetch(`${apiUrl}api/users/by-role/CUSTOMER`);
       if (!response.ok) {
-        alert("Error trying to get Customers");
-        return
+        resetAlert();
+        setAlert({ title: "Erro!", description: "Users not found", type: response.type, show: true });
+        setTimeout(() => {
+          resetAlert();
+        }, 3000);
+        return null;
       }
       const data = await response.json();
       setCustomers(data);
@@ -100,10 +111,30 @@ export function CreatePropertyForm() {
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const { name, address, phone, city, state, zipPostalCode, ownerId } = values;
-    const result = await CreateProperty(name, address, phone, city, state, zipPostalCode, ownerId);
-    console.log(result);
-    router.refresh();
-    return;
+    try {
+      const result = await CreateProperty(name, address, phone, city, state, zipPostalCode, ownerId);
+      if (result.type === "error") {
+        resetAlert();
+        setAlert({ title: result.title, description: result.msg, type: result.type, show: true });
+        setTimeout(() => {
+          resetAlert();
+        }, 3000);
+        return null;
+      }
+      setAlert({ title: result.title, description: result.msg, type: result.type, show: true });
+      setTimeout(() => {
+        resetAlert();
+      }, 3000);
+      router.refresh();
+    } catch (error) {
+      resetAlert();
+      setAlert({ title: "Error!", description: "Error trying to create a new Property", type: "error", show: true });
+      setTimeout(() => {
+        resetAlert()
+      }, 3000);
+      console.log(error);
+      return;
+    }
   }
 
   return (
@@ -237,6 +268,10 @@ export function CreatePropertyForm() {
           Add property
         </Button >
       </form >
+
+      {alert.show && (
+        <AlertComponent title={alert.title} msg={alert.description} type={alert.type} show={true} />
+      )}
     </Form >
   )
 }

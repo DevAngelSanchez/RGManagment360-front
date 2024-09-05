@@ -31,10 +31,10 @@ import { apiUrl } from "@/auth";
 import { IconEdit } from "@tabler/icons-react";
 import { User } from "@/lib/types";
 import { EditUser } from "./actions";
+import AlertComponent from "@/components/custom/alert";
 
 interface Props {
   user: User;
-  id: number;
 }
 
 const formSchema = z.object({
@@ -78,8 +78,14 @@ const formSchema = z.object({
   isActive: z.string(),
 });
 
-export const EditUserForm: FC<Props> = ({ user, id }) => {
+export const EditUserForm: FC<Props> = ({ user }) => {
   const router = useRouter();
+
+  const [alert, setAlert] = useState({ title: "", description: "", type: "default", show: false });
+
+  function resetAlert() {
+    return setAlert({ title: "", description: "", type: "default", show: false });
+  }
 
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
@@ -100,11 +106,30 @@ export const EditUserForm: FC<Props> = ({ user, id }) => {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const { name, lastname, username, email, phone, address, role, isActive } = values;
 
-    const result = await EditUser(user.id, name, lastname, username, email, phone, address, role, isActive);
-
-    console.log(result);
-    router.refresh();
-    return;
+    try {
+      const result = await EditUser(user.id, name, lastname, username, email, phone, address, role, isActive);
+      if (result.type === "error") {
+        resetAlert();
+        setAlert({ title: result.title, description: result.msg, type: result.type, show: true });
+        setTimeout(() => {
+          resetAlert();
+        }, 3000);
+        return null;
+      }
+      setAlert({ title: result.title, description: result.msg, type: result.type, show: true });
+      setTimeout(() => {
+        resetAlert();
+      }, 3000);
+      router.refresh();
+    } catch (error) {
+      resetAlert();
+      setAlert({ title: "Error!", description: "Error trying to edit this User", type: "error", show: true });
+      setTimeout(() => {
+        resetAlert()
+      }, 3000);
+      console.log(error);
+      return;
+    }
   }
 
   return (
@@ -271,6 +296,10 @@ export const EditUserForm: FC<Props> = ({ user, id }) => {
           Save user
         </Button>
       </form>
+
+      {alert.show && (
+        <AlertComponent title={alert.title} msg={alert.description} type={alert.type} show={true} />
+      )}
     </Form>
   );
 };

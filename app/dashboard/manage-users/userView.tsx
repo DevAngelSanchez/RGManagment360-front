@@ -94,7 +94,7 @@ export async function UserView() {
                               <DialogHeader>
                                 <DialogTitle>Edit User</DialogTitle>
                                 <DialogClose asChild>
-                                  <EditUserForm id={value.id} user={value} />
+                                  <EditUserForm user={value} />
                                 </DialogClose>
                               </DialogHeader>
                             </DialogContent>

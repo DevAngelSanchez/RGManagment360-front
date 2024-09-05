@@ -1,10 +1,9 @@
 "use client";
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import { z } from "zod";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { apiUrl } from "@/auth";
 import {
   Form,
   FormControl,
@@ -25,20 +24,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Category, Subcategory } from "@/lib/types";
 import { EditSubcategory } from "./actions";
-
-// interface ISubcategory {
-//   id: string;
-//   name: string;
-//   mayorCategory: {
-//     id: number;
-//     name: string;
-//   }
-// };
-
-// interface ICategory {
-//   id: string;
-//   name: string;
-// };
+import AlertComponent from "@/components/custom/alert";
 
 interface EditSubCategoryProps {
   categories: Category[] | null;
@@ -54,9 +40,38 @@ const formSchema = z.object({
 
 export const EditFormSubCategory: FC<EditSubCategoryProps> = ({ categories, subcategory }) => {
   const router = useRouter();
+
+  const [alert, setAlert] = useState({ title: "", description: "", type: "default", show: false });
+
+  function resetAlert() {
+    return setAlert({ title: "", description: "", type: "default", show: false });
+  }
+
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    const result = await EditSubcategory(subcategory.id, values.name, values.parentCategoryId);
-    router.refresh()
+    try {
+      const result = await EditSubcategory(subcategory.id, values.name, values.parentCategoryId);
+      if (result.type === "error") {
+        resetAlert();
+        setAlert({ title: result.title, description: result.msg, type: result.type, show: true });
+        setTimeout(() => {
+          resetAlert();
+        }, 3000);
+        return null;
+      }
+      setAlert({ title: result.title, description: result.msg, type: result.type, show: true });
+      setTimeout(() => {
+        resetAlert();
+      }, 3000);
+      router.refresh();
+    } catch (error) {
+      resetAlert();
+      setAlert({ title: "Error!", description: "Error trying to update this Subcategory", type: "error", show: true });
+      setTimeout(() => {
+        resetAlert()
+      }, 3000);
+      console.log(error);
+      return;
+    }
   }
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -121,6 +136,10 @@ export const EditFormSubCategory: FC<EditSubCategoryProps> = ({ categories, subc
         </div>
         <Button type="submit">Submit</Button>
       </form>
+
+      {alert.show && (
+        <AlertComponent title={alert.title} msg={alert.description} type={alert.type} show={true} />
+      )}
     </Form>
   );
 };

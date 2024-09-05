@@ -28,6 +28,7 @@ import { useRouter } from "next/navigation";
 import { apiUrl } from "@/auth";
 import { IconPlus } from "@tabler/icons-react";
 import { CreateServiceProvider } from "./actions";
+import AlertComponent from "@/components/custom/alert";
 
 interface Category {
   id: number;
@@ -74,6 +75,11 @@ export function CreateServiceProviderForm() {
   const router = useRouter();
   const [categories, setCategories] = useState<Category[]>([]);
   const [subcategories, setSubcategories] = useState<Subcategory[]>([]);
+  const [alert, setAlert] = useState({ title: "", description: "", type: "default", show: false });
+
+  function resetAlert() {
+    return setAlert({ title: "", description: "", type: "default", show: false });
+  }
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -132,8 +138,31 @@ export function CreateServiceProviderForm() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
 
     const { name, lastname, username, category, subcategory, address, email, phone, password } = values;
-    const result = await CreateServiceProvider(name, lastname, username, category, subcategory, address, email, phone, password);
-    router.refresh();
+
+    try {
+      const result = await CreateServiceProvider(name, lastname, username, category, subcategory, address, email, phone, password);
+      if (result.type === "error") {
+        resetAlert();
+        setAlert({ title: result.title, description: result.msg, type: result.type, show: true });
+        setTimeout(() => {
+          resetAlert();
+        }, 3000);
+        return null;
+      }
+      setAlert({ title: result.title, description: result.msg, type: result.type, show: true });
+      setTimeout(() => {
+        resetAlert();
+      }, 3000);
+      router.refresh();
+    } catch (error) {
+      resetAlert();
+      setAlert({ title: "Error!", description: "Error trying to create a new Services Provider", type: "error", show: true });
+      setTimeout(() => {
+        resetAlert()
+      }, 3000);
+      console.log(error);
+      return;
+    }
   }
 
   return (
@@ -298,6 +327,10 @@ export function CreateServiceProviderForm() {
           Add Service Provider
         </Button >
       </form >
+
+      {alert.show && (
+        <AlertComponent title={alert.title} msg={alert.description} type={alert.type} show={true} />
+      )}
     </Form >
   )
 }

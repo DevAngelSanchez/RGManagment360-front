@@ -28,6 +28,7 @@ import { useRouter } from "next/navigation";
 import { apiUrl } from "@/auth";
 import { IconPlus, IconTrash } from "@tabler/icons-react";
 import { DeleteProperty } from "./actions";
+import AlertComponent from "@/components/custom/alert";
 
 const formSchema = z.object({
   id: z.number(),
@@ -42,6 +43,12 @@ interface DeletePropertyFormProps {
 export const DeletePropertyForm: FC<DeletePropertyFormProps> = ({ id, name }) => {
   const router = useRouter();
 
+  const [alert, setAlert] = useState({ title: "", description: "", type: "default", show: false });
+
+  function resetAlert() {
+    return setAlert({ title: "", description: "", type: "default", show: false });
+  }
+
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -55,9 +62,30 @@ export const DeletePropertyForm: FC<DeletePropertyFormProps> = ({ id, name }) =>
   async function onSubmit(values: z.infer<typeof formSchema>) {
 
     const result = await DeleteProperty(values.id);
-    console.log(result)
-    router.refresh();
-    return;
+    try {
+      const result = await DeleteProperty(values.id);
+      if (result.type === "error") {
+        resetAlert();
+        setAlert({ title: result.title, description: result.msg, type: result.type, show: true });
+        setTimeout(() => {
+          resetAlert();
+        }, 3000);
+        return null;
+      }
+      setAlert({ title: result.title, description: result.msg, type: result.type, show: true });
+      setTimeout(() => {
+        resetAlert();
+      }, 3000);
+      router.refresh();
+    } catch (error) {
+      resetAlert();
+      setAlert({ title: "Error!", description: "Error trying to delete this property", type: "error", show: true });
+      setTimeout(() => {
+        resetAlert()
+      }, 3000);
+      console.log(error);
+      return;
+    }
   }
 
   return (
@@ -94,6 +122,10 @@ export const DeletePropertyForm: FC<DeletePropertyFormProps> = ({ id, name }) =>
           Delete
         </Button>
       </form >
+
+      {alert.show && (
+        <AlertComponent title={alert.title} msg={alert.description} type={alert.type} show={true} />
+      )}
     </Form >
   )
 }

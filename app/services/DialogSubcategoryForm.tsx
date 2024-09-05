@@ -25,6 +25,7 @@ import { Button } from "@/components/ui/button";
 import { apiUrl } from "@/auth";
 import { Category } from "@/lib/types";
 import { CreateSubcategory } from "./actions";
+import AlertComponent from "@/components/custom/alert";
 
 // interface ISubcategory {
 //   name: string;
@@ -45,9 +46,39 @@ const formSchema = z.object({
 
 export const DialogSubcategoryForm: FC<TSubcategoryProps> = ({ category }) => {
   const router = useRouter();
+  const [alert, setAlert] = useState({ title: "", description: "", type: "default", show: false });
+
+  function resetAlert() {
+    return setAlert({ title: "", description: "", type: "default", show: false });
+  }
+
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    const result = await CreateSubcategory(values.subcategory, values.categoryId);
-    router.refresh();
+
+    try {
+      const result = await CreateSubcategory(values.subcategory, values.categoryId);
+      console.log(result)
+      if (result.type === "error") {
+        resetAlert();
+        setAlert({ title: result.title, description: result.msg, type: result.type, show: true });
+        setTimeout(() => {
+          resetAlert();
+        }, 3000);
+        return null;
+      }
+      setAlert({ title: result.title, description: result.msg, type: result.type, show: true });
+      setTimeout(() => {
+        resetAlert();
+      }, 3000);
+      router.refresh();
+    } catch (error) {
+      resetAlert();
+      setAlert({ title: "Error!", description: "Error trying to create a new Subcategory", type: "error", show: true });
+      setTimeout(() => {
+        resetAlert()
+      }, 3000);
+      console.log(error);
+      return;
+    }
   }
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -110,6 +141,10 @@ export const DialogSubcategoryForm: FC<TSubcategoryProps> = ({ category }) => {
         </div>
         <Button type="submit">Submit</Button>
       </form>
+
+      {alert.show && (
+        <AlertComponent title={alert.title} msg={alert.description} type={alert.type} show={true} />
+      )}
     </Form>
   );
 };

@@ -13,8 +13,6 @@ export async function createCategory(category: string) {
     });
 
     const data = await result.json();
-    console.log(data)
-    console.log(result)
 
     return data;
   } catch (error) {
@@ -36,12 +34,9 @@ export async function EditCategory(id: number, name: string) {
       }),
     });
 
-    if (!result.ok) {
-      alert("Error trying to create a new category");
-      return null;
-    }
+    const data = await result.json();
 
-    return result.json();
+    return data;
   } catch (error) {
     console.log(error);
     throw new Error("Error trying to edit this category");
@@ -59,11 +54,6 @@ export async function DeleteCategory(id: number) {
         id
       })
     });
-
-    if (!result.ok) {
-      alert("Error trying to delete this category");
-      return;
-    }
 
     return result.json();
   } catch (error) {
@@ -87,11 +77,6 @@ export async function CreateSubcategory(name: string, categoryId: string) {
         }),
       }
     );
-
-    if (!result.ok) {
-      alert("Error trying to create a new subcategory");
-      return null;
-    }
 
     return result.json();
   } catch (error) {
@@ -117,11 +102,6 @@ export async function EditSubcategory(id: number, name: string, categoryId: stri
       }
     );
 
-    if (!result.ok) {
-      alert("Error trying to edit this subcategory");
-      return null;
-    }
-
     return result.json();
   } catch (error) {
     console.log(error);
@@ -143,11 +123,6 @@ export async function DeleteSubcategory(id: number) {
         }),
       }
     );
-
-    if (!result.ok) {
-      alert("Error trying to delete this subcategory");
-      return null;
-    }
 
     return result.json();
   } catch (error) {

@@ -56,7 +56,11 @@ const formSchema = z.object({
 
 export default function CreateUserForm() {
 	const router = useRouter();
-	const [alert, setAlert] = useState({ title: "", msg: "", show: false });
+	const [alert, setAlert] = useState({ title: "", description: "", type: "default", show: false });
+
+	function resetAlert() {
+		return setAlert({ title: "", description: "", type: "default", show: false });
+	}
 
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
@@ -76,10 +80,25 @@ export default function CreateUserForm() {
 		try {
 			const { name, lastname, username, email, password, address, phone, role } = values;
 			const result = await CreateUser(name, lastname, username, email, password, address, phone, role);
-			console.log(result)
-			setAlert({ title: "Success!", msg: result.msg, show: true });
+			if (result.type === "error") {
+				resetAlert();
+				setAlert({ title: result.title, description: result.msg, type: result.type, show: true });
+				setTimeout(() => {
+					resetAlert();
+				}, 3000);
+				return null;
+			}
+			setAlert({ title: result.title, description: result.msg, type: result.type, show: true });
+			setTimeout(() => {
+				resetAlert();
+			}, 3000);
 			router.refresh();
 		} catch (error) {
+			resetAlert();
+			setAlert({ title: "Error!", description: "Error trying to create a new User", type: "error", show: true });
+			setTimeout(() => {
+				resetAlert()
+			}, 3000);
 			console.log(error);
 			return;
 		}
@@ -235,7 +254,10 @@ export default function CreateUserForm() {
 					Create
 				</Button >
 			</form >
-			<AlertComponent title={alert.title} msg={alert.msg} show={alert.show} />
+
+			{alert.show && (
+				<AlertComponent title={alert.title} msg={alert.description} type={alert.type} show={true} />
+			)}
 		</Form >
 	);
 }

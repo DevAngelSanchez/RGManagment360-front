@@ -20,11 +20,6 @@ export async function CreateServiceProvider(name: string, lastname: string, user
       })
     });
 
-    if (!result.ok) {
-      alert("Error trying to create a supplier");
-      return;
-    }
-
     return result.json();
   } catch (error) {
     console.log(error);

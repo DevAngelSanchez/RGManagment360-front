@@ -48,7 +48,6 @@ export function DialogCategoryForm() {
       setTimeout(() => {
         resetAlert();
       }, 3000);
-      console.log("categoria creada", values.category);
       router.refresh();
     } catch (error) {
       resetAlert();

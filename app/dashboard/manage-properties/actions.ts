@@ -18,11 +18,6 @@ export async function CreateProperty(name: string, address: string, phone: strin
       })
     });
 
-    if (!result.ok) {
-      alert("Error trying to create this property");
-      return;
-    }
-
     return result.json();
   } catch (error) {
     console.log(error);
@@ -48,11 +43,6 @@ export async function EditProperty(id: number, name: string, address: string, ci
       })
     });
 
-    if (!result.ok) {
-      alert("Error trying to update this property");
-      return;
-    }
-
     return result.json();
   } catch (error) {
     console.log(error);
@@ -71,11 +61,6 @@ export async function DeleteProperty(id: number) {
         id: id,
       })
     });
-
-    if (!result.ok) {
-      alert("Error trying to delete this property");
-      return;
-    }
 
     return result.json();
   } catch (error) {

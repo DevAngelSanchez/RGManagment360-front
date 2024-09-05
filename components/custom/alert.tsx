@@ -35,7 +35,7 @@ export default function AlertComponent({ title, msg, type, show }: Props) {
 
   return (
     <Alert variant={variant}>
-      <IconRocket size={16} />
+      {/* <IconRocket size={16} /> */}
       <AlertTitle>{title}</AlertTitle>
       <AlertDescription>
         {msg}

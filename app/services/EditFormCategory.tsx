@@ -1,10 +1,9 @@
 "use client";
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import { z } from "zod";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { apiUrl } from "@/auth";
 import {
   Form,
   FormControl,
@@ -17,6 +16,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { EditCategory } from "./actions";
+import AlertComponent from "@/components/custom/alert";
 
 type TCategory = {
   name: string;
@@ -32,9 +32,37 @@ const formSchema = z.object({
 export const EditFormCategory: FC<TCategory> = ({ id, name }) => {
   const router = useRouter();
 
+  const [alert, setAlert] = useState({ title: "", description: "", type: "default", show: false });
+
+  function resetAlert() {
+    return setAlert({ title: "", description: "", type: "default", show: false });
+  }
+
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    const result = await EditCategory(Number(id), values.category);
-    router.refresh();
+    try {
+      const result = await EditCategory(Number(id), values.category);
+      if (result.type === "error") {
+        resetAlert();
+        setAlert({ title: result.title, description: result.msg, type: result.type, show: true });
+        setTimeout(() => {
+          resetAlert();
+        }, 3000);
+        return null;
+      }
+      setAlert({ title: result.title, description: result.msg, type: result.type, show: true });
+      setTimeout(() => {
+        resetAlert();
+      }, 3000);
+      router.refresh();
+    } catch (error) {
+      resetAlert();
+      setAlert({ title: "Error!", description: "Error trying to edit this Category", type: "error", show: true });
+      setTimeout(() => {
+        resetAlert()
+      }, 3000);
+      console.log(error);
+      return;
+    }
   }
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -66,23 +94,12 @@ export const EditFormCategory: FC<TCategory> = ({ id, name }) => {
             </FormItem>
           )}
         />
-        {/*  <FormField
-          control={form.control}
-          name="id"
-          render={({ field }) => (
-            <FormItem className="hidden">
-              <FormControl>
-                <Input
-                  placeholder="Insert a new name for the selected category"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        /> */}
         <Button type="submit">Submit</Button>
       </form>
+
+      {alert.show && (
+        <AlertComponent title={alert.title} msg={alert.description} type={alert.type} show={true} />
+      )}
     </Form>
   );
 };

@@ -18,10 +18,6 @@ export async function CreateUser(name: string, lastname: string, username: strin
         role
       })
     });
-    if (!result.ok) {
-      console.log("Error trying to create this user");
-      return;
-    }
 
     return result.json();
   } catch (error) {
@@ -42,10 +38,6 @@ export async function DeleteUser(id: number) {
       })
     });
 
-    if (!result.ok) {
-      console.log("Error trying to delete this user");
-      return;
-    }
 
     return result.json();
   } catch (error) {
@@ -73,11 +65,6 @@ export async function EditUser(id: number, name: string, lastname: string, usern
         isActive: isActive,
       }),
     });
-
-    if (!result.ok) {
-      console.log("Error trying to update this user");
-      return;
-    }
 
     return result.json();
   } catch (error) {

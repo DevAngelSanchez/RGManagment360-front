@@ -29,6 +29,7 @@ import { apiUrl } from "@/auth";
 import { IconEdit } from "@tabler/icons-react";
 import { Property } from "@/lib/types";
 import { EditProperty } from "./actions";
+import AlertComponent from "@/components/custom/alert";
 
 interface EditPropertyFormProps {
   property: Property;
@@ -70,12 +71,22 @@ export const EditPropertyForm: FC<EditPropertyFormProps> = ({ property }) => {
 
   const [customers, setCustomers] = useState<Customer[]>([]);
 
+  const [alert, setAlert] = useState({ title: "", description: "", type: "default", show: false });
+
+  function resetAlert() {
+    return setAlert({ title: "", description: "", type: "default", show: false });
+  }
+
   useEffect(() => {
     const fetchCustomers = async () => {
       const response = await fetch(`${apiUrl}api/users/by-role/CUSTOMER`);
       if (!response.ok) {
-        alert("Error trying to get Customers");
-        return
+        resetAlert();
+        setAlert({ title: "Erro!", description: "Users not found", type: response.type, show: true });
+        setTimeout(() => {
+          resetAlert();
+        }, 3000);
+        return null;
       }
       const data = await response.json();
       setCustomers(data);
@@ -102,10 +113,31 @@ export const EditPropertyForm: FC<EditPropertyFormProps> = ({ property }) => {
   async function onSubmit(values: z.infer<typeof formSchema>) {
 
     const { id, name, address, city, state, zipPostalCode, ownerId } = values;
-    const result = await EditProperty(id, name, address, city, state, zipPostalCode, ownerId);
-    console.log(result);
-    router.push("/dashboard/manage-properties");
-    return;
+
+    try {
+      const result = await EditProperty(id, name, address, city, state, zipPostalCode, ownerId);
+      if (result.type === "error") {
+        resetAlert();
+        setAlert({ title: result.title, description: result.msg, type: result.type, show: true });
+        setTimeout(() => {
+          resetAlert();
+        }, 3000);
+        return null;
+      }
+      setAlert({ title: result.title, description: result.msg, type: result.type, show: true });
+      setTimeout(() => {
+        resetAlert();
+      }, 3000);
+      router.refresh();
+    } catch (error) {
+      resetAlert();
+      setAlert({ title: "Error!", description: "Error trying to edit this property", type: "error", show: true });
+      setTimeout(() => {
+        resetAlert()
+      }, 3000);
+      console.log(error);
+      return;
+    }
   }
 
   return (
@@ -235,6 +267,10 @@ export const EditPropertyForm: FC<EditPropertyFormProps> = ({ property }) => {
           Edit property
         </Button >
       </form >
+
+      {alert.show && (
+        <AlertComponent title={alert.title} msg={alert.description} type={alert.type} show={true} />
+      )}
     </Form >
   )
 }
