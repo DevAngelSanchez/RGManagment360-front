@@ -1,5 +1,6 @@
 "use client"
 
+import { useState } from 'react'
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
@@ -17,7 +18,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
 import { apiUrl } from "@/auth";
-import { useToast } from "@/components/ui/use-toast";
+import AlertComponent from "@/components/custom/alert"
 
 const formSchema = z.object({
   name: z.string().min(3, {
@@ -45,9 +46,13 @@ const formSchema = z.object({
 
 export function RegisterForm() {
 
-  const { toast } = useToast();
-
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
+  const [alert, setAlert] = useState({ title: "", description: "", type: "default", show: false });
+
+  function resetAlert() {
+    return setAlert({ title: "", description: "", type: "default", show: false });
+  }
 
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
@@ -64,6 +69,7 @@ export function RegisterForm() {
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
+      setIsLoading(true); // Mostrar spinner
       const response = await fetch(`${apiUrl}auth/register`, {
         method: "POST",
         headers: {
@@ -77,26 +83,32 @@ export function RegisterForm() {
           password: values?.passwordForm.password
         })
       });
-
-      if (!response.ok) {
-        console.log(`Error al registrar el usuario. Status Error: ${response.status}`);
-        return null;
-      }
+      setIsLoading(false); // ocultar spinner
 
       const data = await response.json();
 
       if (data.type !== 'success') {
-        alert(data.msg);
+        resetAlert();
+        setAlert({ title: data.title, description: data.msg, type: data.type, show: true });
+        setTimeout(() => {
+          resetAlert();
+        }, 3000);
         return;
       }
 
-      toast({
-        variant: "success",
-        title: data.msg
-      });
-      setTimeout(() => router.push('/auth/login'), 3000)
+      resetAlert();
+      setAlert({ title: data.title, description: data.msg, type: data.type, show: true });
+      setTimeout(() => {
+        resetAlert();
+      }, 3000);
+
+      router.push('/auth/login')
     } catch (error) {
-      console.log("Hubo un error al crear el usuario", error);
+      resetAlert();
+      setAlert({ title: "Something is wrong!", description: "Try to verify your data", type: "error", show: true });
+      setTimeout(() => {
+        resetAlert();
+      }, 3000);
       return;
     }
   }
@@ -191,8 +203,17 @@ export function RegisterForm() {
           )
           }
         />
-        < Button className="w-full" type="submit" >Create user</Button >
+        <Button className="w-full" type="submit" disabled={isLoading}>
+          {isLoading ? (
+            <span className="spinner-border animate-spin inline-block w-4 h-4 border-2 rounded-full"></span>
+          ) : (
+            'Create User'
+          )}
+        </Button>
       </form >
+      {alert.show && (
+        <AlertComponent title={alert.title} msg={alert.description} type={alert.type} show={true} />
+      )}
     </Form >
   )
 }

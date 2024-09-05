@@ -1,6 +1,6 @@
 "use client"
 
-import React from "react";
+import React, { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
@@ -17,6 +17,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react"
+import AlertComponent from "@/components/custom/alert";
 
 const formSchema = z.object({
   email: z.string().email({
@@ -27,6 +28,12 @@ const formSchema = z.object({
 
 export function LoginForm() {
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
+  const [alert, setAlert] = useState({ title: "", description: "", type: "default", show: false });
+
+  function resetAlert() {
+    return setAlert({ title: "", description: "", type: "default", show: false });
+  }
 
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
@@ -39,18 +46,23 @@ export function LoginForm() {
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
-
+    setIsLoading(true); // Mostrar spinner
     const result = await signIn('credentials', {
       redirect: false,
       email: values?.email,
       password: values?.password
     });
+    setIsLoading(false); // Ocultar spinner
 
     if (result?.error) {
-      console.log("Error al iniciar sesion, verifique sus credenciales");
+      resetAlert();
+      setAlert({ title: "Something is wrong!", description: "Try to verify your credentials", type: "error", show: true });
+      setTimeout(() => {
+        resetAlert();
+      }, 3000);
       return null;
     } else {
-      router.push('/dashboard')
+      router.push('/dashboard');
     }
   }
 
@@ -83,8 +95,18 @@ export function LoginForm() {
             </FormItem>
           )}
         />
-        < Button className="w-full" type="submit" >Login</Button >
+        <Button className="w-full" type="submit" disabled={isLoading}>
+          {isLoading ? (
+            <span className="spinner-border animate-spin inline-block w-4 h-4 border-2 rounded-full"></span>
+          ) : (
+            'Login'
+          )}
+        </Button>
       </form >
+
+      {alert.show && (
+        <AlertComponent title={alert.title} msg={alert.description} type={alert.type} show={true} />
+      )}
     </Form >
   )
 }
