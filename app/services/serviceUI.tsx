@@ -31,7 +31,7 @@ export default async function ServicesUI() {
         <h1 className="text-4xl font-bold mb-4">Services</h1>
         <div className="flex gap-3">
           <Dialog>
-            <DialogTrigger className="hidden md:flex px-4 py-2  items-center gap-2 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition-all">
+            <DialogTrigger className="hidden md:flex px-4 py-2 items-center gap-2 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition-all">
               <IconPlus size={24} />
               Create Category
             </DialogTrigger>

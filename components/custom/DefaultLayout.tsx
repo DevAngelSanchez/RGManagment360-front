@@ -14,7 +14,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = async ({
   const session = await auth();
 
   return (
-    <div className="w-fit">
+    <div className="w-full ">
       <Header email={session ? session.user?.email : "Username"} />
 
       <div className="flex">

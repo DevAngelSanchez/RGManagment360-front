@@ -7,8 +7,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 export default async function Page() {
   return (
     <LayoutSelector layout="default">
-      <main>
-        <section className="bg-slate-50 h-100vh w-full  overflow-y-auto p-4">
+      <main className="w-full ">
+        <section className="bg-slate-50 h-full   overflow-y-auto p-4">
           <Suspense
             fallback={<Skeleton className="w-[100px] h-[20px] rounded-full" />}
           >

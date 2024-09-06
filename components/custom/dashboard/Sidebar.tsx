@@ -35,9 +35,11 @@ const Sidebar: React.FC = () => {
   useEffect(() => {
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
-      if (window.innerWidth <= 768) {
+      if (window.innerWidth <= 950) {
         // Adjust the value as needed
         setShowSidebar(false);
+      } else {
+        setShowSidebar(true);
       }
     };
 
@@ -54,10 +56,10 @@ const Sidebar: React.FC = () => {
     <div className="relative">
       <div
         className={`${
-          showSidebar && windowWidth <= 768
-            ? "absolute top-0 left-0 bg-white h-full w-64 z-50 bg-opacity-90"
+          showSidebar && windowWidth <= 950
+            ? "absolute top-0 left-0 bg-white h-full w-64 z-50 bg-opacity-80 backdrop-blur-sm shadow-md " 
             : showSidebar
-            ? "w-64"
+            ? "w-64 bg-white h-full"
             : "hidden"
         }`}
       >
@@ -99,14 +101,16 @@ const Sidebar: React.FC = () => {
                 height={25}
                 width={25}
                 className={`${
-                  showSidebar && windowWidth > 768 ? "hidden" : "self-end mt-3"
+                  showSidebar && windowWidth > 950 ? "hidden" : "self-end mt-3"
                 }`}
               ></IconArrowBarLeft>
             </div>
           </div>
         </div>
       </div>
-      {windowWidth <= 768 && !showSidebar && (
+      
+      
+      {windowWidth <= 950 && !showSidebar && (
         <div className="bg-slate-50 h-full ">
           <IconMenu2
             onClick={handleToggleSidebar}
