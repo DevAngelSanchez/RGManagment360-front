@@ -68,6 +68,7 @@ const formSchema = z.object({
 export function CreatePropertyForm() {
   const router = useRouter();
 
+  const [isLoading, setIsLoading] = useState(false);
   const [alert, setAlert] = useState({ title: "", description: "", type: "default", show: false });
 
   function resetAlert() {
@@ -112,7 +113,9 @@ export function CreatePropertyForm() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const { name, address, phone, city, state, zipPostalCode, ownerId } = values;
     try {
+      setIsLoading(true);
       const result = await CreateProperty(name, address, phone, city, state, zipPostalCode, ownerId);
+      setIsLoading(false);
       if (result.type === "error") {
         resetAlert();
         setAlert({ title: result.title, description: result.msg, type: result.type, show: true });
@@ -263,10 +266,16 @@ export function CreatePropertyForm() {
             />
           </div>
         </div>
-        < Button className="w-full" type="submit" >
-          <IconPlus size={24} />
-          Add property
-        </Button >
+        <Button className="w-full" type="submit" disabled={isLoading}>
+          {isLoading ? (
+            <span className="spinner-border animate-spin inline-block w-4 h-4 border-2 rounded-full"></span>
+          ) : (
+            <>
+              <IconPlus size={24} />
+              <span>Create Property</span>
+            </>
+          )}
+        </Button>
       </form >
 
       {alert.show && (

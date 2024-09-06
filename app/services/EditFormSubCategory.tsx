@@ -25,6 +25,7 @@ import { Button } from "@/components/ui/button";
 import { Category, Subcategory } from "@/lib/types";
 import { EditSubcategory } from "./actions";
 import AlertComponent from "@/components/custom/alert";
+import { IconEdit } from "@tabler/icons-react";
 
 interface EditSubCategoryProps {
   categories: Category[] | null;
@@ -41,6 +42,7 @@ const formSchema = z.object({
 export const EditFormSubCategory: FC<EditSubCategoryProps> = ({ categories, subcategory }) => {
   const router = useRouter();
 
+  const [isLoading, setIsLoading] = useState(false);
   const [alert, setAlert] = useState({ title: "", description: "", type: "default", show: false });
 
   function resetAlert() {
@@ -49,7 +51,9 @@ export const EditFormSubCategory: FC<EditSubCategoryProps> = ({ categories, subc
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
+      setIsLoading(true);
       const result = await EditSubcategory(subcategory.id, values.name, values.parentCategoryId);
+      setIsLoading(false);
       if (result.type === "error") {
         resetAlert();
         setAlert({ title: result.title, description: result.msg, type: result.type, show: true });
@@ -134,7 +138,16 @@ export const EditFormSubCategory: FC<EditSubCategoryProps> = ({ categories, subc
             )}
           />
         </div>
-        <Button type="submit">Submit</Button>
+        <Button className="w-full" type="submit" disabled={isLoading}>
+          {isLoading ? (
+            <span className="spinner-border animate-spin inline-block w-4 h-4 border-2 rounded-full"></span>
+          ) : (
+            <>
+              <IconEdit size={24} />
+              <span>Update Subcategory</span>
+            </>
+          )}
+        </Button>
       </form>
 
       {alert.show && (

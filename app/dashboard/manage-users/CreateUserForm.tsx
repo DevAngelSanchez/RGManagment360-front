@@ -24,7 +24,6 @@ import {
 
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
-import { apiUrl } from "@/auth";
 import { phoneNumberValidation } from "@/lib/utils";
 import { IconPlus } from "@tabler/icons-react";
 import AlertComponent from "@/components/custom/alert";
@@ -56,6 +55,7 @@ const formSchema = z.object({
 
 export default function CreateUserForm() {
 	const router = useRouter();
+	const [isLoading, setIsLoading] = useState(false);
 	const [alert, setAlert] = useState({ title: "", description: "", type: "default", show: false });
 
 	function resetAlert() {
@@ -79,7 +79,9 @@ export default function CreateUserForm() {
 	async function onSubmit(values: z.infer<typeof formSchema>) {
 		try {
 			const { name, lastname, username, email, password, address, phone, role } = values;
+			setIsLoading(true);
 			const result = await CreateUser(name, lastname, username, email, password, address, phone, role);
+			setIsLoading(false);
 			if (result.type === "error") {
 				resetAlert();
 				setAlert({ title: result.title, description: result.msg, type: result.type, show: true });
@@ -249,10 +251,16 @@ export default function CreateUserForm() {
 						)}
 					/>
 				</div>
-				< Button className="w-full" type="submit" >
-					<IconPlus size={24} />
-					Create
-				</Button >
+				<Button className="w-full" type="submit" disabled={isLoading}>
+					{isLoading ? (
+						<span className="spinner-border animate-spin inline-block w-4 h-4 border-2 rounded-full"></span>
+					) : (
+						<>
+							<IconPlus size={24} />
+							<span>Add User</span>
+						</>
+					)}
+				</Button>
 			</form >
 
 			{alert.show && (

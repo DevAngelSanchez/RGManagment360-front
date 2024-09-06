@@ -14,7 +14,7 @@ import { IconPlus } from "@tabler/icons-react";
 import PropertiesUI from "./propertiesUI";
 import { Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
-import {CreatePropertyForm} from "./createForm";
+import { CreatePropertyForm } from "./createForm";
 
 export default async function ManageProperties() {
 
@@ -32,9 +32,6 @@ export default async function ManageProperties() {
               <DialogContent>
                 <DialogHeader>
                   <DialogTitle>Create Property</DialogTitle>
-                  <DialogDescription>
-                    Lorem, ipsum dolor sit amet consectetur adipisicing elit. Sint nihil aperiam nostrum eos molestias ipsa vero.
-                  </DialogDescription>
                   <DialogClose asChild >
                     <CreatePropertyForm />
                   </DialogClose>

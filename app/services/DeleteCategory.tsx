@@ -34,6 +34,7 @@ interface Props {
 export const DeleteCategoryForm: FC<Props> = ({ id, name }) => {
   const router = useRouter();
 
+  const [isLoading, setIsLoading] = useState(false);
   const [alert, setAlert] = useState({ title: "", description: "", type: "default", show: false });
 
   function resetAlert() {
@@ -53,7 +54,9 @@ export const DeleteCategoryForm: FC<Props> = ({ id, name }) => {
   async function onSubmit(values: z.infer<typeof formSchema>) {
 
     try {
+      setIsLoading(true);
       const result = await DeleteCategory(id);
+      setIsLoading(false);
       if (result.type === "error") {
         resetAlert();
         setAlert({ title: result.title, description: result.msg, type: result.type, show: true });
@@ -107,9 +110,15 @@ export const DeleteCategoryForm: FC<Props> = ({ id, name }) => {
             </FormItem>
           )}
         />
-        <Button variant="destructive" type="submit">
-          <IconTrash size={16} className="mr-2" />
-          Delete
+        <Button variant="destructive" className="w-full" type="submit" disabled={isLoading}>
+          {isLoading ? (
+            <span className="spinner-border animate-spin inline-block w-4 h-4 border-2 rounded-full"></span>
+          ) : (
+            <>
+              <IconTrash size={24} className="mr-1" />
+              <span>Delete</span>
+            </>
+          )}
         </Button>
       </form >
 

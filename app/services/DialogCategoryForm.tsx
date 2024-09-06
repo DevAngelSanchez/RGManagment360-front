@@ -17,6 +17,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { createCategory } from "./actions";
 import AlertComponent from "@/components/custom/alert";
+import { IconPlus } from "@tabler/icons-react";
 
 const formSchema = z.object({
   category: z.string().min(2, {
@@ -26,6 +27,7 @@ const formSchema = z.object({
 
 export function DialogCategoryForm() {
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
   const [alert, setAlert] = useState({ title: "", description: "", type: "default", show: false });
 
 
@@ -35,7 +37,9 @@ export function DialogCategoryForm() {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
+      setIsLoading(true);
       const result = await createCategory(values.category);
+      setIsLoading(false);
       if (result.type === "error") {
         resetAlert();
         setAlert({ title: result.title, description: result.msg, type: result.type, show: true });
@@ -86,7 +90,16 @@ export function DialogCategoryForm() {
             </FormItem>
           )}
         />
-        <Button type="submit">Submit</Button>
+        <Button className="w-full" type="submit" disabled={isLoading}>
+          {isLoading ? (
+            <span className="spinner-border animate-spin inline-block w-4 h-4 border-2 rounded-full"></span>
+          ) : (
+            <>
+              <IconPlus size={24} />
+              <span>Create Category</span>
+            </>
+          )}
+        </Button>
       </form>
       {alert.show && (
         <AlertComponent title={alert.title} msg={alert.description} type={alert.type} show={true} />

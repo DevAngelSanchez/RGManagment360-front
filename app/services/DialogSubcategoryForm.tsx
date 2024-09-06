@@ -22,15 +22,11 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { apiUrl } from "@/auth";
 import { Category } from "@/lib/types";
 import { CreateSubcategory } from "./actions";
 import AlertComponent from "@/components/custom/alert";
+import { IconPlus } from "@tabler/icons-react";
 
-// interface ISubcategory {
-//   name: string;
-//   id: number;
-// }
 type TSubcategoryProps = {
   category: Category[] | null;
 };
@@ -46,6 +42,7 @@ const formSchema = z.object({
 
 export const DialogSubcategoryForm: FC<TSubcategoryProps> = ({ category }) => {
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
   const [alert, setAlert] = useState({ title: "", description: "", type: "default", show: false });
 
   function resetAlert() {
@@ -55,8 +52,9 @@ export const DialogSubcategoryForm: FC<TSubcategoryProps> = ({ category }) => {
   async function onSubmit(values: z.infer<typeof formSchema>) {
 
     try {
+      setIsLoading(true);
       const result = await CreateSubcategory(values.subcategory, values.categoryId);
-      console.log(result)
+      setIsLoading(false);
       if (result.type === "error") {
         resetAlert();
         setAlert({ title: result.title, description: result.msg, type: result.type, show: true });
@@ -139,7 +137,16 @@ export const DialogSubcategoryForm: FC<TSubcategoryProps> = ({ category }) => {
             )}
           />
         </div>
-        <Button type="submit">Submit</Button>
+        <Button className="w-full" type="submit" disabled={isLoading}>
+          {isLoading ? (
+            <span className="spinner-border animate-spin inline-block w-4 h-4 border-2 rounded-full"></span>
+          ) : (
+            <>
+              <IconPlus size={24} />
+              <span>Create Subcategory</span>
+            </>
+          )}
+        </Button>
       </form>
 
       {alert.show && (

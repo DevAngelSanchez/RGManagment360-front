@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useEffect, FC } from "react";
+import React, { useState, FC } from "react";
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
@@ -9,7 +9,6 @@ import { Button } from "@/components/ui/button"
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -18,7 +17,6 @@ import {
 
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
-import { apiUrl } from "@/auth";
 import { IconTrash } from "@tabler/icons-react";
 import { DeleteUser } from "./actions";
 import AlertComponent from "@/components/custom/alert";
@@ -36,6 +34,7 @@ interface Props {
 export const DeleteUserForm: FC<Props> = ({ id, name }) => {
   const router = useRouter();
 
+  const [isLoading, setIsLoading] = useState(false);
   const [alert, setAlert] = useState({ title: "", description: "", type: "default", show: false });
 
   function resetAlert() {
@@ -53,9 +52,10 @@ export const DeleteUserForm: FC<Props> = ({ id, name }) => {
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    const result = await DeleteUser(values.id);
     try {
+      setIsLoading(true);
       const result = await DeleteUser(values.id);
+      setIsLoading(false);
       if (result.type === "error") {
         resetAlert();
         setAlert({ title: result.title, description: result.msg, type: result.type, show: true });
@@ -109,9 +109,15 @@ export const DeleteUserForm: FC<Props> = ({ id, name }) => {
             </FormItem>
           )}
         />
-        <Button variant="destructive" type="submit">
-          <IconTrash size={16} className="mr-2" />
-          Delete
+        <Button variant="destructive" className="w-full" type="submit" disabled={isLoading}>
+          {isLoading ? (
+            <span className="spinner-border animate-spin inline-block w-4 h-4 border-2 rounded-full"></span>
+          ) : (
+            <>
+              <IconTrash size={24} />
+              <span>Delete</span>
+            </>
+          )}
         </Button>
       </form >
 

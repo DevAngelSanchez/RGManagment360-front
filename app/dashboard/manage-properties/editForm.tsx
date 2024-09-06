@@ -9,7 +9,6 @@ import { Button } from "@/components/ui/button"
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -71,6 +70,7 @@ export const EditPropertyForm: FC<EditPropertyFormProps> = ({ property }) => {
 
   const [customers, setCustomers] = useState<Customer[]>([]);
 
+  const [isLoading, setIsLoading] = useState(false);
   const [alert, setAlert] = useState({ title: "", description: "", type: "default", show: false });
 
   function resetAlert() {
@@ -115,7 +115,9 @@ export const EditPropertyForm: FC<EditPropertyFormProps> = ({ property }) => {
     const { id, name, address, city, state, zipPostalCode, ownerId } = values;
 
     try {
+      setIsLoading(true)
       const result = await EditProperty(id, name, address, city, state, zipPostalCode, ownerId);
+      setIsLoading(false)
       if (result.type === "error") {
         resetAlert();
         setAlert({ title: result.title, description: result.msg, type: result.type, show: true });
@@ -262,10 +264,16 @@ export const EditPropertyForm: FC<EditPropertyFormProps> = ({ property }) => {
             />
           </div>
         </div>
-        < Button className="w-full" type="submit" >
-          <IconEdit size={24} />
-          Edit property
-        </Button >
+        <Button className="w-full" type="submit" disabled={isLoading}>
+          {isLoading ? (
+            <span className="spinner-border animate-spin inline-block w-4 h-4 border-2 rounded-full"></span>
+          ) : (
+            <>
+              <IconEdit size={24} />
+              <span>Update Property</span>
+            </>
+          )}
+        </Button>
       </form >
 
       {alert.show && (

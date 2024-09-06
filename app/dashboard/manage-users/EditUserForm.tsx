@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, FC } from "react";
+import React, { useState, FC } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -9,7 +9,6 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -81,6 +80,7 @@ const formSchema = z.object({
 export const EditUserForm: FC<Props> = ({ user }) => {
   const router = useRouter();
 
+  const [isLoading, setIsLoading] = useState(false);
   const [alert, setAlert] = useState({ title: "", description: "", type: "default", show: false });
 
   function resetAlert() {
@@ -107,7 +107,9 @@ export const EditUserForm: FC<Props> = ({ user }) => {
     const { name, lastname, username, email, phone, address, role, isActive } = values;
 
     try {
+      setIsLoading(true);
       const result = await EditUser(user.id, name, lastname, username, email, phone, address, role, isActive);
+      setIsLoading(false);
       if (result.type === "error") {
         resetAlert();
         setAlert({ title: result.title, description: result.msg, type: result.type, show: true });
@@ -291,9 +293,15 @@ export const EditUserForm: FC<Props> = ({ user }) => {
             />
           </div>
         </div>
-        <Button className="w-full" type="submit">
-          <IconEdit size={24} />
-          Save user
+        <Button className="w-full" type="submit" disabled={isLoading}>
+          {isLoading ? (
+            <span className="spinner-border animate-spin inline-block w-4 h-4 border-2 rounded-full"></span>
+          ) : (
+            <>
+              <IconEdit size={24} />
+              <span>Update User</span>
+            </>
+          )}
         </Button>
       </form>
 
