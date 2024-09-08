@@ -57,7 +57,7 @@ const Sidebar: React.FC = () => {
       <div
         className={`${
           showSidebar && windowWidth <= 950
-            ? "absolute top-0 left-0 bg-white h-full w-64 z-50 bg-opacity-80 backdrop-blur-sm shadow-md " 
+            ? "absolute top-0 left-0 bg-white h-full w-44 z-50 bg-opacity-80 backdrop-blur-sm shadow-md "
             : showSidebar
             ? "w-64 bg-white h-full"
             : "hidden"
@@ -108,14 +108,14 @@ const Sidebar: React.FC = () => {
           </div>
         </div>
       </div>
-      
-      
+
       {windowWidth <= 950 && !showSidebar && (
-        <div className="bg-slate-50 h-full ">
+        <div className="bg-slate-50 h-full absolute top-0 left-0">
           <IconMenu2
             onClick={handleToggleSidebar}
             height={25}
             width={25}
+            className="absolute -top-14 left-3"
           ></IconMenu2>
         </div>
       )}
