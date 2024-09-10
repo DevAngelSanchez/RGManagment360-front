@@ -1,10 +1,11 @@
-import NextAuth from "next-auth"
+import NextAuth from "next-auth";
 import "next-auth/jwt";
-import Credentials from "next-auth/providers/credentials"
+import Credentials from "next-auth/providers/credentials";
+import Google from "next-auth/providers/google";
 // Your own logic for dealing with plaintext password strings; be careful!
 
-// export const apiUrl = "http://localhost:3001/";
-export const apiUrl = process.env.API_URL || "https://rgmanagment360-backend.onrender.com/";
+export const apiUrl = "http://localhost:3001/";
+// export const apiUrl = process.env.API_URL || "https://rgmanagment360-backend.onrender.com/";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
@@ -55,6 +56,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         }
       },
     }),
+    Google
   ],
   pages: {
     signIn: "/auth/login"

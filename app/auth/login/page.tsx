@@ -2,6 +2,7 @@ import Link from "next/link";
 import { LoginForm } from "./form";
 import LayoutSelector from "@/components/custom/LayoutSelector";
 import Image from "next/image";
+import GoogleSignIn from "./googleSignIn";
 
 export default function LoginPage() {
   return (
@@ -11,6 +12,9 @@ export default function LoginPage() {
           Welcome back!
         </h1>
         <LoginForm />
+        <span>Or Sign in with</span>
+
+        <GoogleSignIn />
         <div className="flex flex-col gap-2 items-center">
           <p className="text-center text-sm">
             Dont have an account?{" "}
