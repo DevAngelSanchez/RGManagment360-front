@@ -17,7 +17,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = async ({
     <div className="w-full ">
       <Header email={session ? session.user?.email : "Username"} />
 
-      <div className="flex">
+      <div className="flex h-full">
         <Sidebar />
         {children}
       </div>

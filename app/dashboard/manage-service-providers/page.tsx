@@ -21,7 +21,7 @@ export default async function ManageSuppliers() {
   return (
     <LayoutSelector layout="default">
       <main>
-        <section className="h-[calc(100vh-5.6rem)] max-w-[calc(100vw-240px)] ml-[240px] flex flex-col overflow-y-auto p-4">
+        <section className="flex flex-col overflow-y-auto p-4 bg-slate-50 w-full">
           <div className="flex items-center justify-between w-full gap-2 mb-6">
             <h1 className="text-4xl font-bold mb-4">Service Providers</h1>
             <Dialog>

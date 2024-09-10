@@ -14,10 +14,16 @@ import {
   IconMenu2,
   IconArrowBarLeft,
 } from "@tabler/icons-react";
+if (typeof window !== 'undefined') {
+  // Access window object here
+}
 
 const Sidebar: React.FC = () => {
+  if (typeof window !== 'undefined') {
+    // Access window object here
+  }
   const [showSidebar, setShowSidebar] = useState(true);
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth); // revisar esto
   const sidebarRef = useRef<HTMLDivElement>(null);
 
   const handleToggleSidebar = () => {
@@ -32,7 +38,11 @@ const Sidebar: React.FC = () => {
     }
   };
 
+
   useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setWindowWidth(window.innerWidth);
+    }
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
       if (window.innerWidth <= 950) {
@@ -42,6 +52,7 @@ const Sidebar: React.FC = () => {
         setShowSidebar(true);
       }
     };
+
 
     window.addEventListener("resize", handleResize);
     document.addEventListener("click", handleClickOutside);
