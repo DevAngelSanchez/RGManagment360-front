@@ -20,9 +20,9 @@ import { Skeleton } from "@/components/ui/skeleton";
 const ManageUsers = async () => {
 
   return (
-    <main className="w-full h-screen">
+    <main className="w-full h-full bg-slate-50 ">
       <LayoutSelector layout="default">
-        <section className="flex flex-col gap-6 overflow-y-auto p-4 bg-slate-50 w-full h-full">
+        <section className=" p-4 overflow-y-auto">
           <div className="flex flex-row justify-between pr-8">
             <h1 className="text-4xl font-bold mb-4">USERS</h1>
             <Dialog>

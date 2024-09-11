@@ -26,10 +26,19 @@ import { Input } from "@/components/ui/input";
 
 const FormSchema = z.object({
   role: z.string({
-    required_error: "Please select a role to display.",
+    required_error: "Please select a role.",
+  }),
+  status: z.string({
+    required_error: "Please select a status.",
   }),
 
   username: z.string(),
+  email: z
+    .string()
+    .email({
+      message: "Not valid email",
+    })
+    .trim(),
 });
 
 export function FilterUser() {
@@ -37,17 +46,22 @@ export function FilterUser() {
     resolver: zodResolver(FormSchema),
     defaultValues: {
       role: "",
+      status: "",
       username: "",
+      email: "",
     },
   });
 
   function onSubmit(data: z.infer<typeof FormSchema>) {}
 
   return (
-    <div className="flex p-4 gap-4">
-      <div>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="w-40">
+    <div className=" p-4 gap-4 ">
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="grid grid-cols-12 gap-3 w-fit"
+        >
+          <div className="md:col-span-3 col-span-6">
             <FormField
               control={form.control}
               name="username"
@@ -61,12 +75,24 @@ export function FilterUser() {
                 </FormItem>
               )}
             />
-          </form>
-        </Form>
-      </div>
-      <div>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="w-40">
+          </div>
+
+          <div className="md:col-span-3 col-span-6">
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email</FormLabel>
+                  <FormControl>
+                    <Input placeholder="johndoe@gmail.com" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <div className="md:col-span-3 col-span-6">
             <FormField
               control={form.control}
               name="role"
@@ -95,9 +121,35 @@ export function FilterUser() {
                 </FormItem>
               )}
             />
-          </form>
-        </Form>
-      </div>
+          </div>
+          <div className="md:col-span-3 col-span-6">
+            <FormField
+              control={form.control}
+              name="status"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Status</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a status" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="active">Active</SelectItem>
+                      <SelectItem value="disabled">Disabled</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+        </form>
+      </Form>
     </div>
   );
 }
