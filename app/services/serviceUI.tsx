@@ -1,6 +1,5 @@
 import { CategoryTable } from "./categoryTable";
 import { SubCategoryTable } from "./subCategoryTable";
-
 import { Category, Subcategory } from "@/lib/types";
 import { fetchCategories, fetchSubcategories } from "@/lib/fetch";
 
@@ -17,7 +16,6 @@ import {
 import DialogCategoryForm from "./DialogCategoryForm";
 import DialogSubcategoryForm from "./DialogSubcategoryForm";
 
-
 export default async function ServicesUI() {
   const categoriesResult = await fetchCategories();
   const subcategoriesResult = await fetchSubcategories();
@@ -27,15 +25,15 @@ export default async function ServicesUI() {
 
   return (
     <>
-      <div className="flex justify-between">
+      <div className="flex flex-col sm:flex-row  sm:justify-between">
         <h1 className="text-4xl font-bold mb-4">Services</h1>
         <div className="flex gap-3">
           <Dialog>
-            <DialogTrigger className="hidden md:flex px-4 py-2  items-center gap-2 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition-all">
+            <DialogTrigger className="hidden sm:flex px-4 py-2 items-center gap-2 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition-all">
               <IconPlus size={24} />
               Create Category
             </DialogTrigger>
-            <DialogTrigger className="md:hidden px-2 py-1 flex items-center  rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition-all">
+            <DialogTrigger className="sm:hidden px-2 py-1 flex items-center  rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition-all">
               <IconPlus size={18} />
               Category
             </DialogTrigger>
@@ -81,7 +79,7 @@ export default async function ServicesUI() {
           </Dialog>
         </div>
       </div>
-      <div className="flex flex-col items-start w-full p-4 gap-8 mb-6 md:flex-row">
+      <div className="flex flex-col items-start w-full mt-4 gap-8 mb-6 md:flex-row">
         <div className="lg:w-2/5 xl:w-2/5 w-full">
           <CategoryTable category={categories} />
         </div>
@@ -94,4 +92,4 @@ export default async function ServicesUI() {
       </div>
     </>
   );
-};
+}
