@@ -1,11 +1,11 @@
 "use client"
 
 import React, { useState } from "react";
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -16,15 +16,10 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
-import { signIn } from "next-auth/react"
+import { signIn } from "next-auth/react";
 import AlertComponent from "@/components/custom/alert";
-
-const formSchema = z.object({
-  email: z.string().email({
-    message: "Not valid email",
-  }).trim(),
-  password: z.string().trim(),
-})
+import { loginSchema } from "@/lib/zodSchemas";
+import { loginAction } from "./action";
 
 export function LoginForm() {
   const router = useRouter();
@@ -36,8 +31,8 @@ export function LoginForm() {
   }
 
   // 1. Define your form.
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof loginSchema>>({
+    resolver: zodResolver(loginSchema),
     defaultValues: {
       email: "",
       password: ""
@@ -45,25 +40,22 @@ export function LoginForm() {
   })
 
   // 2. Define a submit handler.
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof loginSchema>) {
     setIsLoading(true); // Mostrar spinner
-    const result = await signIn('credentials', {
-      redirect: false,
-      email: values?.email,
-      password: values?.password
-    });
+    const result = await loginAction(values);
+    router.push('/dashboard');
     setIsLoading(false); // Ocultar spinner
 
-    if (result?.error) {
-      resetAlert();
-      setAlert({ title: "Something is wrong!", description: "Try to verify your credentials", type: "error", show: true });
-      setTimeout(() => {
-        resetAlert();
-      }, 3000);
-      return null;
-    } else {
-      router.push('/dashboard');
-    }
+    // if (result?.error) {
+    //   resetAlert();
+    //   setAlert({ title: "Something is wrong!", description: "Try to verify your credentials", type: "error", show: true });
+    //   setTimeout(() => {
+    //     resetAlert();
+    //   }, 3000);
+    //   return null;
+    // } else {
+    //   router.push('/dashboard');
+    // }
   }
 
   return (

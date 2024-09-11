@@ -21,7 +21,7 @@ import { User } from "@/lib/types";
 export default async function Dashboard() {
   const session = await auth();
 
-  if (session === null) {
+  if (!session) {
     return redirect("/auth/login");
   }
 

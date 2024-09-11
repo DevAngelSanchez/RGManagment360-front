@@ -1,63 +1,13 @@
 import NextAuth from "next-auth";
-import "next-auth/jwt";
-import Credentials from "next-auth/providers/credentials";
-import Google from "next-auth/providers/google";
-// Your own logic for dealing with plaintext password strings; be careful!
+import { PrismaAdapter } from "@auth/prisma-adapter";
+// import { db } from "@/lib/db";
 
-export const apiUrl = "http://localhost:3001/";
-// export const apiUrl = process.env.API_URL || "https://rgmanagment360-backend.onrender.com/";
+import "next-auth/jwt";
+
+import authConfig from "@/auth.config";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
-  providers: [
-    Credentials({
-      credentials: {
-        email: {
-          label: 'Email',
-          type: 'email',
-          placeholder: 'johndoe@gmail.com'
-        },
-        password: {
-          label: 'Contraseña',
-          type: 'password',
-          placeholder: '********'
-        },
-      },
-      authorize: async (credentials) => {
-
-        if (!credentials) {
-          return null;
-        }
-
-        const res = await fetch(`${apiUrl}auth/login`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            email: credentials.email,
-            password: credentials.password
-          })
-        });
-
-        if (!res.ok) {
-          console.error('Hubo un error en la consulta');
-          return null;
-        }
-
-        const data = await res.json();
-
-        // Si la API devuelve un objeto de usuario válido, devuélvelo
-        if (data) {
-          return {
-            id: `${data.id}`,
-            username: data.name,
-            email: data.email
-          };
-        } else {
-          return null;
-        }
-      },
-    }),
-    Google
-  ],
+  // adapter: PrismaAdapter(db),
   pages: {
     signIn: "/auth/login"
   },
@@ -75,7 +25,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       }
       return session
     },
-  }
+  },
+  ...authConfig,
+  session: {
+    strategy: "jwt"
+  },
 })
 
 declare module "next-auth" {
