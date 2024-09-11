@@ -19,6 +19,13 @@ type HeaderProps = {
 };
 
 export default function Header({ name, email }: HeaderProps) {
+
+  const handleClick = async () => {
+    await signOut({
+      callbackUrl: "/login"
+    })
+  }
+
   return (
     <header className="w-full border-b border-gray-300 flex items-center justify-between gap-2 px-6 py-6 bg-gradient-to-r from-green-500 to-teal-400">
       <div className="flex items-center gap-8">
@@ -57,7 +64,7 @@ export default function Header({ name, email }: HeaderProps) {
           <DropdownMenuSeparator />
           {/* <DropdownMenuItem>Profile</DropdownMenuItem> */}
           <DropdownMenuItem>
-            <button onClick={() => signOut()}>Sign out</button>
+            <button onClick={handleClick}>Sign out</button>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
