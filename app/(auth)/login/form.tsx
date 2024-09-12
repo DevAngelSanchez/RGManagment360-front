@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState } from "react";
+import React, { useState, useTransition } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -16,14 +16,14 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
-import { signIn } from "next-auth/react";
 import AlertComponent from "@/components/custom/alert";
 import { loginSchema } from "@/lib/zodSchemas";
 import { loginAction } from "./action";
 
 export function LoginForm() {
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
+  // const [isLoading, setIsLoading] = useState(false);
+  const [isPending, startTransition] = useTransition();
   const [alert, setAlert] = useState({ title: "", description: "", type: "default", show: false });
 
   function resetAlert() {
@@ -41,10 +41,19 @@ export function LoginForm() {
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof loginSchema>) {
-    setIsLoading(true); // Mostrar spinner
-    const result = await loginAction(values);
-    router.push('/dashboard');
-    setIsLoading(false); // Ocultar spinner
+    resetAlert();
+    startTransition(async () => {
+      const response = await loginAction(values);
+
+      if (response?.error) {
+        setAlert({ title: "Error!", description: response.error, type: "error", show: true });
+        setTimeout(() => {
+          resetAlert();
+        }, 5000);
+      } else {
+        router.push('/dashboard');
+      }
+    });
 
     // if (result?.error) {
     //   resetAlert();
@@ -87,8 +96,8 @@ export function LoginForm() {
             </FormItem>
           )}
         />
-        <Button className="w-full" type="submit" disabled={isLoading}>
-          {isLoading ? (
+        <Button className="w-full" type="submit" disabled={isPending}>
+          {isPending ? (
             <span className="spinner-border animate-spin inline-block w-4 h-4 border-2 rounded-full"></span>
           ) : (
             'Login'

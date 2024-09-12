@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from 'react'
+import { useState, useTransition } from 'react'
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
@@ -9,7 +9,6 @@ import { Button } from "@/components/ui/button"
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -17,37 +16,14 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
-import { apiUrl } from "@/auth";
 import AlertComponent from "@/components/custom/alert"
-
-const formSchema = z.object({
-  name: z.string().min(3, {
-    message: "Username has to be at least 3 characters long",
-  }),
-  lastname: z.string().min(3, {
-    message: "Username has to be at least 3 characters long",
-  }),
-  username: z.string().min(3, {
-    message: "Username has to be at least 3 characters long",
-  }),
-  email: z.string().email({
-    message: "Not valid email",
-  }).trim(),
-  passwordForm: z.object({
-    password: z.string().min(6, {
-      message: "Password has to be at least 6 characters long"
-    }),
-    confirm: z.string(),
-  }).refine((data) => data.password === data.confirm, {
-    message: "Passwords don't match",
-    path: ["confirm"],
-  })
-})
+import { registerAction } from './actions'
+import { registerSchema } from '@/lib/zodSchemas'
 
 export function RegisterForm() {
 
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
+  const [isPending, startTransition] = useTransition();
   const [alert, setAlert] = useState({ title: "", description: "", type: "default", show: false });
 
   function resetAlert() {
@@ -55,8 +31,8 @@ export function RegisterForm() {
   }
 
   // 1. Define your form.
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof registerSchema>>({
+    resolver: zodResolver(registerSchema),
     defaultValues: {
       name: "",
       lastname: "",
@@ -67,51 +43,32 @@ export function RegisterForm() {
   })
 
   // 2. Define a submit handler.
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof registerSchema>) {
     try {
-      setIsLoading(true); // Mostrar spinner
-      const response = await fetch(`${apiUrl}auth/register`, {
-        method: "POST",
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          name: values?.name,
-          lastname: values?.lastname,
-          username: values?.username,
-          email: values?.email,
-          password: values?.passwordForm.password
-        })
-      });
-      setIsLoading(false); // ocultar spinner
-
-      const data = await response.json();
-
-      if (data.type !== 'success') {
-        resetAlert();
-        setAlert({ title: data.title, description: data.msg, type: data.type, show: true });
-        setTimeout(() => {
-          resetAlert();
-        }, 3000);
-        return;
-      }
-
       resetAlert();
-      setAlert({ title: data.title, description: data.msg, type: data.type, show: true });
-      setTimeout(() => {
-        resetAlert();
-      }, 3000);
+      startTransition(async () => {
+        const response = await registerAction(values);
 
-      router.push('/auth/login')
+        if (response?.error) {
+          setAlert({ title: "Error!", description: response.error, type: "error", show: true });
+          setTimeout(() => {
+            resetAlert();
+          }, 5000);
+        } else {
+          router.push('/dashboard');
+        }
+      });
     } catch (error) {
       resetAlert();
       setAlert({ title: "Something is wrong!", description: "Try to verify your data", type: "error", show: true });
       setTimeout(() => {
         resetAlert();
-      }, 3000);
+      }, 5000);
       return;
     }
   }
+
+  // Minito de video 1:38:37
 
   return (
     <Form {...form}>
@@ -203,8 +160,8 @@ export function RegisterForm() {
           )
           }
         />
-        <Button className="w-full" type="submit" disabled={isLoading}>
-          {isLoading ? (
+        <Button className="w-full" type="submit" disabled={isPending}>
+          {isPending ? (
             <span className="spinner-border animate-spin inline-block w-4 h-4 border-2 rounded-full"></span>
           ) : (
             'Create User'

@@ -1,6 +1,9 @@
 import Credentials from "next-auth/providers/credentials";
 import Google from "next-auth/providers/google";
 import type { NextAuthConfig } from "next-auth";
+import { loginSchema } from "./lib/zodSchemas";
+import { db } from "./lib/db";
+import bcrypt from "bcryptjs";
 
 export const apiUrl = "http://localhost:3001/";
 // export const apiUrl = process.env.API_URL || "https://rgmanagment360-backend.onrender.com/";
@@ -10,48 +13,28 @@ export default {
     Credentials({
       authorize: async (credentials) => {
 
-        console.log(credentials);
+        const { data, success } = loginSchema.safeParse(credentials);
 
-        if (credentials.email !== "angel@test.com") {
-          throw new Error("Invalid Credentials");
+        if (!success) {
+          throw new Error("Invalid credentials!");
         }
 
-        return {
-          id: "1",
-          name: "Angel Test",
-          email: "angel@test.com"
+        // Verificar si existe el usuario
+        const user = await db.user.findUnique({
+          where: {
+            email: data.email
+          }
+        });
+
+        if (!user || !user.password) {
+          throw new Error("User not found!");
         }
 
-        // if (!credentials) {
-        //   return null;
-        // }
+        const isValid = await bcrypt.compare(data.password, user.password);
 
-        // const res = await fetch(`${apiUrl}auth/login`, {
-        //   method: 'POST',
-        //   headers: { 'Content-Type': 'application/json' },
-        //   body: JSON.stringify({
-        //     email: credentials.email,
-        //     password: credentials.password
-        //   })
-        // });
+        if (!isValid) throw new Error("Incorrect password!");
 
-        // if (!res.ok) {
-        //   console.error('Hubo un error en la consulta');
-        //   return null;
-        // }
-
-        // const data = await res.json();
-
-        // // Si la API devuelve un objeto de usuario válido, devuélvelo
-        // if (data) {
-        //   return {
-        //     id: `${data.id}`,
-        //     username: data.name,
-        //     email: data.email
-        //   };
-        // } else {
-        //   return null;
-        // }
+        return user;
       },
     }),
     Google],
