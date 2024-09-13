@@ -37,9 +37,9 @@ export default async function Dashboard() {
           <div className="grid grid-cols-5 gap-4 mb-6">
             <div className="md:col-span-3 col-span-5">
               <Card>
-               
+                
                 <iframe
-                  src="https://calendar.google.com/calendar/embed?height=600&wkst=1&ctz=America%2FCaracas&bgcolor=%2345ff57&showPrint=0&showTitle=0&src=am9zZW1hcjc3amFtQGdtYWlsLmNvbQ&color=%23039BE5"
+                  src="https://calendar.google.com/calendar/embed?height=600&wkst=1&ctz=America%2FCaracas&bgcolor=%23bbf7d0&showTz=0&showTitle=0&showPrint=0&src=am9zZW1hcjc3amFtQGdtYWlsLmNvbQ&color=%23039BE5"
                   style={{ border: 0, width: "100%", height: "600px" }}
                   scrolling="no"
                 ></iframe>
