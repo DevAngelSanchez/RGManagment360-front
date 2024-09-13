@@ -4,14 +4,22 @@ import LayoutSelector from "@/components/custom/LayoutSelector";
 import Image from "next/image";
 import GoogleSignIn from "./googleSignIn";
 
-export default function LoginPage() {
+export default function LoginPage({
+  searchParams
+}: {
+  searchParams: { verified: string }
+}) {
+
+  const isVerified = searchParams.verified === "true";
+
   return (
     <LayoutSelector layout="login/register">
       <div className="flex flex-col gap-2 items-center justify-between p-8">
         <h1 className="text-primary font-semibold text-2xl text-center">
           Welcome back!
         </h1>
-        <LoginForm />
+
+        <LoginForm isVerified={isVerified} />
         <span>Or Sign in with</span>
 
         <GoogleSignIn />

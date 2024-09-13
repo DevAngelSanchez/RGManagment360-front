@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useTransition } from "react";
+import React, { useEffect, useState, useTransition } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -20,11 +20,21 @@ import AlertComponent from "@/components/custom/alert";
 import { loginSchema } from "@/lib/zodSchemas";
 import { loginAction } from "./action";
 
-export function LoginForm() {
+export function LoginForm({ isVerified }: { isVerified: boolean }) {
   const router = useRouter();
-  // const [isLoading, setIsLoading] = useState(false);
   const [isPending, startTransition] = useTransition();
   const [alert, setAlert] = useState({ title: "", description: "", type: "default", show: false });
+
+  useEffect(() => {
+    if (isVerified) {
+      resetAlert()
+      setAlert({ title: "Verified!", description: "You can now login!", type: "success", show: true });
+
+      setTimeout(() => {
+        resetAlert();
+      }, 5000)
+    }
+  }, []);
 
   function resetAlert() {
     return setAlert({ title: "", description: "", type: "default", show: false });
@@ -54,17 +64,6 @@ export function LoginForm() {
         router.push('/dashboard');
       }
     });
-
-    // if (result?.error) {
-    //   resetAlert();
-    //   setAlert({ title: "Something is wrong!", description: "Try to verify your credentials", type: "error", show: true });
-    //   setTimeout(() => {
-    //     resetAlert();
-    //   }, 3000);
-    //   return null;
-    // } else {
-    //   router.push('/dashboard');
-    // }
   }
 
   return (

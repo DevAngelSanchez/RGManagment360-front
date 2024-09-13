@@ -1,35 +1,33 @@
 import NextAuth from "next-auth";
 import { PrismaAdapter } from "@auth/prisma-adapter";
-// import { db } from "@/lib/db";
+import { db } from "@/lib/db";
 
 import "next-auth/jwt";
 
 import authConfig from "@/auth.config";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
-  // adapter: PrismaAdapter(db),
+  adapter: PrismaAdapter(db),
   pages: {
     signIn: "/login"
   },
+  session: {
+    strategy: "jwt"
+  },
   callbacks: {
-    jwt({ token, trigger, session, account }) {
-      if (trigger === "update") token.name = session.user.name
-      if (account?.provider === "keycloak") {
-        return { ...token, accessToken: account.access_token }
+    jwt({ token, user }) {
+      if (user) {
+        token.role = user.role
       }
       return token
     },
-    async session({ session, token }) {
-      if (token?.accessToken) {
-        session.accessToken = token.accessToken
-      }
+    session({ session, token }) {
+      session.user.role = token.role
       return session
     },
   },
   ...authConfig,
-  session: {
-    strategy: "jwt"
-  },
+
 })
 
 declare module "next-auth" {
