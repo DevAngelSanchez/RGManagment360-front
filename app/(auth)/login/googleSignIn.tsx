@@ -1,19 +1,18 @@
-import { signIn } from "next-auth/react";
-import { Button } from "@/components/ui/button";
-import { IconBrandGoogle } from "@tabler/icons-react";
+"use client";
 
-export default function GoogleSignIn() {
-  return (
-    <form
-      action={async () => {
-        "use server"
-        await signIn("google")
-      }}
-    >
-      <Button type="submit" className="flex items-center justify-center gap-1" >
-        <IconBrandGoogle size={16} />
-        Google
-      </Button>
-    </form>
-  )
+import { Button } from "@/components/ui/button";
+import { signIn } from "next-auth/react";
+
+interface ButtonSocialProps {
+  children: React.ReactNode;
+  provider: string;
 }
+
+const ButtonSocial = ({ children, provider }: ButtonSocialProps) => {
+  const handleClick = async () => {
+    await signIn(provider);
+  };
+
+  return <Button onClick={handleClick}>{children}</Button>;
+};
+export default ButtonSocial;

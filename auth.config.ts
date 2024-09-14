@@ -73,5 +73,6 @@ export default {
         return user;
       },
     }),
-    Google],
+    Google
+  ],
 } satisfies NextAuthConfig

@@ -2,7 +2,8 @@ import Link from "next/link";
 import { LoginForm } from "./form";
 import LayoutSelector from "@/components/custom/LayoutSelector";
 import Image from "next/image";
-import GoogleSignIn from "./googleSignIn";
+import ButtonSocial from "./googleSignIn";
+import { IconBrandGoogle } from "@tabler/icons-react";
 
 export default function LoginPage({
   searchParams
@@ -22,13 +23,16 @@ export default function LoginPage({
         <LoginForm isVerified={isVerified} />
         <span>Or Sign in with</span>
 
-        <GoogleSignIn />
+        <ButtonSocial provider="google">
+          <IconBrandGoogle size={16} className="mr-2" />
+          Sign in with Google
+        </ButtonSocial>
         <div className="flex flex-col gap-2 items-center">
           <p className="text-center text-sm">
             Dont have an account?{" "}
             <Link
               className="text-indigo-500 font-semibold hover:underline"
-              href="/auth/register"
+              href="/register"
             >
               Sign up now
             </Link>
