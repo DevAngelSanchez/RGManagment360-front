@@ -58,11 +58,3 @@ export const registerAction = async (values: z.infer<typeof registerSchema>) => 
     return { error: "error 500" }
   }
 }
-
-// body: JSON.stringify({
-//   name: values?.name,
-//   lastname: values?.lastname,
-//   username: values?.username,
-//   email: values?.email,
-//   password: values?.passwordForm.password
-// })

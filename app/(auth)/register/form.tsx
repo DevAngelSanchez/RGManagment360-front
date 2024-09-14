@@ -68,8 +68,6 @@ export function RegisterForm() {
     }
   }
 
-  // Minito de video 1:38:37
-
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 min-w-[360px]">
