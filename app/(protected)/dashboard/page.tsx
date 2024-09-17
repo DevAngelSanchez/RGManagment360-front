@@ -31,11 +31,19 @@ export default async function Dashboard() {
   return (
     <main>
       <LayoutSelector layout="default">
-        <section className="h-[calc(100vh-5.6rem)] md:max-w-[calc(100vw-240px)] md:ml-[240px] flex flex-col overflow-y-auto p-4">
+        <section className=" flex flex-col overflow-y-auto p-4 bg-slate-50 w-full">
           <h1 className="text-4xl font-bold mb-4">Dashboard</h1>
 
           <div className="grid grid-cols-5 gap-4 mb-6">
-            <div className="col-span-3">
+            <div className="md:col-span-3 col-span-5">
+              <Card>
+                
+                <iframe
+                  src="https://calendar.google.com/calendar/embed?height=600&wkst=1&ctz=America%2FCaracas&bgcolor=%23bbf7d0&showTz=0&showTitle=0&showPrint=0&src=am9zZW1hcjc3amFtQGdtYWlsLmNvbQ&color=%23039BE5"
+                  style={{ border: 0, width: "100%", height: "600px" }}
+                  scrolling="no"
+                ></iframe>
+              </Card>
               <Card>
                 <CardHeader>
                   <CardTitle>Last 6 months data chart</CardTitle>
@@ -45,7 +53,7 @@ export default async function Dashboard() {
                 </CardContent>
               </Card>
             </div>
-            <div className="col-span-2">
+            <div className="md:col-span-2 col-span-5">
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
@@ -77,11 +85,11 @@ export default async function Dashboard() {
           </div>
 
           <div className="grid grid-cols-2 gap-4">
-            <div className="flex flex-col gap-2 border rounded-lg border-gray-200 shadow-md p-3">
+            <div className="md:col-span-1 col-span-2 gap-2 border rounded-lg border-gray-200 shadow-md p-3">
               <h2 className="text-xl font-semibold">Last invoices</h2>
               <DashboardTable />
             </div>
-            <div className="flex flex-col gap-2 border rounded-lg border-gray-200 shadow-md p-3">
+            <div className="md:col-span-1 col-span-2 gap-2 border rounded-lg border-gray-200 shadow-md p-3">
               <h2 className="text-xl font-semibold">Last Employees</h2>
               <DashboardTable />
             </div>

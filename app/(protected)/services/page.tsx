@@ -7,12 +7,10 @@ import { Skeleton } from "@/components/ui/skeleton";
 export default async function Page() {
   return (
     <LayoutSelector layout="default">
-      <main>
-        <section className="bg-slate-50 h-[calc(100vh-5.6rem)] md:max-w-[calc(100vw-240px)] md:ml-[240px] w-full flex flex-col overflow-y-auto p-4">
+      <main className="w-full h-full bg-slate-50 ">
+        <section className="p-4 overflow-y-auto">
           <Suspense
-            fallback={
-              <Skeleton className="w-[100px] h-[20px] rounded-full" />
-            }
+            fallback={<Skeleton className="w-[100px] h-[20px] rounded-full" />}
           >
             <ServicesUI />
           </Suspense>
@@ -20,5 +18,4 @@ export default async function Page() {
       </main>
     </LayoutSelector>
   );
-};
-
+}

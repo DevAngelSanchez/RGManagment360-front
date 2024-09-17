@@ -29,7 +29,7 @@ export default function Header({ name, email }: HeaderProps) {
   return (
     <header className="w-full border-b border-gray-300 flex items-center justify-between gap-2 px-6 py-6 bg-gradient-to-r from-green-500 to-teal-400">
       <div className="flex items-center gap-8">
-        <h2 className="font-semibold text-gray-800 text-xl">{email}</h2>
+        <h2 className=" text-gray-800 font-bold text-2xl ml-6">{email}</h2>
         {/* <nav>
           <ul className="flex items-center gap-4">
             <Link

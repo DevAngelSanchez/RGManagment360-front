@@ -1,4 +1,4 @@
-import { PropertiesTable } from "@/app/dashboard/manage-properties/propertiesTable";
+import { PropertiesTable } from "./propertiesTable";
 import { fetchProperties } from "@/lib/fetch";
 import { Property } from "@/lib/types";
 

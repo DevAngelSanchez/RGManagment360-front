@@ -20,8 +20,8 @@ export default async function ManageProperties() {
 
   return (
     <LayoutSelector layout="default">
-      <main>
-        <section className="h-[calc(100vh-5.6rem)] max-w-[calc(100vw-240px)] ml-[240px] flex flex-col overflow-y-auto p-4">
+      <main className="w-full h-full bg-slate-50 ">
+        <section className="flex flex-col overflow-y-auto p-4">
           <div className="flex items-center justify-between w-full gap-2 mb-6">
             <h1 className="text-4xl font-bold mb-4">Manage Properties</h1>
             <Dialog>
