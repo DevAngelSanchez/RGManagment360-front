@@ -55,7 +55,7 @@ export function RegisterForm() {
             resetAlert();
           }, 5000);
         } else {
-          router.push('/dashboard');
+          router.push('/login');
         }
       });
     } catch (error) {

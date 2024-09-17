@@ -1,4 +1,4 @@
-import { db } from '@/lib/db';
+import { apiUrl } from '@/auth.config';
 import { redirect } from 'next/navigation';
 import { type NextRequest } from 'next/server'
 
@@ -11,41 +11,21 @@ export async function GET(request: NextRequest) {
     return new Response("Token not found!", { status: 400 });
   }
 
-  const verifyToken = await db.verificationToken.findFirst({
-    where: {
-      token
+  try {
+    // Hacer una solicitud al backend de Express
+    const response = await fetch(`${apiUrl}auth/verify-email?token=${token}`);
+
+    console.log(response)
+
+    if (!response.ok) {
+      const { message } = await response.json();
+      return new Response(message, { status: response.status });
     }
-  });
 
-  if (!verifyToken) {
-    return new Response("Token not found!", { status: 404 });
+    // Si el correo se verifica correctamente
+    redirect("/login?verified=true");
+
+  } catch (error) {
+    return new Response("Something went wrong!", { status: 500 });
   }
-
-  // Verificar que no haya expirado
-  if (verifyToken.expires < new Date()) {
-    return new Response("Token expired!", { status: 400 });
-  }
-
-  const user = await db.user.findUnique({
-    where: {
-      email: verifyToken.identifier
-    }
-  });
-
-  // Verificar si ya esta activo
-  if (user?.emailVerified) {
-    return new Response("Email already verified!", { status: 400 })
-  }
-
-  // Marcar como verificado
-  await db.user.update({
-    where: {
-      email: verifyToken.identifier
-    },
-    data: {
-      emailVerified: new Date()
-    }
-  });
-
-  redirect("/login?verified=true");
 }

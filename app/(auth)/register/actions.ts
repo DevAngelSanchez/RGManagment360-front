@@ -1,11 +1,9 @@
 "use server";
 
-import { signIn } from "@/auth";
-import { db } from "@/lib/db";
 import { registerSchema } from "@/lib/zodSchemas";
 import { AuthError } from "next-auth";
 import { z } from "zod";
-import bcrypt from 'bcryptjs';
+import { apiUrl } from "@/auth.config";
 
 export const registerAction = async (values: z.infer<typeof registerSchema>) => {
   try {
@@ -17,39 +15,31 @@ export const registerAction = async (values: z.infer<typeof registerSchema>) => 
       }
     }
 
-    // Verificar que el usuario exista
-    const user = await db.user.findUnique({
-      where: {
-        email: data.email
-      }
-    });
-
-    if (user) return { error: "User already in exist!" };
-
-    // hash password
-
-    const passwordHashed = await bcrypt.hash(data.passwordForm.password, 10);
-
-    // create user
-    await db.user.create({
-      data: {
+    const response = await fetch(`${apiUrl}auth/register`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
         name: data.name,
         lastname: data.lastname,
         username: data.username,
         email: data.email,
-        password: passwordHashed
-      }
-    });
+        password: data.passwordForm.password
+      })
+    })
 
-    await signIn("credentials", {
-      email: data.email,
-      password: data.passwordForm.password,
-      redirect: false,
-    });
+    const result = await response.json();
+
+    if (result.title === "Error!") {
+      throw new Error(result.msg);
+    }
 
     return {
-      success: true
-    };
+      success: true,
+      title: result.title,
+      msg: result.msg
+    }
 
   } catch (error) {
     if (error instanceof AuthError) {
