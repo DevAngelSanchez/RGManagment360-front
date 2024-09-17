@@ -13,6 +13,7 @@ import {
   IconUser,
   IconMenu2,
   IconArrowBarLeft,
+  IconCalendar,
 } from "@tabler/icons-react";
 if (typeof window !== 'undefined') {
   // Access window object here
@@ -102,6 +103,10 @@ const Sidebar: React.FC = () => {
                 <SidebarItemLink href="/dashboard/manage-properties">
                   <IconBuildingEstate />
                   Properties
+                </SidebarItemLink>
+                <SidebarItemLink href="/dashboard/calendar">
+                  <IconCalendar />
+                  Calendar
                 </SidebarItemLink>
               </SidebarItemsLinkContainer>
             </div>

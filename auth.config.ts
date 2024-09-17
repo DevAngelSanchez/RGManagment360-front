@@ -37,6 +37,16 @@ export default {
         return result;
       },
     }),
-    Google
+    Google(
+      {
+        clientId: process.env.AUTH_GOOGLE_ID,
+        clientSecret: process.env.AUTH_GOOGLE_SECRET,
+        authorization: {
+          params: {
+            scope: "https://www.googleapis.com/auth/calendar.readonly https://www.googleapis.com/auth/userinfo.profile"
+          }
+        }
+      }
+    )
   ],
 } satisfies NextAuthConfig
