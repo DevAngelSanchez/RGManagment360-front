@@ -30,7 +30,15 @@ const MyCalendar: React.FC<Props> = ({ accessToken }) => {
         });
 
         const data = await response.json();
-        setEvents(data.events); // Asegúrate de que `data.events` es el formato esperado
+
+        const formattedEvents = data.formatedEvents.map((event: any) => ({
+          ...event,
+          start: event.allDay ? new Date(event.end) : new Date(event.start),  // Convertir a objeto Date
+          end: new Date(event.end),      // Convertir a objeto Date
+        }));
+        console.log(formattedEvents)
+
+        setEvents(formattedEvents); // Asegúrate de que `data.events` es el formato esperado
       }
     };
 

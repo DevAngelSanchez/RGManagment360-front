@@ -2,7 +2,7 @@ import { VerificationEmailTemplate } from "@/templates/emails";
 import { Resend } from "resend";
 
 const resend = new Resend(process.env.AUTH_RESEND_KEY);
-const nextAuthUrl = process.env.NEXTAUTH_URL;
+const nextAuthUrl = process.env.NEXTAUTH_URL || "http://localhost:3000";
 
 export const sendVerificationEmail = async (email: string, token: string) => {
   try {

@@ -13,7 +13,7 @@ export default function RegisterPage() {
         </div>
         <RegisterForm />
         <p className="text-center text-sm">
-          Already have an account? <Link className="text-indigo-500 font-semibold hover:underline" href="/auth/login">Sign in</Link>
+          Already have an account? <Link className="text-indigo-500 font-semibold hover:underline" href="/login">Sign in</Link>
         </p>
       </div>
       <div className="flex flex-col items-center justify-between gap-8 w-full bg-primary p-8 rounded-tr-xl rounded-br-xl">
