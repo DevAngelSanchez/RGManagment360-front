@@ -24,7 +24,7 @@ import {
 
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
-import { apiUrl } from "@/auth";
+import { apiUrl } from "@/auth.config";
 import { IconEdit } from "@tabler/icons-react";
 import { Property } from "@/lib/types";
 import { EditProperty } from "./actions";

@@ -1,4 +1,4 @@
-import { apiUrl } from "@/auth";
+import { apiUrl } from "@/auth.config";
 
 export async function createCategory(category: string) {
   try {

@@ -25,7 +25,7 @@ import {
 
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
-import { apiUrl } from "@/auth";
+import { apiUrl } from "@/auth.config";
 import { IconPlus } from "@tabler/icons-react";
 import { CreateProperty } from "./actions";
 import AlertComponent from "@/components/custom/alert";

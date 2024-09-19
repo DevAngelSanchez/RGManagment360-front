@@ -1,4 +1,4 @@
-import { apiUrl } from "@/auth";
+import { apiUrl } from "@/auth.config";
 
 export async function CreateServiceProvider(name: string, lastname: string, username: string, category: string, subcategory: string, email: string, address: string, phone: string, password: string) {
   try {

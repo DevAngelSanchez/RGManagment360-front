@@ -1,4 +1,4 @@
-import { apiUrl } from "@/auth";
+import { apiUrl } from "@/auth.config";
 
 export async function CreateUser(name: string, lastname: string, username: string, email: string, password: string, address: string, phone: string, role: string) {
   try {

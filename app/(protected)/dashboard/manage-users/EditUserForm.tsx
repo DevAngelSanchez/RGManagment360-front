@@ -26,7 +26,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
-import { apiUrl } from "@/auth";
+import { apiUrl } from "@/auth.config";
 import { IconEdit } from "@tabler/icons-react";
 import { User } from "@/lib/types";
 import { EditUser } from "./actions";

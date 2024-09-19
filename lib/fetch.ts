@@ -1,4 +1,4 @@
-import { apiUrl } from "@/auth";
+import { apiUrl } from "@/auth.config";
 import { Category, Property, Subcategory, Supplier, User } from "./types";
 
 interface FetchResult<Type> {

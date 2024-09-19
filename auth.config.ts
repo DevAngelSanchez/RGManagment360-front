@@ -43,7 +43,7 @@ export default {
         clientSecret: process.env.AUTH_GOOGLE_SECRET,
         authorization: {
           params: {
-            scope: "https://www.googleapis.com/auth/calendar.readonly https://www.googleapis.com/auth/userinfo.profile"
+            scope: "https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/calendar.readonly https://www.googleapis.com/auth/userinfo.profile"
           }
         }
       }

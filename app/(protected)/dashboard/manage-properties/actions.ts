@@ -1,4 +1,4 @@
-import { apiUrl } from "@/auth";
+import { apiUrl } from "@/auth.config";
 
 export async function CreateProperty(name: string, address: string, phone: string, city: string, state: string, zipPostalCode: string, ownerId: string) {
   try {

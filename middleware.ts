@@ -6,6 +6,7 @@ const { auth } = NextAuth(authConfig);
 
 const publicRoutes = [
   "/",
+  "/dashboard"
 ]
 const authRoutes = ["/login", "/register"];
 const apiAuthPrefix = "/api/auth";

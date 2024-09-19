@@ -1,13 +1,10 @@
 import NextAuth from "next-auth";
-import { PrismaAdapter } from "@auth/prisma-adapter";
-import { db } from "@/lib/db";
 
 import "next-auth/jwt";
 
 import authConfig from "@/auth.config";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
-  adapter: PrismaAdapter(db),
   pages: {
     signIn: "/login"
   },
@@ -15,14 +12,22 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     strategy: "jwt"
   },
   callbacks: {
-    jwt({ token, user }) {
+    jwt({ token, user, account }) {
       if (user) {
-        token.role = user.role
+        token.role = user.role;
+        token.username = user.username;
       }
+
+      if (account && account.provider === "google") {
+        token.accessToken = account.access_token;
+      }
+
       return token
     },
     session({ session, token }) {
-      session.user.role = token.role
+      session.user.role = token.role;
+      session.accessToken = token.accessToken;
+      session.user.username = token.username;
       return session
     },
   },

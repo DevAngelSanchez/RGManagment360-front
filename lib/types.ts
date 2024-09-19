@@ -64,3 +64,12 @@ export interface Task {
   datetimeAssigment: Date;
   datetimeEnd: Date;
 }
+
+export interface Event {
+  id: number,
+  title: string;
+  start: Date,
+  end: Date,
+  allDay?: Boolean,
+  resource?: any,
+}
