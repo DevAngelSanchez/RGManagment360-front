@@ -32,9 +32,6 @@ export default async function ManageSuppliers() {
               <DialogContent>
                 <DialogHeader>
                   <DialogTitle>Create Provider</DialogTitle>
-                  <DialogDescription>
-                    Lorem, ipsum dolor sit amet consectetur adipisicing elit. Sint nihil aperiam nostrum eos molestias ipsa vero.
-                  </DialogDescription>
                   <DialogClose asChild >
                     <CreateServiceProviderForm />
                   </DialogClose>
