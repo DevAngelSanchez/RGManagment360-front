@@ -29,9 +29,18 @@ import { apiUrl } from "@/auth.config";
 import { IconPlus } from "@tabler/icons-react";
 import AlertComponent from "@/components/custom/alert";
 import { Category, Property, Subcategory } from "@/lib/types";
-import MyTimepicker from "@/components/custom/dashboard/timepicker";
+
 import { User } from "@prisma/client";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { Textarea } from "@/components/ui/textarea";
+
+import type { TimePickerProps } from 'antd';
+import { TimePicker } from 'antd';
+
+import dayjs from 'dayjs';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
+
+dayjs.extend(customParseFormat);
 
 const formSchema = z.object({
   name: z.string().min(3, {
@@ -58,10 +67,13 @@ const formSchema = z.object({
 
 export function CreateTaskForm() {
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
   const [subcategories, setSubcategories] = useState<Subcategory[]>([]);
   const [properties, setProperties] = useState<Property[]>([]);
   const [providers, setProviders] = useState<User[]>([]);
+  const [datetimeStart, setDatetimeStart] = useState("");
+  const [datetimeEnd, setDatetimeEnd] = useState("");
   const [priorities, setPriorities] = useState<string[]>(["low", "normal", "high"]);
   const [status, setStatus] = useState<string[]>(["pending", "in progress", "complete"]);
   const [alert, setAlert] = useState({ title: "", description: "", type: "default", show: false });
@@ -139,7 +151,7 @@ export function CreateTaskForm() {
     fetchSubcategories();
     fetchProperties();
     fetchProviders();
-  }, [])
+  }, []);
 
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
@@ -158,14 +170,18 @@ export function CreateTaskForm() {
     },
   });
 
-  console.log(providers)
+  const onChange: TimePickerProps["onChange"] = (time, timeString) => {
+    console.log(time, timeString);
+  }
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
 
     const { name, categoryId, subcategoryId, priority, propertyId, status, taskProviderId, datetimeAssigment, datetimeEnd, observations } = values;
 
+    setIsLoading(true)
     console.log(values);
+    setIsLoading(false)
 
     // try {
     //   const result = await CreateEventTask(name);
@@ -382,7 +398,7 @@ export function CreateTaskForm() {
                   <FormItem>
                     <FormLabel>Start time</FormLabel>
                     <FormControl>
-                      <MyTimepicker label="Select a start time" />
+                      <TimePicker onChange={onChange} defaultOpenValue={dayjs("00:00:00", "HH:mm:ss")} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -397,7 +413,7 @@ export function CreateTaskForm() {
                   <FormItem>
                     <FormLabel>End time</FormLabel>
                     <FormControl>
-                      <MyTimepicker label="Select a end time" />
+                      <TimePicker onChange={onChange} defaultOpenValue={dayjs("00:00:00", "HH:mm:ss")} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -412,7 +428,7 @@ export function CreateTaskForm() {
                   <FormItem>
                     <FormLabel>Observations</FormLabel>
                     <FormControl>
-                      <Input placeholder="Additional task details" {...field} />
+                      <Textarea placeholder="Additional task details" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -420,10 +436,16 @@ export function CreateTaskForm() {
               />
             </div>
 
-            < Button className="w-full" type="submit" >
-              <IconPlus size={24} />
-              Add New Task
-            </Button >
+            <Button className="w-full" type="submit" disabled={isLoading}>
+              {isLoading ? (
+                <span className="spinner-border animate-spin inline-block w-4 h-4 border-2 rounded-full"></span>
+              ) : (
+                <>
+                  <IconPlus size={24} className="mr-2" />
+                  <span>Add Task</span>
+                </>
+              )}
+            </Button>
           </div>
 
           <ScrollBar />

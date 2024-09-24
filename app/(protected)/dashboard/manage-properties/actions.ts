@@ -1,6 +1,6 @@
 import { apiUrl } from "@/auth.config";
 
-export async function CreateProperty(name: string, address: string, phone: string, city: string, state: string, zipPostalCode: string, ownerId: string) {
+export async function CreateProperty(name: string, address: string, phone: string, city: string, state: string, zipPostalCode: string, ownerId: string, companyName: string, facturationEmail: string) {
   try {
     const result = await fetch(`${apiUrl}api/properties/create-property`, {
       method: "POST",
@@ -14,7 +14,9 @@ export async function CreateProperty(name: string, address: string, phone: strin
         city: city,
         state: state,
         zipPostalCode: zipPostalCode,
-        ownerId: Number(ownerId)
+        ownerId: Number(ownerId),
+        companyName,
+        facturationEmail
       })
     });
 

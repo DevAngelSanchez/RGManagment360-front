@@ -11,12 +11,12 @@ export async function CreateServiceProvider(name: string, lastname: string, user
         name: name,
         lastname: lastname,
         username: username,
+        email: email,
+        password: password,
+        phone: phone,
+        address: address,
         category: category,
         subcategory: subcategory,
-        email: email,
-        address: address,
-        phone: phone,
-        password: password
       })
     });
 

@@ -62,7 +62,9 @@ const formSchema = z.object({
   }),
   ownerId: z.string({
     message: ""
-  })
+  }),
+  companyName: z.string().trim(),
+  facturationEmail: z.string().email(),
 });
 
 export function CreatePropertyForm() {
@@ -105,16 +107,18 @@ export function CreatePropertyForm() {
       city: "",
       state: "",
       zipPostalCode: "",
-      ownerId: ""
+      ownerId: "",
+      companyName: "",
+      facturationEmail: "",
     },
   })
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    const { name, address, phone, city, state, zipPostalCode, ownerId } = values;
+    const { name, address, phone, city, state, zipPostalCode, ownerId, companyName, facturationEmail } = values;
     try {
       setIsLoading(true);
-      const result = await CreateProperty(name, address, phone, city, state, zipPostalCode, ownerId);
+      const result = await CreateProperty(name, address, phone, city, state, zipPostalCode, ownerId, companyName, facturationEmail);
       setIsLoading(false);
       if (result.type === "error") {
         resetAlert();
@@ -215,6 +219,39 @@ export function CreatePropertyForm() {
                   <FormLabel>Postal Code (ZIP)</FormLabel>
                   <FormControl>
                     <Input type="text" placeholder="123312" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
+          <div className="w-full">
+            <FormField
+              control={form.control}
+              name="companyName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Company Name</FormLabel>
+                  <FormControl>
+                    <Input type="text" placeholder="Company S.A" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <div className="w-full">
+            <FormField
+              control={form.control}
+              name="facturationEmail"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Facturation Email</FormLabel>
+                  <FormControl>
+                    <Input type="text" placeholder="company@company.com" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

@@ -18,6 +18,8 @@ interface Props {
 
 const ServiceProvidersList: React.FC<Props> = ({ serviceProviders }) => {
 
+  console.log(serviceProviders)
+
   return (
     <Card>
       <CardHeader>
