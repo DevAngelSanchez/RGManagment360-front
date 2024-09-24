@@ -23,6 +23,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import "./index.css";
+import { CreateTaskForm } from "./form";
 
 interface Props {
   accessToken?: string;
@@ -112,7 +113,7 @@ const MyCalendar: React.FC<Props> = ({ accessToken }) => {
             Add task.
           </DialogTitle>
           <DialogDescription>
-            <Input
+            {/* <Input
               type="text"
               placeholder="Título del evento"
               value={newEvent.title}
@@ -126,7 +127,8 @@ const MyCalendar: React.FC<Props> = ({ accessToken }) => {
               className="bg-green-500 text-white px-4 py-2 rounded-lg cursor-pointer"
             >
               Save
-            </Button>
+            </Button> */}
+            <CreateTaskForm />
           </DialogDescription>
         </DialogContent>
       </Dialog>
