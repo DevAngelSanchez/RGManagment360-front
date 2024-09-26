@@ -39,6 +39,7 @@ import { TimePicker } from 'antd';
 
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
+import { MainDatePicker } from "@/components/custom/DatePicker";
 
 dayjs.extend(customParseFormat);
 
@@ -60,6 +61,7 @@ const formSchema = z.object({
   taskProviderId: z.string({
     message: 'Select a Service Provider'
   }),
+  day: z.date(),
   datetimeAssigment: z.date(),
   datetimeEnd: z.date(),
   observations: z.string().trim()
@@ -72,8 +74,9 @@ export function CreateTaskForm() {
   const [subcategories, setSubcategories] = useState<Subcategory[]>([]);
   const [properties, setProperties] = useState<Property[]>([]);
   const [providers, setProviders] = useState<User[]>([]);
-  const [datetimeStart, setDatetimeStart] = useState("");
-  const [datetimeEnd, setDatetimeEnd] = useState("");
+  const [startTime, setStartTime] = useState<string>("00:00");
+  const [endTime, setEndTime] = useState<string>("00:00");
+  const [day, setDay] = useState<Date | null>(null);
   const [priorities, setPriorities] = useState<string[]>(["low", "normal", "high"]);
   const [status, setStatus] = useState<string[]>(["pending", "in progress", "complete"]);
   const [alert, setAlert] = useState({ title: "", description: "", type: "default", show: false });
@@ -174,6 +177,22 @@ export function CreateTaskForm() {
     console.log(time, timeString);
   }
 
+  const handleDateChange = (selectedDay: Date) => {
+    setDay(selectedDay); // Aquí guardamos el día seleccionado
+  };
+
+  const handleStartTimeChange: TimePickerProps["onChange"] = (time, timeString) => {
+    setStartTime(timeString); // Guardamos la hora de inicio
+  };
+
+  const handleEndTimeChange: TimePickerProps["onChange"] = (time, timeString) => {
+    setEndTime(timeString); // Guardamos la hora de fin
+  };
+
+  const combineDateAndTime = (day: Date, time: string) => {
+    return dayjs(day).format('YYYY-MM-DD') + 'T' + time + ':00'; // Combina el día y hora en formato ISO 8601
+  };
+
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
 
@@ -182,50 +201,79 @@ export function CreateTaskForm() {
     setIsLoading(true)
     console.log(values);
     setIsLoading(false)
-
-    // try {
-    //   const result = await CreateEventTask(name);
-    //   if (result.type === "error") {
-    //     resetAlert();
-    //     setAlert({ title: result.title, description: result.msg, type: result.type, show: true });
-    //     setTimeout(() => {
-    //       resetAlert();
-    //     }, 3000);
-    //     return null;
-    //   }
-    //   setAlert({ title: result.title, description: result.msg, type: result.type, show: true });
-    //   setTimeout(() => {
-    //     resetAlert();
-    //   }, 3000);
-    //   router.refresh();
-    // } catch (error) {
-    //   resetAlert();
-    //   setAlert({ title: "Error!", description: "Error trying to create a new Services Provider", type: "error", show: true });
-    //   setTimeout(() => {
-    //     resetAlert()
-    //   }, 3000);
-    //   console.log(error);
-    //   return;
-    // }
   }
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 min-w-[360px] max-h-[400px] overflow-y-auto">
-        <ScrollArea >
-
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 min-w-[360px]">
+        <ScrollArea className="w-full h-[400px] p-3">
           <div className="flex flex-col gap-4">
+            <div className="w-full">
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Task name</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Task name" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="w-full">
+              <FormField
+                control={form.control}
+                name="propertyId"
+                render={({ field }) => (
+                  <FormItem className="">
+                    <FormLabel>Select Property</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a Property" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {properties && properties.map(item => (
+                          <SelectItem key={item.id} value={item.name}>
+                            {item.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
+
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
               <div className="w-full">
                 <FormField
                   control={form.control}
-                  name="name"
+                  name="categoryId"
                   render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Task name</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Task name" {...field} />
-                      </FormControl>
+                    <FormItem className="">
+                      <FormLabel>Select a Category</FormLabel>
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select a Category" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {categories && categories.map(item => (
+                            <SelectItem key={item.id} value={item.name}>
+                              {item.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -234,18 +282,18 @@ export function CreateTaskForm() {
               <div className="w-full">
                 <FormField
                   control={form.control}
-                  name="propertyId"
+                  name="subcategoryId"
                   render={({ field }) => (
                     <FormItem className="">
-                      <FormLabel>Select Property</FormLabel>
+                      <FormLabel>Select a subcategory</FormLabel>
                       <Select onValueChange={field.onChange} defaultValue={field.value}>
                         <FormControl>
                           <SelectTrigger>
-                            <SelectValue placeholder="Select a Property" />
+                            <SelectValue placeholder="Select a Subcategory" />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          {properties && properties.map(item => (
+                          {subcategories && subcategories.map(item => (
                             <SelectItem key={item.id} value={item.name}>
                               {item.name}
                             </SelectItem>
@@ -258,167 +306,137 @@ export function CreateTaskForm() {
                 />
               </div>
             </div>
-            <div className="w-full">
-              <FormField
-                control={form.control}
-                name="categoryId"
-                render={({ field }) => (
-                  <FormItem className="">
-                    <FormLabel>Select a Category</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select a Category" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {categories && categories.map(item => (
-                          <SelectItem key={item.id} value={item.name}>
-                            {item.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-            <div className="w-full">
-              <FormField
-                control={form.control}
-                name="subcategoryId"
-                render={({ field }) => (
-                  <FormItem className="">
-                    <FormLabel>Select a subcategory</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select a Subcategory" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {subcategories && subcategories.map(item => (
-                          <SelectItem key={item.id} value={item.name}>
-                            {item.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-            <div className="w-full">
-              <FormField
-                control={form.control}
-                name="priority"
-                render={({ field }) => (
-                  <FormItem className="">
-                    <FormLabel>Priority</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select a priority" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {priorities && priorities.map((item, index) => (
-                          <SelectItem key={index} value={item}>
-                            {item}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-            <div className="w-full">
-              <FormField
-                control={form.control}
-                name="status"
-                render={({ field }) => (
-                  <FormItem className="">
-                    <FormLabel>Status</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Pending" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {status && status.map((item, index) => (
-                          <SelectItem key={index} value={item}>
-                            {item}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+              <div className="w-full">
+                <FormField
+                  control={form.control}
+                  name="priority"
+                  render={({ field }) => (
+                    <FormItem className="">
+                      <FormLabel>Priority</FormLabel>
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select a priority" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {priorities && priorities.map((item, index) => (
+                            <SelectItem key={index} value={item}>
+                              {item}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className="w-full">
+                <FormField
+                  control={form.control}
+                  name="status"
+                  render={({ field }) => (
+                    <FormItem className="">
+                      <FormLabel>Status</FormLabel>
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Pending" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {status && status.map((item, index) => (
+                            <SelectItem key={index} value={item}>
+                              {item}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
             </div>
 
-            <div className="w-full">
-              <FormField
-                control={form.control}
-                name="taskProviderId"
-                render={({ field }) => (
-                  <FormItem className="">
-                    <FormLabel>Provider</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select a Provider" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {providers && providers.map(item => (
-                          <SelectItem key={item?.id} value={item?.name || "Invalid name"}>
-                            {item?.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2 ">
+              <div className="w-full">
+                <FormField
+                  control={form.control}
+                  name="taskProviderId"
+                  render={({ field }) => (
+                    <FormItem className="">
+                      <FormLabel>Provider</FormLabel>
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select a Provider" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {providers && providers.map(item => (
+                            <SelectItem key={item?.id} value={item?.name || "Invalid name"}>
+                              {item?.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <div className="w-full">
+                <FormField
+                  control={form.control}
+                  name="day"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-col gap-2">
+                      <FormLabel>Day</FormLabel>
+                      <MainDatePicker />
+                    </FormItem>
+                  )}
+                >
+
+                </FormField>
+              </div>
             </div>
 
-            <div className="w-full">
-              <FormField
-                control={form.control}
-                name="datetimeAssigment"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Start time</FormLabel>
-                    <FormControl>
-                      <TimePicker onChange={onChange} defaultOpenValue={dayjs("00:00:00", "HH:mm:ss")} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-            <div className="w-full">
-              <FormField
-                control={form.control}
-                name="datetimeEnd"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>End time</FormLabel>
-                    <FormControl>
-                      <TimePicker onChange={onChange} defaultOpenValue={dayjs("00:00:00", "HH:mm:ss")} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+              <div className="w-full">
+                <FormField
+                  control={form.control}
+                  name="datetimeAssigment"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-col gap-2">
+                      <FormLabel>Start time</FormLabel>
+                      <FormControl>
+                        <TimePicker onChange={onChange} defaultOpenValue={dayjs("00:00:00", "HH:mm:ss")} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className="w-full">
+                <FormField
+                  control={form.control}
+                  name="datetimeEnd"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-col gap-2">
+                      <FormLabel>End time</FormLabel>
+                      <FormControl>
+                        <TimePicker onChange={onChange} defaultOpenValue={dayjs("00:00:00", "HH:mm:ss")} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
             </div>
             <div className="w-full">
               <FormField
@@ -436,20 +454,20 @@ export function CreateTaskForm() {
               />
             </div>
 
-            <Button className="w-full" type="submit" disabled={isLoading}>
-              {isLoading ? (
-                <span className="spinner-border animate-spin inline-block w-4 h-4 border-2 rounded-full"></span>
-              ) : (
-                <>
-                  <IconPlus size={24} className="mr-2" />
-                  <span>Add Task</span>
-                </>
-              )}
-            </Button>
           </div>
 
           <ScrollBar />
         </ScrollArea>
+        <Button className="w-full" type="submit" disabled={isLoading}>
+          {isLoading ? (
+            <span className="spinner-border animate-spin inline-block w-4 h-4 border-2 rounded-full"></span>
+          ) : (
+            <>
+              <IconPlus size={24} className="mr-2" />
+              <span>Add Task</span>
+            </>
+          )}
+        </Button>
       </form >
 
       {alert.show && (

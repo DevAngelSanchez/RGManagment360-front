@@ -110,8 +110,8 @@ const MyCalendar: React.FC<Props> = ({ accessToken }) => {
       />
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogTrigger asChild></DialogTrigger>
-        <DialogContent className="bg-white p-4 rounded-lg">
-          <DialogTitle className="text-lg font-bold mb-4">
+        <DialogContent className="bg-white rounded-lg">
+          <DialogTitle className="text-lg font-bold mb-4 px-3">
             Add task.
           </DialogTitle>
           <DialogDescription>
