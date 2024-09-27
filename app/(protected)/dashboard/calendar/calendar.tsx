@@ -108,14 +108,14 @@ const MyCalendar: React.FC<Props> = ({ accessToken }) => {
         onSelectSlot={handleSelectSlot}
         className="bg-white rounded-lg shadow-md"
       />
-      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+      {/* <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogTrigger asChild></DialogTrigger>
         <DialogContent className="bg-white rounded-lg">
           <DialogTitle className="text-lg font-bold mb-4 px-3">
             Add task.
           </DialogTitle>
           <DialogDescription>
-            {/* <Input
+            <Input
               type="text"
               placeholder="Título del evento"
               value={newEvent.title}
@@ -129,11 +129,11 @@ const MyCalendar: React.FC<Props> = ({ accessToken }) => {
               className="bg-green-500 text-white px-4 py-2 rounded-lg cursor-pointer"
             >
               Save
-            </Button> */}
+            </Button>
             <CreateTaskForm />
           </DialogDescription>
         </DialogContent>
-      </Dialog>
+      </Dialog> */}
     </div>
   );
 };

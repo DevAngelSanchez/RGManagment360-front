@@ -15,6 +15,7 @@ import PropertiesUI from "./propertiesUI";
 import { Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { CreatePropertyForm } from "./createForm";
+import { auth } from "@/auth";
 
 export default async function ManageProperties() {
 

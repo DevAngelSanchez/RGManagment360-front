@@ -61,22 +61,25 @@ const formSchema = z.object({
   taskProviderId: z.string({
     message: 'Select a Service Provider'
   }),
-  day: z.date(),
   datetimeAssigment: z.date(),
   datetimeEnd: z.date(),
   observations: z.string().trim()
 });
 
-export function CreateTaskForm() {
+interface Props {
+  accessToken: string;
+}
+
+export function CreateTaskForm({ accessToken }: Props) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
   const [subcategories, setSubcategories] = useState<Subcategory[]>([]);
   const [properties, setProperties] = useState<Property[]>([]);
   const [providers, setProviders] = useState<User[]>([]);
-  const [startTime, setStartTime] = useState<string>("00:00");
-  const [endTime, setEndTime] = useState<string>("00:00");
-  const [day, setDay] = useState<Date | null>(null);
+  const [startTime, setStartTime] = useState<string | string[]>("00:00");
+  const [endTime, setEndTime] = useState<string | string[]>("00:00");
+  const [day, setDay] = useState<Date | undefined>(undefined);
   const [priorities, setPriorities] = useState<string[]>(["low", "normal", "high"]);
   const [status, setStatus] = useState<string[]>(["pending", "in progress", "complete"]);
   const [alert, setAlert] = useState({ title: "", description: "", type: "default", show: false });
@@ -173,24 +176,19 @@ export function CreateTaskForm() {
     },
   });
 
-  const onChange: TimePickerProps["onChange"] = (time, timeString) => {
-    console.log(time, timeString);
+  const handleStartTimeChange: TimePickerProps["onChange"] = (time, timeString) => {
+    setStartTime(timeString);
+  }
+  const handleEndTimeChange: TimePickerProps["onChange"] = (time, timeString) => {
+    setEndTime(timeString);
   }
 
-  const handleDateChange = (selectedDay: Date) => {
+  const handleDateChange = (selectedDay: Date | undefined) => {
     setDay(selectedDay); // Aquí guardamos el día seleccionado
   };
 
-  const handleStartTimeChange: TimePickerProps["onChange"] = (time, timeString) => {
-    setStartTime(timeString); // Guardamos la hora de inicio
-  };
-
-  const handleEndTimeChange: TimePickerProps["onChange"] = (time, timeString) => {
-    setEndTime(timeString); // Guardamos la hora de fin
-  };
-
-  const combineDateAndTime = (day: Date, time: string) => {
-    return dayjs(day).format('YYYY-MM-DD') + 'T' + time + ':00'; // Combina el día y hora en formato ISO 8601
+  const combineDateAndTime = (day: Date, time: string | string[]) => {
+    return dayjs(day).format('YYYY-MM-DD') + 'T' + time; // Combina el día y hora en formato ISO 8601
   };
 
   // 2. Define a submit handler.
@@ -198,47 +196,146 @@ export function CreateTaskForm() {
 
     const { name, categoryId, subcategoryId, priority, propertyId, status, taskProviderId, datetimeAssigment, datetimeEnd, observations } = values;
 
-    setIsLoading(true)
     console.log(values);
-    setIsLoading(false)
+
+    try {
+      setIsLoading(true);
+
+      if (!day) {
+        resetAlert();
+        setAlert({ title: "Please select a day!", description: "You don't have selected any day.", type: "error", show: true });
+        setTimeout(() => {
+          resetAlert();
+        }, 3000);
+        return null;
+      }
+
+      const response = await fetch(`${apiUrl}api/create-task`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          name,
+          categoryId: Number(categoryId),
+          subcategoryId: Number(subcategoryId),
+          priority,
+          propertyId: Number(propertyId),
+          status,
+          taskProviderId: Number(taskProviderId),
+          datetimeAssigment: combineDateAndTime(day, startTime),
+          datetimeEnd: combineDateAndTime(day, endTime),
+          observations,
+          accessToken
+        })
+      });
+
+      console.log(response)
+
+      setIsLoading(false);
+      if (!response.ok) {
+        resetAlert();
+        setAlert({ title: "Error", description: "Error trying to create a new task", type: "error", show: true });
+        setTimeout(() => {
+          resetAlert();
+        }, 3000);
+        return null;
+      }
+
+      const result = await response.json();
+
+      console.log(result)
+
+      if (result.type === "error") {
+        resetAlert();
+        setAlert({ title: result.title, description: result.msg, type: result.type, show: true });
+        setTimeout(() => {
+          resetAlert();
+        }, 3000);
+        return null;
+      }
+
+      setAlert({ title: result.title, description: result.msg, type: result.type, show: true });
+      setTimeout(() => {
+        resetAlert();
+      }, 3000);
+      router.refresh();
+    } catch (error) {
+      resetAlert();
+      setAlert({ title: "Error!", description: "Error trying to create a new Services Provider", type: "error", show: true });
+      setTimeout(() => {
+        resetAlert()
+      }, 3000);
+      console.log(error);
+      return;
+    }
   }
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 min-w-[360px]">
-        <ScrollArea className="w-full h-[400px] p-3">
-          <div className="flex flex-col gap-4">
-            <div className="w-full">
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Task name</FormLabel>
+        <div className="flex flex-col gap-4">
+          <div className="w-full">
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Task name</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Task name" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <div className="w-full">
+            <FormField
+              control={form.control}
+              name="propertyId"
+              render={({ field }) => (
+                <FormItem className="">
+                  <FormLabel>Select Property</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
-                      <Input placeholder="Task name" {...field} />
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a Property" />
+                      </SelectTrigger>
                     </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
+                    <SelectContent>
+                      {properties && properties.map(item => (
+                        <SelectItem key={item.id} value={item.id.toString()}>
+                          {item.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
+
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
             <div className="w-full">
               <FormField
                 control={form.control}
-                name="propertyId"
+                name="categoryId"
                 render={({ field }) => (
                   <FormItem className="">
-                    <FormLabel>Select Property</FormLabel>
+                    <FormLabel>Select a Category</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="Select a Property" />
+                          <SelectValue placeholder="Select a Category" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {properties && properties.map(item => (
-                          <SelectItem key={item.id} value={item.name}>
+                        {categories && categories.map(item => (
+                          <SelectItem key={item.id} value={item.id.toString()}>
                             {item.name}
                           </SelectItem>
                         ))}
@@ -249,215 +346,175 @@ export function CreateTaskForm() {
                 )}
               />
             </div>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
-
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-              <div className="w-full">
-                <FormField
-                  control={form.control}
-                  name="categoryId"
-                  render={({ field }) => (
-                    <FormItem className="">
-                      <FormLabel>Select a Category</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select a Category" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {categories && categories.map(item => (
-                            <SelectItem key={item.id} value={item.name}>
-                              {item.name}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <div className="w-full">
-                <FormField
-                  control={form.control}
-                  name="subcategoryId"
-                  render={({ field }) => (
-                    <FormItem className="">
-                      <FormLabel>Select a subcategory</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select a Subcategory" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {subcategories && subcategories.map(item => (
-                            <SelectItem key={item.id} value={item.name}>
-                              {item.name}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-              <div className="w-full">
-                <FormField
-                  control={form.control}
-                  name="priority"
-                  render={({ field }) => (
-                    <FormItem className="">
-                      <FormLabel>Priority</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select a priority" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {priorities && priorities.map((item, index) => (
-                            <SelectItem key={index} value={item}>
-                              {item}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <div className="w-full">
-                <FormField
-                  control={form.control}
-                  name="status"
-                  render={({ field }) => (
-                    <FormItem className="">
-                      <FormLabel>Status</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Pending" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {status && status.map((item, index) => (
-                            <SelectItem key={index} value={item}>
-                              {item}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-2 ">
-              <div className="w-full">
-                <FormField
-                  control={form.control}
-                  name="taskProviderId"
-                  render={({ field }) => (
-                    <FormItem className="">
-                      <FormLabel>Provider</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select a Provider" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {providers && providers.map(item => (
-                            <SelectItem key={item?.id} value={item?.name || "Invalid name"}>
-                              {item?.name}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-
-              <div className="w-full">
-                <FormField
-                  control={form.control}
-                  name="day"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-col gap-2">
-                      <FormLabel>Day</FormLabel>
-                      <MainDatePicker />
-                    </FormItem>
-                  )}
-                >
-
-                </FormField>
-              </div>
-            </div>
-
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-              <div className="w-full">
-                <FormField
-                  control={form.control}
-                  name="datetimeAssigment"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-col gap-2">
-                      <FormLabel>Start time</FormLabel>
+            <div className="w-full">
+              <FormField
+                control={form.control}
+                name="subcategoryId"
+                render={({ field }) => (
+                  <FormItem className="">
+                    <FormLabel>Select a subcategory</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
-                        <TimePicker onChange={onChange} defaultOpenValue={dayjs("00:00:00", "HH:mm:ss")} />
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a Subcategory" />
+                        </SelectTrigger>
                       </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <div className="w-full">
-                <FormField
-                  control={form.control}
-                  name="datetimeEnd"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-col gap-2">
-                      <FormLabel>End time</FormLabel>
+                      <SelectContent>
+                        {subcategories && subcategories.map(item => (
+                          <SelectItem key={item.id} value={item.id.toString()}>
+                            {item.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+            <div className="w-full">
+              <FormField
+                control={form.control}
+                name="priority"
+                render={({ field }) => (
+                  <FormItem className="">
+                    <FormLabel>Priority</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
-                        <TimePicker onChange={onChange} defaultOpenValue={dayjs("00:00:00", "HH:mm:ss")} />
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a priority" />
+                        </SelectTrigger>
                       </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
+                      <SelectContent>
+                        {priorities && priorities.map((item, index) => (
+                          <SelectItem key={index} value={item}>
+                            {item}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </div>
             <div className="w-full">
               <FormField
                 control={form.control}
-                name="observations"
+                name="status"
                 render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Observations</FormLabel>
-                    <FormControl>
-                      <Textarea placeholder="Additional task details" {...field} />
-                    </FormControl>
+                  <FormItem className="">
+                    <FormLabel>Status</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Pending" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {status && status.map((item, index) => (
+                          <SelectItem key={index} value={item}>
+                            {item}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2 ">
+            <div className="w-full">
+              <FormField
+                control={form.control}
+                name="taskProviderId"
+                render={({ field }) => (
+                  <FormItem className="">
+                    <FormLabel>Provider</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a Provider" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {providers && providers.map(item => (
+                          <SelectItem key={item?.id} value={item.id.toString() || "Invalid ID"}>
+                            {item?.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                     <FormMessage />
                   </FormItem>
                 )}
               />
             </div>
 
+            <div className="w-full">
+              <FormItem className="flex flex-col gap-2">
+                <FormLabel>Day</FormLabel>
+                <MainDatePicker onChange={handleDateChange} />
+              </FormItem>
+            </div>
           </div>
 
-          <ScrollBar />
-        </ScrollArea>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+            <div className="w-full">
+              <FormField
+                control={form.control}
+                name="datetimeAssigment"
+                render={({ field }) => (
+                  <FormItem className="flex flex-col gap-2">
+                    <FormLabel>Start time</FormLabel>
+                    <FormControl>
+                      <TimePicker onChange={handleStartTimeChange} defaultOpenValue={dayjs("00:00:00", "HH:mm:ss")} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="w-full">
+              <FormField
+                control={form.control}
+                name="datetimeEnd"
+                render={({ field }) => (
+                  <FormItem className="flex flex-col gap-2">
+                    <FormLabel>End time</FormLabel>
+                    <FormControl>
+                      <TimePicker onChange={handleEndTimeChange} defaultOpenValue={dayjs("00:00:00", "HH:mm:ss")} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+          </div>
+          <div className="w-full">
+            <FormField
+              control={form.control}
+              name="observations"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Observations</FormLabel>
+                  <FormControl>
+                    <Textarea placeholder="Additional task details" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+
+        </div>
+
         <Button className="w-full" type="submit" disabled={isLoading}>
           {isLoading ? (
             <span className="spinner-border animate-spin inline-block w-4 h-4 border-2 rounded-full"></span>

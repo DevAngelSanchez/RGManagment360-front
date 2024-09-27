@@ -1,4 +1,5 @@
 import LayoutSelector from "@/components/custom/LayoutSelector";
+import { redirect } from "next/navigation";
 
 import { Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -27,6 +28,10 @@ export default async function page() {
   const session = await auth()
   console.log(session?.accessToken)
 
+  if (!session?.accessToken) {
+    return redirect("/login");
+  }
+
   return (
     <LayoutSelector layout="default">
       <main className="w-full h-full bg-slate-50 ">
@@ -43,7 +48,7 @@ export default async function page() {
                   <DialogHeader>
                     <DialogTitle>Create a new task</DialogTitle>
                     <DialogClose asChild >
-                      <CreateTaskForm />
+                      <CreateTaskForm accessToken={session?.accessToken} />
                     </DialogClose>
                   </DialogHeader>
                 </DialogContent>

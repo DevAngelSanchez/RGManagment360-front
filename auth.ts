@@ -16,6 +16,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       if (user) {
         token.role = user.role;
         token.username = user.username;
+        token.accessToken = user.accessToken;
       }
 
       if (account && account.provider === "google") {
