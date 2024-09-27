@@ -144,6 +144,7 @@ export function CreateServiceProviderForm() {
     try {
       setIsLoading(true);
       const result = await CreateServiceProvider(name, lastname, username, email, password, phone, address, category, subcategory);
+      setIsLoading(false);
       if (result.type === "error") {
         resetAlert();
         setAlert({ title: result.title, description: result.msg, type: result.type, show: true });
@@ -152,7 +153,6 @@ export function CreateServiceProviderForm() {
         }, 3000);
         return null;
       }
-      setIsLoading(false);
       setAlert({ title: result.title, description: result.msg, type: result.type, show: true });
       setTimeout(() => {
         resetAlert();
@@ -163,7 +163,7 @@ export function CreateServiceProviderForm() {
       setAlert({ title: "Error!", description: "Error trying to create a new Services Provider", type: "error", show: true });
       setTimeout(() => {
         resetAlert()
-      }, 3000);
+      }, 10000);
       console.log(error);
       return;
     }

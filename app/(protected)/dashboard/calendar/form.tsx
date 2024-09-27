@@ -229,10 +229,8 @@ export function CreateTaskForm({ accessToken }: Props) {
           accessToken
         })
       });
-
-      console.log(response)
-
       setIsLoading(false);
+
       if (!response.ok) {
         resetAlert();
         setAlert({ title: "Error", description: "Error trying to create a new task", type: "error", show: true });
@@ -243,8 +241,6 @@ export function CreateTaskForm({ accessToken }: Props) {
       }
 
       const result = await response.json();
-
-      console.log(result)
 
       if (result.type === "error") {
         resetAlert();
