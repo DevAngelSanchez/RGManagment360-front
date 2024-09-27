@@ -196,8 +196,6 @@ export function CreateTaskForm({ accessToken }: Props) {
 
     const { name, categoryId, subcategoryId, priority, propertyId, status, taskProviderId, datetimeAssigment, datetimeEnd, observations } = values;
 
-    console.log(values);
-
     try {
       setIsLoading(true);
 
@@ -251,6 +249,7 @@ export function CreateTaskForm({ accessToken }: Props) {
         return null;
       }
 
+      resetAlert();
       setAlert({ title: result.title, description: result.msg, type: result.type, show: true });
       setTimeout(() => {
         resetAlert();
