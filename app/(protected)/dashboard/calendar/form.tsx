@@ -92,66 +92,121 @@ export function CreateTaskForm({ accessToken }: Props) {
     const fetchCategories = async () => {
       try {
         const response = await fetch(`${apiUrl}api/categories/`);
-        if (!response) {
-          console.log("Not found categories");
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          setAlert({
+            title: "Error!",
+            description: errorData.msg || "Error fetching categories",
+            type: "error",
+            show: true
+          });
+          setTimeout(() => resetAlert(), 5000);
           return;
         }
 
         const categories = await response.json();
         setCategories(categories);
-      } catch (error) {
-        console.log("Error trying to fetch categories");
-        return null;
+      } catch (error: any) {
+        setAlert({
+          title: "Error!",
+          description: error.message || "Error trying to fetch categories",
+          type: "error",
+          show: true
+        });
+        setTimeout(() => resetAlert(), 5000);
       }
-    }
+    };
 
     const fetchSubcategories = async () => {
       try {
         const response = await fetch(`${apiUrl}api/Subcategories/`);
-        if (!response) {
-          console.log("Not found Subcategories");
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          setAlert({
+            title: "Error!",
+            description: errorData.msg || "Error fetching subcategories",
+            type: "error",
+            show: true
+          });
+          setTimeout(() => resetAlert(), 5000);
           return;
         }
 
         const subcategories = await response.json();
         setSubcategories(subcategories);
-      } catch (error) {
-        console.log("Error trying to fetch Subcategories");
-        return null;
+      } catch (error: any) {
+        setAlert({
+          title: "Error!",
+          description: error.message || "Error trying to fetch subcategories",
+          type: "error",
+          show: true
+        });
+        setTimeout(() => resetAlert(), 5000);
       }
-    }
+    };
+
 
     const fetchProperties = async () => {
       try {
         const response = await fetch(`${apiUrl}api/properties/`);
-        if (!response) {
-          console.log("Not found Properties");
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          setAlert({
+            title: "Error!",
+            description: errorData.msg || "Error fetching properties",
+            type: "error",
+            show: true
+          });
+          setTimeout(() => resetAlert(), 5000);
           return;
         }
 
         const properties = await response.json();
         setProperties(properties);
-      } catch (error) {
-        console.log("Error trying to fetch Properties");
-        return null;
+      } catch (error: any) {
+        setAlert({
+          title: "Error!",
+          description: error.message || "Error trying to fetch properties",
+          type: "error",
+          show: true
+        });
+        setTimeout(() => resetAlert(), 5000);
       }
-    }
+    };
+
 
     const fetchProviders = async () => {
       try {
         const response = await fetch(`${apiUrl}api/users/by-role/SERVICE_PROVIDER`);
-        if (!response) {
-          console.log("Not found Providers");
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          setAlert({
+            title: "Error!",
+            description: errorData.msg || "Error fetching providers",
+            type: "error",
+            show: true
+          });
+          setTimeout(() => resetAlert(), 5000);
           return;
         }
 
         const providers = await response.json();
         setProviders(providers);
-      } catch (error) {
-        console.log("Error trying to fetch Providers");
-        return null;
+      } catch (error: any) {
+        setAlert({
+          title: "Error!",
+          description: error.message || "Error trying to fetch providers",
+          type: "error",
+          show: true
+        });
+        setTimeout(() => resetAlert(), 5000);
       }
-    }
+    };
+
 
     fetchCategories();
     fetchSubcategories();
