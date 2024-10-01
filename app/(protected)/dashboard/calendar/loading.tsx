@@ -12,9 +12,8 @@ export default async function loading() {
               <Skeleton className="h-4 w-[300px]" />
             </div>
 
-            <div className="flex flex-row space-x-20 justify-between">
-              <Skeleton className="h-[600px] w-[450px] rounded-xl" />
-              <Skeleton className="h-[600px] w-[450px] rounded-xl" />
+            <div className="  space-y-20 w-full">
+              <Skeleton className="h-[600px] w-[1050px] rounded-xl" />
             </div>
           </div>
         </section>

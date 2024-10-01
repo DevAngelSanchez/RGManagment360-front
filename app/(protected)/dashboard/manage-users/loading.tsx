@@ -1,15 +1,23 @@
 import LayoutSelector from "@/components/custom/LayoutSelector";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default async function loading() {
   return (
-    <main>
-      <LayoutSelector layout="default">
-        <section className="h-[calc(100vh-5.6rem)] max-w-[calc(100vw-240px)] ml-[240px] flex flex-col gap-6 overflow-y-auto p-4">
-          <div className="flex flex-row justify-between pr-8">
-            <h1 className="text-4xl font-bold mb-4">Loading...</h1>
+    <LayoutSelector layout="default">
+      <main className="w-full">
+        <section className=" flex flex-col overflow-y-auto p-4">
+          <div className="flex flex-col space-y-10">
+            <div className=" flex flex-row justify-between space-x-48">
+              <Skeleton className="h-4 w-[350px]" />
+              <Skeleton className="h-4 w-[300px]" />
+            </div>
+
+            <div className="  space-y-20 w-full">
+              <Skeleton className="h-[600px] w-[800px] rounded-xl" />
+            </div>
           </div>
         </section>
-      </LayoutSelector>
-    </main>
-  )
+      </main>
+    </LayoutSelector>
+  );
 }
