@@ -31,24 +31,24 @@ import { CreateUser } from "./actions";
 
 const formSchema = z.object({
 	name: z.string().min(3, {
-		message: "Invalid name"
+		message: "Minimun 3 characters"
 	}).trim(),
 	lastname: z.string().min(3, {
-		message: "Invalid name"
+		message: "Minimun 3 characters"
 	}).trim(),
 	username: z.string().min(3, {
-		message: "Invalid name"
+		message: "Minimun 3 characters"
 	}).trim(),
 	email: z
 		.string()
 		.email({
-			message: "Not valid email",
+			message: "Invalid e-mail",
 		})
 		.trim(),
 	password: z.string().trim(),
 	address: z.string().trim(),
 	phone: z.string().regex(phoneNumberValidation, {
-		message: "Invalid Format"
+		message: "Invalid Phone number!"
 	}).trim(),
 	role: z.string().trim()
 });

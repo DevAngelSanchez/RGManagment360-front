@@ -45,8 +45,7 @@ export const SubCategoryTable: FC<TSubcategory> = async ({ categories, subcatego
         <CardHeader className="items-start flex flex-col">
           <CardTitle className="mb-2 ">Subcategory table</CardTitle>
           <CardDescription>
-            This is a list of all the subcategories available at the moment, You
-            can always create new ones!
+            This is a list of all the subcategories available at the moment, You can always create more!
           </CardDescription>
         </CardHeader>
         <CardContent>

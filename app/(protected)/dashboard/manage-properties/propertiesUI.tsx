@@ -7,10 +7,8 @@ export default async function PropertiesUI() {
   const properties: Property[] = propertiesResult.data || [];
 
   return (
-    <>
-      <div className="w-full flex flex-col gap-4 mb-6">
-        <PropertiesTable properties={properties} />
-      </div>
-    </>
+    <div className="w-full flex flex-col gap-4 mb-6">
+      <PropertiesTable properties={properties} />
+    </div>
   )
 }

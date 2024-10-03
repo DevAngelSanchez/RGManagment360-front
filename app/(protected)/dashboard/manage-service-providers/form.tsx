@@ -43,13 +43,13 @@ interface Subcategory {
 
 const formSchema = z.object({
   name: z.string().min(3, {
-    message: "The service provider name must have more than 3 characters"
+    message: "Minimun 3 characters"
   }).trim(),
   lastname: z.string().min(2, {
-    message: "The service provider lastname must have more than 2 characters"
+    message: "Minimun 3 characters"
   }).trim(),
   username: z.string().min(3, {
-    message: "The service provider username must have more than 3 characters"
+    message: "Minimun 3 characters"
   }).trim(),
   category: z.string({
     message: 'Select a category'
@@ -58,15 +58,15 @@ const formSchema = z.object({
     message: "Select a subcategory"
   }),
   address: z.string().min(3, {
-    message: "The service provider address must have more than 3 characters"
+    message: "Minimun 3 characters"
   }).trim(),
   email: z.string().email({
-    message: "Not valid email",
+    message: "Invalid e-mail",
   }).trim(),
   phone: z.string().min(7, {
-    message: "The phone field must have mora than 7 characters"
+    message: "The phone field must be mora than 7 characters"
   }).regex(/^\+?(\d{1,3})?[-.\s]?(\(?\d{1,4}\)?[-.\s]?)?(\d{1,4}[-.\s]?){1,3}\d{1,4}$/, {
-    message: "This is not a format valid"
+    message: "Invalid phone number!"
   }).trim(),
   password: z.string().trim(),
 });
