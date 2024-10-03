@@ -242,7 +242,7 @@ export default function CreateUserForm() {
 											Assistant
 										</SelectItem>
 										<SelectItem value="CUSTOMER">
-											CUSTOMER
+											Customer
 										</SelectItem>
 									</SelectContent>
 								</Select>

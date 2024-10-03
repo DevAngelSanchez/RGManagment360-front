@@ -256,7 +256,7 @@ export const EditUserForm: FC<Props> = ({ user }) => {
                     <SelectContent>
                       <SelectItem value="MANAGER">Manager</SelectItem>
                       <SelectItem value="ASSISTANT">Assistant</SelectItem>
-                      <SelectItem value="CUSTOMER">CUSTOMER</SelectItem>
+                      <SelectItem value="CUSTOMER">Customer</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />
