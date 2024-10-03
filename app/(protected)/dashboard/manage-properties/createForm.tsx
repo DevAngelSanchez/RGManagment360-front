@@ -47,18 +47,18 @@ const formSchema = z.object({
     message: "The property address must have more than 3 characters"
   }).trim(),
   phone: z.string().min(7, {
-    message: "The phone field must have more than 7 characters"
+    message: "The phone field must be more than 7 characters"
   }).regex(/^\+?(\d{1,3})?[-.\s]?(\(?\d{1,4}\)?[-.\s]?)?(\d{1,4}[-.\s]?){1,3}\d{1,4}$/, {
     message: "This is not a format valid"
   }).trim(),
   city: z.string().min(2, {
-    message: "The property city field must have more than 2 characters"
+    message: "The property city field must be more than 2 characters"
   }),
   state: z.string().min(2, {
-    message: "The property state field must have more than 2 characters"
+    message: "The property state field must be more than 2 characters"
   }),
   zipPostalCode: z.string().min(2, {
-    message: "The property postal code field must have more than 2 characters"
+    message: "The property postal code field must be more than 2 characters"
   }),
   ownerId: z.string({
     message: ""

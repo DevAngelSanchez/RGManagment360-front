@@ -44,7 +44,7 @@ export async function UserView() {
       <Card className="max-w-[1000px]">
         <FilterUser />
         <CardHeader className="bg-green-200 rounded-t-md">
-          <CardTitle>User List</CardTitle>
+          <CardTitle>Users list</CardTitle>
           <CardDescription>
             This is a list of the registered users.
           </CardDescription>

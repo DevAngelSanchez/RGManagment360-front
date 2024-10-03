@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/dialog";
 import DialogCategoryForm from "./DialogCategoryForm";
 import DialogSubcategoryForm from "./DialogSubcategoryForm";
+import { Fragment } from "react";
 
 export default async function ServicesUI() {
   const categoriesResult = await fetchCategories();
@@ -24,7 +25,7 @@ export default async function ServicesUI() {
   const subcategories: Subcategory[] = subcategoriesResult.data || [];
 
   return (
-    <>
+    <Fragment>
       <div className="flex flex-col sm:flex-row  sm:justify-between">
         <h1 className="text-4xl font-bold mb-4">Services</h1>
         <div className="flex gap-3">
@@ -67,7 +68,7 @@ export default async function ServicesUI() {
                 <div className="mb-2">
                   <DialogTitle className="mb-2">Fill each field</DialogTitle>
                   <DialogDescription>
-                    Here you will be creating a subcategory associeated to a
+                    Here you will be creating a subcategory associated to a
                     category
                   </DialogDescription>
                 </div>
@@ -90,6 +91,6 @@ export default async function ServicesUI() {
           />
         </div>
       </div>
-    </>
+    </Fragment>
   );
 }

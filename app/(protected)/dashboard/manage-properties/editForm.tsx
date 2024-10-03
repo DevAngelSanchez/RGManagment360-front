@@ -52,13 +52,13 @@ const formSchema = z.object({
     message: "The property address must have more than 3 characters"
   }).trim(),
   city: z.string().min(2, {
-    message: "The property city field must have more than 2 characters"
+    message: "The property city field must be more than 2 characters"
   }),
   state: z.string().min(2, {
-    message: "The property state field must have more than 2 characters"
+    message: "The property state field must be more than 2 characters"
   }),
   zipPostalCode: z.string().min(2, {
-    message: "The property postal code field must have more than 2 characters"
+    message: "The property postal code field must be more than 2 characters"
   }),
   ownerId: z.string({
     message: ""

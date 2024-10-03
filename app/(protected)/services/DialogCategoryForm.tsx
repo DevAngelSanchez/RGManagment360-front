@@ -20,8 +20,8 @@ import AlertComponent from "@/components/custom/alert";
 import { IconPlus } from "@tabler/icons-react";
 
 const formSchema = z.object({
-  category: z.string().min(2, {
-    message: "Category must be at least 2 characters.",
+  category: z.string().min(3, {
+    message: "Minimun 3 characters",
   }),
 });
 

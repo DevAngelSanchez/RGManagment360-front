@@ -9,11 +9,7 @@ export default async function Page() {
     <LayoutSelector layout="default">
       <main className="w-full h-full bg-slate-50 ">
         <section className="p-4 overflow-y-auto">
-          {/* <Suspense
-            fallback={<Skeleton className="w-[700px] h-[200px] rounded-full" />}
-          > */}
-            <ServicesUI />
-          {/* </Suspense> */}
+          <ServicesUI />
         </section>
       </main>
     </LayoutSelector>

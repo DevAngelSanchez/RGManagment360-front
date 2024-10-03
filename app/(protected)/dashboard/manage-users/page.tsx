@@ -24,17 +24,17 @@ const ManageUsers = async () => {
       <LayoutSelector layout="default">
         <section className=" p-4 overflow-y-auto">
           <div className="flex flex-row justify-between pr-8">
-            <h1 className="text-4xl font-bold mb-4">USERS</h1>
+            <h1 className="text-4xl font-bold mb-4">Users</h1>
             <Dialog>
               <DialogTrigger asChild>
                 <Button>
                   <IconPlus className="p-0" height={17} />
-                  Create User
+                  Create user
                 </Button>
               </DialogTrigger>
               <DialogContent>
                 <DialogHeader>
-                  <DialogTitle>Add a new User</DialogTitle>
+                  <DialogTitle>Add a new user</DialogTitle>
                   <DialogClose asChild>
                     <CreateUserForm />
                   </DialogClose>

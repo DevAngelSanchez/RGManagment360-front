@@ -36,7 +36,7 @@ const FormSchema = z.object({
   email: z
     .string()
     .email({
-      message: "Not valid email",
+      message: "Invalid e-mail",
     })
     .trim(),
 });
@@ -52,7 +52,7 @@ export function FilterUser() {
     },
   });
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {}
+  function onSubmit(data: z.infer<typeof FormSchema>) { }
 
   return (
     <div className=" p-4 gap-4 ">
@@ -109,10 +109,10 @@ export function FilterUser() {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="manager">Manager</SelectItem>
-                      <SelectItem value="admin">Admin</SelectItem>
-                      <SelectItem value="customer">Customer</SelectItem>
-                      <SelectItem value="serviceProvider">
+                      <SelectItem value="MANAGER">Manager</SelectItem>
+                      <SelectItem value="ASSISTANT">Assistant</SelectItem>
+                      <SelectItem value="CUSTOMER">Customer</SelectItem>
+                      <SelectItem value="SERVICE_PROVIDER">
                         Service Provider
                       </SelectItem>
                     </SelectContent>
@@ -140,7 +140,7 @@ export function FilterUser() {
                     </FormControl>
                     <SelectContent>
                       <SelectItem value="active">Active</SelectItem>
-                      <SelectItem value="disabled">Disabled</SelectItem>
+                      <SelectItem value="disabled">Inactive</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />

@@ -32,8 +32,8 @@ type TSubcategoryProps = {
 };
 
 const formSchema = z.object({
-  subcategory: z.string().min(2, {
-    message: "Category must be at least 2 characters.",
+  subcategory: z.string().min(3, {
+    message: "Minimun 3 characters",
   }),
   categoryId: z.string({
     message: "Select a id",
@@ -100,8 +100,7 @@ export const DialogSubcategoryForm: FC<TSubcategoryProps> = ({ category }) => {
                 <Input placeholder="Create a subcategory" {...field} />
               </FormControl>
               <FormDescription>
-                This subcategory will be related to a category, you have to
-                select it down bellow.
+                This subcategory will be related to a category, that you have to select down below.
               </FormDescription>
               <FormMessage />
             </FormItem>
