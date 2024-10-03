@@ -29,4 +29,15 @@ export const registerSchema = z.object({
     message: "Passwords don't match",
     path: ["confirm"],
   })
-})
+});
+
+export const filterUsersSchema = z.object({
+  role: z.string({
+    required_error: "Please select a role.",
+  }),
+  status: z.string({
+    required_error: "Please select a status.",
+  }),
+  name: z.string().trim(),
+  lastname: z.string().trim()
+});

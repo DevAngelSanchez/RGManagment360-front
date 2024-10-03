@@ -12,6 +12,7 @@ export interface User {
   category?: Category;
   subcategory?: Subcategory;
   properties?: Property[];
+  status?: string;
 }
 
 export interface Supplier {
