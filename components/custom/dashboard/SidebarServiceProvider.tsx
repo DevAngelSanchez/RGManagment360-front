@@ -14,21 +14,12 @@ import {
   IconArrowBarLeft,
   IconCalendar,
 } from "@tabler/icons-react";
-if (typeof window !== "undefined") {
+if (typeof window !== 'undefined') {
   // Access window object here
 }
-interface SidebarItem {
-  href: string;
-  icon: React.ReactNode;
-  text: string;
-}
 
-interface SidebarProps {
-  sidebarItems: SidebarItem[];
-}
-
-const Sidebar: React.FC<SidebarProps> = ({ sidebarItems }) => {
-  if (typeof window !== "undefined") {
+const Sidebar: React.FC = () => {
+  if (typeof window !== 'undefined') {
     // Access window object here
   }
   const [showSidebar, setShowSidebar] = useState(true);
@@ -47,8 +38,9 @@ const Sidebar: React.FC<SidebarProps> = ({ sidebarItems }) => {
     }
   };
 
+
   useEffect(() => {
-    if (typeof window !== "undefined") {
+    if (typeof window !== 'undefined') {
       setWindowWidth(window.innerWidth);
     }
     const handleResize = () => {
@@ -60,6 +52,7 @@ const Sidebar: React.FC<SidebarProps> = ({ sidebarItems }) => {
         setShowSidebar(true);
       }
     };
+
 
     window.addEventListener("resize", handleResize);
     document.addEventListener("click", handleClickOutside);
@@ -73,36 +66,56 @@ const Sidebar: React.FC<SidebarProps> = ({ sidebarItems }) => {
   return (
     <div className="relative max-w-[380px]">
       <div
-        className={`${
-          showSidebar && windowWidth <= 950
-            ? "absolute top-0 left-0 bg-white h-full w-44 z-50 bg-opacity-80 backdrop-blur-sm shadow-md "
-            : showSidebar
+        className={`${showSidebar && windowWidth <= 950
+          ? "absolute top-0 left-0 bg-white h-full w-44 z-50 bg-opacity-80 backdrop-blur-sm shadow-md "
+          : showSidebar
             ? "w-52 bg-white h-full"
             : "hidden"
-        }`}
+          }`}
       >
         <div className="p-2">
+          <div>
+            <SidebarItemsLinkContainer>
+              <SidebarItemLink href="/dashboard">
+                <IconHome />
+                Home
+              </SidebarItemLink>
+            </SidebarItemsLinkContainer>
+          </div>
           <div className="flex flex-col">
             <div>
-              {/* this is the content */}
               <SidebarItemsLinkContainer>
-                {sidebarItems.map((item, index) => (
-                  <SidebarItemLink key={index} href={item.href}>
-                    {item.icon}
-                    {item.text}
-                  </SidebarItemLink>
-                ))}
+                <SidebarItemLink href="/dashboard/manage-users">
+                  <IconUser />
+                  Manage Users
+                </SidebarItemLink>
               </SidebarItemsLinkContainer>
-              {/* this is the content */}
+              <SidebarItemsLinkContainer>
+                <SidebarItemLink href="/services">
+                  <IconTools size={SidebarLinkIconSize} />
+                  Services
+                </SidebarItemLink>
+                <SidebarItemLink href="/dashboard/manage-service-providers">
+                  <IconUsersGroup size={SidebarLinkIconSize} />
+                  Services Providers
+                </SidebarItemLink>
+                <SidebarItemLink href="/dashboard/manage-properties">
+                  <IconBuildingEstate />
+                  Properties
+                </SidebarItemLink>
+                <SidebarItemLink href="/dashboard/calendar">
+                  <IconCalendar />
+                  Calendar
+                </SidebarItemLink>
+              </SidebarItemsLinkContainer>
             </div>
             <div className="justify-end">
               <IconArrowBarLeft
                 onClick={handleToggleSidebar}
                 height={25}
                 width={25}
-                className={`${
-                  showSidebar && windowWidth > 950 ? "hidden" : "self-end mt-3"
-                }`}
+                className={`${showSidebar && windowWidth > 950 ? "hidden" : "self-end mt-3"
+                  }`}
               ></IconArrowBarLeft>
             </div>
           </div>
