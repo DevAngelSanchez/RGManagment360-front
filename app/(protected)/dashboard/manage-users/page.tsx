@@ -22,7 +22,7 @@ const ManageUsers = async () => {
   return (
     <main className="w-full h-full bg-slate-50 ">
       <LayoutSelector layout="default">
-        <section className=" p-4 overflow-y-auto">
+        <section className=" p-4 overflow-y-auto w-full">
           <div className="flex flex-row justify-between pr-8">
             <h1 className="text-4xl font-bold mb-4">Users</h1>
             <Dialog>

@@ -126,7 +126,7 @@ export function UserView() {
 
   return (
     <div className="flex justify-start">
-      <Card className="max-w-[1000px]">
+      <Card className="w-full">
         <div className=" p-4 gap-4 ">
           <h2 className="font-bold text-xl">Filters</h2>
           <Form {...form}>
