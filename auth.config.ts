@@ -10,7 +10,6 @@ export default {
   providers: [
     Credentials({
       authorize: async (credentials) => {
-
         const { data, success } = loginSchema.safeParse(credentials);
 
         if (!success) {
@@ -20,33 +19,32 @@ export default {
         const response = await fetch(`${apiUrl}auth/login`, {
           method: "POST",
           headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
           },
           body: JSON.stringify({
             email: data.email,
-            password: data.password
-          })
+            password: data.password,
+          }),
         });
 
         const result = await response.json();
 
         if (result.type === "error") {
-          throw new Error(result.msg)
+          throw new Error(result.msg);
         }
 
         return result;
       },
     }),
-    Google(
-      {
-        clientId: process.env.AUTH_GOOGLE_ID,
-        clientSecret: process.env.AUTH_GOOGLE_SECRET,
-        authorization: {
-          params: {
-            scope: "https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/calendar https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/calendar.events"
-          }
-        }
-      }
-    )
+    Google({
+      clientId: process.env.AUTH_GOOGLE_ID,
+      clientSecret: process.env.AUTH_GOOGLE_SECRET,
+      authorization: {
+        params: {
+          scope:
+            "https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/calendar https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/calendar.events",
+        },
+      },
+    }),
   ],
-} satisfies NextAuthConfig
+} satisfies NextAuthConfig;
