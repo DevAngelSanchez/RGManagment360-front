@@ -41,3 +41,14 @@ export const filterUsersSchema = z.object({
   name: z.string().trim(),
   lastname: z.string().trim()
 });
+
+export const filterServicesProvidersSchema = z.object({
+
+  name: z.string().trim(),
+  category: z.string({
+    required_error: "Please select a category.",
+  }),
+  subcategory: z.string({
+    required_error: "Please select a subcategory.",
+  }),
+});

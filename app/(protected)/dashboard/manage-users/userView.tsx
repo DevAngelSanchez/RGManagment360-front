@@ -45,6 +45,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+
 import {
   Select,
   SelectContent,
@@ -52,6 +53,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+
 import { Input } from "@/components/ui/input";
 
 import { DeleteUserForm } from "./DeleteUserForm";
@@ -64,12 +66,10 @@ export function UserView() {
 
   const [users, setUsers] = useState<User[]>([]);
   const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
-  const [loading, setLoading] = useState(false);
   const [filters, setFilters] = useState({
     name: '',
     lastname: '',
     role: '',
-    status: ''
   });
 
   useEffect(() => {
@@ -113,8 +113,7 @@ export function UserView() {
         return (
           (filters.name === '' || user.name.toLowerCase().includes(filters.name.toLowerCase())) &&
           (filters.lastname === '' || user.lastname.toLowerCase().includes(filters.lastname.toLowerCase())) &&
-          (filters.role === '' || user.role === filters.role) &&
-          (filters.status === '' || (filters.status === 'active' ? user.status === "active" : user.status === "inactive"))
+          (filters.role === '' || user.role === filters.role)
         );
       });
       setFilteredUsers(filtered);
@@ -206,35 +205,6 @@ export function UserView() {
                           <SelectItem value="SERVICE_PROVIDER">
                             Service Provider
                           </SelectItem>
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <div className="md:col-span-3 col-span-6">
-                <FormField
-                  control={form.control}
-                  name="status"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Status</FormLabel>
-                      <Select
-                        onValueChange={(value) => {
-                          field.onChange(value)
-                          handleSelectChange("status", value)
-                        }}
-                        defaultValue={field.value}
-                      >
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select a status" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          <SelectItem value="active">Active</SelectItem>
-                          <SelectItem value="inactive ">Inactive</SelectItem>
                         </SelectContent>
                       </Select>
                       <FormMessage />

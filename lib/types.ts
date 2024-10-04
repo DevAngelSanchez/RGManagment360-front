@@ -9,8 +9,8 @@ export interface User {
   address?: string;
   phone?: string;
   tasks?: Task[];
-  category?: Category;
-  subcategory?: Subcategory;
+  categories?: Category[];
+  subcategories?: Subcategory[];
   properties?: Property[];
   status?: string;
 }

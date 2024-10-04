@@ -1,8 +1,6 @@
-import { Suspense } from "react";
 import LayoutSelector from "@/components/custom/LayoutSelector";
 
 import ServicesUI from "./serviceUI";
-import { Skeleton } from "@/components/ui/skeleton";
 
 export default async function Page() {
   return (
