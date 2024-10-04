@@ -1,9 +1,8 @@
 "use client"
-
-import { DotsHorizontalIcon } from "@radix-ui/react-icons"
+import { IconDots } from "@tabler/icons-react";
 import { Row } from "@tanstack/react-table"
 
-import { Button } from "@/registry/new-york/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,7 +15,7 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
-} from "@/registry/new-york/ui/dropdown-menu"
+} from "@/components/ui/dropdown-menu";
 
 import { labels } from "../data/data"
 import { taskSchema } from "../data/schema"
@@ -37,7 +36,7 @@ export function DataTableRowActions<TData>({
           variant="ghost"
           className="flex h-8 w-8 p-0 data-[state=open]:bg-muted"
         >
-          <DotsHorizontalIcon className="h-4 w-4" />
+          <IconDots className="h-4 w-4" />
           <span className="sr-only">Open menu</span>
         </Button>
       </DropdownMenuTrigger>

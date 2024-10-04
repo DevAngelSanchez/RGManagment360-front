@@ -34,7 +34,7 @@ const ServiceProviderLayout: React.FC<DashboardLayoutProps> = async ({
           text: "Calendar"
         },
         {
-          href: "/service-provider/manage-tasks",
+          href: "/service-provider/tasks",
           icon: <IconChecklist />,
           text: "Tasks"
         }

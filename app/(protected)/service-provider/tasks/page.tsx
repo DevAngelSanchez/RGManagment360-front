@@ -3,7 +3,7 @@ import path from "path"
 import { Metadata } from "next"
 import Image from "next/image"
 import { z } from "zod"
-
+import LayoutSelector from "@/components/custom/LayoutSelector"
 import { columns } from "./components/columns"
 import { DataTable } from "./components/data-table"
 import { UserNav } from "./components/user-nav"
@@ -14,10 +14,10 @@ export const metadata: Metadata = {
   description: "A task and issue tracker build using Tanstack Table.",
 }
 
-// Simulate a database read for tasks.
+// Simulate a database read for tasks.  "app/(protected)/service-provider/tasks/data/task.json"
 async function getTasks() {
   const data = await fs.readFile(
-    path.join(process.cwd(), "app/(app)/examples/tasks/data/tasks.json")
+    path.join(process.cwd(), "app/(protected)/service-provider/tasks/data/task.json")
   )
 
   const tasks = JSON.parse(data.toString())
@@ -29,6 +29,9 @@ export default async function TaskPage() {
   const tasks = await getTasks()
 
   return (
+    <LayoutSelector layout="service-provider">
+    <main className="w-full h-full bg-slate-50 ">
+      <section className="p-4 overflow-y-auto">
     <>
       <div className="md:hidden">
         <Image
@@ -61,5 +64,8 @@ export default async function TaskPage() {
         <DataTable data={tasks} columns={columns} />
       </div>
     </>
+    </section>
+      </main>
+    </LayoutSelector>
   )
 }
