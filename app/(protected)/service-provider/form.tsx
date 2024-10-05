@@ -68,9 +68,10 @@ const formSchema = z.object({
 
 interface Props {
   accessToken: string;
+  selectedDate?: Date;
 }
 
-export function CreateTaskForm({ accessToken }: Props) {
+export function CreateTaskForm({ accessToken, selectedDate }: Props) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
@@ -79,7 +80,7 @@ export function CreateTaskForm({ accessToken }: Props) {
   const [providers, setProviders] = useState<User[]>([]);
   const [startTime, setStartTime] = useState<string | string[]>("00:00");
   const [endTime, setEndTime] = useState<string | string[]>("00:00");
-  const [day, setDay] = useState<Date | undefined>(undefined);
+  const [day, setDay] = useState<Date | undefined>(selectedDate);
   const [priorities, setPriorities] = useState<string[]>(["low", "normal", "high"]);
   const [status, setStatus] = useState<string[]>(["pending", "in progress", "complete"]);
   const [alert, setAlert] = useState({ title: "", description: "", type: "default", show: false });
@@ -509,7 +510,7 @@ export function CreateTaskForm({ accessToken }: Props) {
             <div className="w-full">
               <FormItem className="flex flex-col gap-2">
                 <FormLabel>Day</FormLabel>
-                <MainDatePicker onChange={handleDateChange} />
+                <MainDatePicker selectedDate={day} onChange={handleDateChange} />
               </FormItem>
             </div>
           </div>
