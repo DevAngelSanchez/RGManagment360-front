@@ -2,7 +2,7 @@ import NextAuth from "next-auth";
 
 import "next-auth/jwt";
 
-import authConfig from "@/auth.config";
+import authConfig, { apiUrl } from "@/auth.config";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   pages: {
@@ -12,18 +12,37 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     strategy: "jwt"
   },
   callbacks: {
-    jwt({ token, user, account }) {
+    async jwt({ token, user, account }) {
+      // Si el usuario ha iniciado sesión por primera vez
       if (user) {
-        token.role = user.role;
-        token.username = user.username;
-        token.accessToken = user.accessToken;
+        token.accessToken = user.accessToken || account?.access_token;
+
+        if (account && account.provider === "google") {
+          // Realizar petición para verificar si el usuario ya está registrado en tu app
+          const response = await fetch(`${apiUrl}auth/getUserRole`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ email: token.email }),
+          });
+
+          const result = await response.json();
+
+          if (result.success) {
+            // Si el usuario está registrado, asignamos el rol correspondiente
+            token.role = result.role;
+          } else {
+            // Si no está registrado, rechazamos el inicio de sesión
+            throw new Error("Unauthorized: You must be registered in the app to sign in with Google.");
+          }
+        } else {
+          // Si el usuario se loguea con credentials, ya viene con el rol desde la API de login
+          token.role = user.role;
+        }
       }
 
-      if (account && account.provider === "google") {
-        token.accessToken = account.access_token;
-      }
-
-      return token
+      return token;
     },
     session({ session, token }) {
       session.user.role = token.role;
