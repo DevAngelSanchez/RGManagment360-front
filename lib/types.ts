@@ -56,14 +56,22 @@ export interface Task {
   priority: string;
   status: string;
   observations?: string;
-  invoice?: string;
-  comments: string[];
-  category: Category;
-  subcategory: Subcategory;
-  property: Property;
-  serviceProvider: User;
+  invoiceFile?: string;
+  comments?: string[];
+  category?: Category;
+  subcategory?: Subcategory;
+  property?: Property;
+  taskProvider?: User;
+  taskProviderId?: number;
+  categoryId?: number;
+  subcategoryId?: number;
+  propertyId?: number;
+  createdBy?: User;
+  createdById?: number;
+  User?: User;
+  userId?: number;
   datetimeAssigment: Date;
-  datetimeEnd: Date;
+  datetimeEnd?: Date;
 }
 
 export interface Event {

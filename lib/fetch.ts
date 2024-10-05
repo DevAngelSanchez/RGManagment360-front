@@ -1,5 +1,5 @@
 import { apiUrl } from "@/auth.config";
-import { Category, Property, Subcategory, Supplier, User } from "./types";
+import { Category, Property, Subcategory, Supplier, Task, User } from "./types";
 
 interface FetchResult<Type> {
   data?: Type;
@@ -40,4 +40,5 @@ export const fetchSubcategories = () => fetchData<Subcategory[]>(`${apiUrl}api/s
 export const fetchProperties = () => fetchData<Property[]>(`${apiUrl}api/properties`);
 export const fetchServiceProviders = () => fetchData<User[]>(`${apiUrl}api/users/by-role/SERVICE_PROVIDER`);
 export const fetchCustomers = () => fetchData<User[]>(`${apiUrl}api/users/by-role/CUSTOMER`);
+export const fetchTasks = () => fetchData<Task[]>(`${apiUrl}api/tasks`);
 

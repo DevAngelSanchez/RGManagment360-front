@@ -12,6 +12,7 @@ import {
   IconMenu2,
   IconArrowBarLeft,
   IconCalendar,
+  IconChecklist,
 } from "@tabler/icons-react";
 import { SidebarLinkIconSize } from "@/lib/measurementUnits";
 type DashboardLayoutProps = {
@@ -37,29 +38,34 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = async ({
             },
             {
               href: "/dashboard/manage-users",
-              icon:<IconUser />,
+              icon: <IconUser />,
               text: "Manage Users",
             },
             {
               href: "/services",
-              icon:  <IconTools size={SidebarLinkIconSize} />,
+              icon: <IconTools size={SidebarLinkIconSize} />,
               text: "Services"
             },
             {
               href: "/dashboard/manage-service-providers",
-              icon:   <IconUsersGroup size={SidebarLinkIconSize} />,
+              icon: <IconUsersGroup size={SidebarLinkIconSize} />,
               text: "Services Providers"
             },
             {
               href: "/dashboard/manage-properties",
-              icon:    <IconBuildingEstate />,
+              icon: <IconBuildingEstate />,
               text: "Properties"
             },
             {
               href: "/dashboard/calendar",
-              icon:  <IconCalendar />,
+              icon: <IconCalendar />,
               text: "Calendar"
-            }
+            },
+            {
+              href: "/dashboard/taskslist",
+              icon: <IconChecklist />,
+              text: "Tasklist"
+            },
           ]}
         />
         {children}

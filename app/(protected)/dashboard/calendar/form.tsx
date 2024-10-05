@@ -80,8 +80,8 @@ export function CreateTaskForm({ accessToken }: Props) {
   const [startTime, setStartTime] = useState<string | string[]>("00:00");
   const [endTime, setEndTime] = useState<string | string[]>("00:00");
   const [day, setDay] = useState<Date | undefined>(undefined);
-  const [priorities, setPriorities] = useState<string[]>(["low", "normal", "high"]);
-  const [status, setStatus] = useState<string[]>(["pending", "in progress", "complete"]);
+  const [priorities, setPriorities] = useState<string[]>(["low", "medium", "high"]);
+  const [status, setStatus] = useState<string[]>(["todo", "in progress", "done", "canceled"]);
   const [alert, setAlert] = useState({ title: "", description: "", type: "default", show: false });
 
   function resetAlert() {
@@ -460,7 +460,7 @@ export function CreateTaskForm({ accessToken }: Props) {
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="Pending" />
+                          <SelectValue placeholder="Select a status" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
