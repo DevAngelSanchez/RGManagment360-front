@@ -3,8 +3,8 @@ import Google from "next-auth/providers/google";
 import type { NextAuthConfig } from "next-auth";
 import { loginSchema } from "./lib/zodSchemas";
 
-export const apiUrl = "http://localhost:3001/";
-// export const apiUrl = process.env.API_URL || "https://rgmanagment360-backend.onrender.com/";
+// export const apiUrl = "http://localhost:3001/";
+export const apiUrl = process.env.API_URL || "https://rgmanagment360-backend.onrender.com/";
 
 export default {
   providers: [
@@ -33,7 +33,12 @@ export default {
           throw new Error(result.msg);
         }
 
-        return result;
+        return {
+          name: result.name,
+          email: result.email,
+          image: result.image,
+          role: result.role,
+        };
       },
     }),
     Google({
