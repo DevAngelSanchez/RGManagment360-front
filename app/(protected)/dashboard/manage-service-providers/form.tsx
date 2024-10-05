@@ -25,21 +25,12 @@ import {
 
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
-import { apiUrl } from "@/auth.config";
 import { IconUserPlus } from "@tabler/icons-react";
 import { CreateServiceProvider } from "./actions";
 import AlertComponent from "@/components/custom/alert";
 
-interface Category {
-  id: number;
-  name: string;
-}
-
-interface Subcategory {
-  id: number;
-  name: string;
-  categoryId: number;
-}
+import { Category, Subcategory } from "@/lib/types";
+import { fetchCategories, fetchSubcategories } from "@/lib/fetch";
 
 const formSchema = z.object({
   name: z.string().min(3, {
@@ -75,6 +66,7 @@ export function CreateServiceProviderForm() {
   const router = useRouter();
   const [categories, setCategories] = useState<Category[]>([]);
   const [subcategories, setSubcategories] = useState<Subcategory[]>([]);
+  const [filteredSubcategories, setFilteredSubcategories] = useState<Subcategory[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
   const [alert, setAlert] = useState({ title: "", description: "", type: "default", show: false });
@@ -83,41 +75,34 @@ export function CreateServiceProviderForm() {
     return setAlert({ title: "", description: "", type: "default", show: false });
   }
 
+  const handleCategoryChange = (name: string, value: string) => {
+    const selectedCategoryId = value;
+
+    // Filtrar las subcategorías basadas en la categoría seleccionada
+    const selectedCategory = categories.find(cat => cat.id === parseInt(selectedCategoryId));
+
+    if (selectedCategory) {
+      setFilteredSubcategories(selectedCategory.subcategories);
+    } else {
+      setFilteredSubcategories(subcategories);
+    }
+  };
+
   useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const response = await fetch(`${apiUrl}api/categories/`);
-        if (!response) {
-          console.log("Not found categories");
-          return;
-        }
+    const getData = async () => {
+      const responseCategories = await fetchCategories();
+      const responseSubcategories = await fetchSubcategories();
 
-        const categories = await response.json();
-        setCategories(categories);
-      } catch (error) {
-        console.log("Error trying to fetch categories");
-        return null;
+      if (responseCategories.data) {
+        setCategories(responseCategories.data)
+      }
+      if (responseSubcategories.data) {
+        setSubcategories(responseSubcategories.data)
+        setFilteredSubcategories(responseSubcategories.data);
       }
     }
 
-    const fetchSubcategories = async () => {
-      try {
-        const response = await fetch(`${apiUrl}api/Subcategories/`);
-        if (!response) {
-          console.log("Not found Subcategories");
-          return;
-        }
-
-        const subcategories = await response.json();
-        setSubcategories(subcategories);
-      } catch (error) {
-        console.log("Error trying to fetch Subcategories");
-        return null;
-      }
-    }
-
-    fetchCategories();
-    fetchSubcategories();
+    getData();
   }, [])
 
   // 1. Define your form.
@@ -265,16 +250,22 @@ export function CreateServiceProviderForm() {
                 render={({ field }) => (
                   <FormItem className="">
                     <FormLabel>Category</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <Select
+                      onValueChange={(value) => {
+                        const selectedCategory = JSON.parse(value);
+                        field.onChange(selectedCategory.name); // Update field with the category name
+                        handleCategoryChange("category", selectedCategory.id);
+                      }}
+                      defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder="Select a Category" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {categories && categories.map(category => (
-                          <SelectItem key={category.id} value={category.name}>
-                            {category.name}
+                        {categories && categories.map(item => (
+                          <SelectItem key={item.id} value={JSON.stringify({ name: item.name, id: item.id })}>
+                            {item.name}
                           </SelectItem>
                         ))}
                       </SelectContent>
@@ -298,9 +289,9 @@ export function CreateServiceProviderForm() {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {subcategories && subcategories.map(subcategory => (
-                          <SelectItem key={subcategory.id} value={subcategory.name}>
-                            {subcategory.name}
+                        {filteredSubcategories && filteredSubcategories.map(item => (
+                          <SelectItem key={item.id} value={item.name}>
+                            {item.name}
                           </SelectItem>
                         ))}
                       </SelectContent>

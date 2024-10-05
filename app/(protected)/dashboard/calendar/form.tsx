@@ -28,9 +28,10 @@ import { useRouter } from "next/navigation";
 import { apiUrl } from "@/auth.config";
 import { IconPlus } from "@tabler/icons-react";
 import AlertComponent from "@/components/custom/alert";
-import { Category, Property, Subcategory } from "@/lib/types";
+import { Category, Property, Subcategory, User } from "@/lib/types";
 
-import { User } from "@prisma/client";
+import { fetchCategories, fetchProperties, fetchServiceProviders, fetchSubcategories } from "@/lib/fetch";
+
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Textarea } from "@/components/ui/textarea";
 
@@ -76,6 +77,7 @@ export function CreateTaskForm({ accessToken, selectedDate }: Props) {
   const [isLoading, setIsLoading] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
   const [subcategories, setSubcategories] = useState<Subcategory[]>([]);
+  const [filteredSubcategories, setFilteredSubcategories] = useState<Subcategory[]>([]);
   const [properties, setProperties] = useState<Property[]>([]);
   const [providers, setProviders] = useState<User[]>([]);
   const [startTime, setStartTime] = useState<string | string[]>("00:00");
@@ -89,130 +91,42 @@ export function CreateTaskForm({ accessToken, selectedDate }: Props) {
     return setAlert({ title: "", description: "", type: "default", show: false });
   }
 
+  const handleCategoryChange = (name: string, value: string) => {
+    const selectedCategoryId = value;
+
+    // Filtrar las subcategorías basadas en la categoría seleccionada
+    const selectedCategory = categories.find(cat => cat.id === parseInt(selectedCategoryId));
+
+    if (selectedCategory) {
+      setFilteredSubcategories(selectedCategory.subcategories);
+    } else {
+      setFilteredSubcategories(subcategories);
+    }
+  };
+
   useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const response = await fetch(`${apiUrl}api/categories/`);
+    const getData = async () => {
+      const responseCategories = await fetchCategories();
+      const responseSubcategories = await fetchSubcategories();
+      const responseProperties = await fetchProperties();
+      const responseServicesProviders = await fetchServiceProviders();
 
-        if (!response.ok) {
-          const errorData = await response.json();
-          setAlert({
-            title: "Error!",
-            description: errorData.msg || "Error fetching categories",
-            type: "error",
-            show: true
-          });
-          setTimeout(() => resetAlert(), 5000);
-          return;
-        }
-
-        const categories = await response.json();
-        setCategories(categories);
-      } catch (error: any) {
-        setAlert({
-          title: "Error!",
-          description: error.message || "Error trying to fetch categories",
-          type: "error",
-          show: true
-        });
-        setTimeout(() => resetAlert(), 5000);
+      if (responseCategories.data) {
+        setCategories(responseCategories.data)
       }
-    };
-
-    const fetchSubcategories = async () => {
-      try {
-        const response = await fetch(`${apiUrl}api/Subcategories/`);
-
-        if (!response.ok) {
-          const errorData = await response.json();
-          setAlert({
-            title: "Error!",
-            description: errorData.msg || "Error fetching subcategories",
-            type: "error",
-            show: true
-          });
-          setTimeout(() => resetAlert(), 5000);
-          return;
-        }
-
-        const subcategories = await response.json();
-        setSubcategories(subcategories);
-      } catch (error: any) {
-        setAlert({
-          title: "Error!",
-          description: error.message || "Error trying to fetch subcategories",
-          type: "error",
-          show: true
-        });
-        setTimeout(() => resetAlert(), 5000);
+      if (responseSubcategories.data) {
+        setSubcategories(responseSubcategories.data)
+        setFilteredSubcategories(responseSubcategories.data);
       }
-    };
-
-
-    const fetchProperties = async () => {
-      try {
-        const response = await fetch(`${apiUrl}api/properties/`);
-
-        if (!response.ok) {
-          const errorData = await response.json();
-          setAlert({
-            title: "Error!",
-            description: errorData.msg || "Error fetching properties",
-            type: "error",
-            show: true
-          });
-          setTimeout(() => resetAlert(), 5000);
-          return;
-        }
-
-        const properties = await response.json();
-        setProperties(properties);
-      } catch (error: any) {
-        setAlert({
-          title: "Error!",
-          description: error.message || "Error trying to fetch properties",
-          type: "error",
-          show: true
-        });
-        setTimeout(() => resetAlert(), 5000);
+      if (responseProperties.data) {
+        setProperties(responseProperties.data);
       }
-    };
-
-
-    const fetchProviders = async () => {
-      try {
-        const response = await fetch(`${apiUrl}api/users/by-role/SERVICE_PROVIDER`);
-
-        if (!response.ok) {
-          const errorData = await response.json();
-          setAlert({
-            title: "Error!",
-            description: errorData.msg || "Error fetching providers",
-            type: "error",
-            show: true
-          });
-          setTimeout(() => resetAlert(), 5000);
-          return;
-        }
-
-        const providers = await response.json();
-        setProviders(providers);
-      } catch (error: any) {
-        setAlert({
-          title: "Error!",
-          description: error.message || "Error trying to fetch providers",
-          type: "error",
-          show: true
-        });
-        setTimeout(() => resetAlert(), 5000);
+      if (responseServicesProviders.data) {
+        setProviders(responseServicesProviders.data);
       }
-    };
+    }
 
-
-    fetchCategories();
-    fetchSubcategories();
-    fetchProperties();
-    fetchProviders();
+    getData();
   }, []);
 
   // 1. Define your form.
@@ -383,7 +297,12 @@ export function CreateTaskForm({ accessToken, selectedDate }: Props) {
                 render={({ field }) => (
                   <FormItem className="">
                     <FormLabel>Select a Category</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <Select
+                      onValueChange={(value) => {
+                        field.onChange(value); // Update field with the category name
+                        handleCategoryChange("category", value);
+                      }}
+                      defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder="Select a Category" />
@@ -391,7 +310,10 @@ export function CreateTaskForm({ accessToken, selectedDate }: Props) {
                       </FormControl>
                       <SelectContent>
                         {categories && categories.map(item => (
-                          <SelectItem key={item.id} value={item.id.toString()}>
+                          <SelectItem
+                            key={item.id}
+                            value={item.id.toString()}
+                          >
                             {item.name}
                           </SelectItem>
                         ))}
@@ -416,7 +338,7 @@ export function CreateTaskForm({ accessToken, selectedDate }: Props) {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {subcategories && subcategories.map(item => (
+                        {filteredSubcategories && filteredSubcategories.map(item => (
                           <SelectItem key={item.id} value={item.id.toString()}>
                             {item.name}
                           </SelectItem>
@@ -583,9 +505,11 @@ export function CreateTaskForm({ accessToken, selectedDate }: Props) {
         </Button>
       </form >
 
-      {alert.show && (
-        <AlertComponent title={alert.title} msg={alert.description} type={alert.type} show={true} />
-      )}
+      {
+        alert.show && (
+          <AlertComponent title={alert.title} msg={alert.description} type={alert.type} show={true} />
+        )
+      }
     </Form >
   )
 }
