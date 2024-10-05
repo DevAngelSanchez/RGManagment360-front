@@ -29,7 +29,7 @@ export default function LoginPage({
         </ButtonSocial>
         <div className="flex flex-col gap-2 items-center">
           <p className="text-center text-sm">
-            Don't have an account?{" "}
+            Don&apos;t have an account?{" "}
             <Link
               className="text-indigo-500 font-semibold hover:underline"
               href="/register"
