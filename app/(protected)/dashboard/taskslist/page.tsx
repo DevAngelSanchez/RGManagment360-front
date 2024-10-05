@@ -26,12 +26,6 @@ async function getTasks() {
   return z.array(taskSchema).parse(tasks)
 }
 
-async function getMyTasks() {
-  const tasks = await fetchTasks();
-
-  return z.array(myTaskSchema).parse(tasks)
-}
-
 export default async function TaskPage() {
   const tasks = await getTasks();
   const fetchResult = await fetchTasks();
@@ -58,7 +52,7 @@ export default async function TaskPage() {
                   </p>
                 </div>
               </div>
-              <DataTable data={tasksData} columns={columns} />
+              <DataTable data={tasksData || []} columns={columns} />
             </div>
           </div>
         </section>

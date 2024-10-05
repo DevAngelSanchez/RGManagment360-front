@@ -12,7 +12,8 @@ export interface User {
   categories?: Category[];
   subcategories?: Subcategory[];
   properties?: Property[];
-  status?: string;
+  statusAccount?: string;
+  emailVerified?: string;
 }
 
 export interface Supplier {

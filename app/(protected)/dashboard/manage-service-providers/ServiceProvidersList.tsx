@@ -135,6 +135,8 @@ const ServiceProvidersList: React.FC<Props> = ({ serviceProviders }) => {
     },
   });
 
+  console.log(filteredUsers)
+
   return (
     <Card>
       <CardHeader>
@@ -255,7 +257,7 @@ const ServiceProvidersList: React.FC<Props> = ({ serviceProviders }) => {
         <ScrollArea className="h-[490px]">
           <div className='h-max pr-4'>
             {filteredUsers && filteredUsers.map(item => (
-              <DirectoryItem key={item.id} name={item.name} email={item.email} phone={item.phone} />
+              <DirectoryItem key={item.id} name={item.name} email={item.email} phone={item.phone} category={item.categories} subcategory={item.subcategories} />
             ))}
           </div>
           <ScrollBar />

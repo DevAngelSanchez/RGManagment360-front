@@ -72,6 +72,16 @@ export function UserView() {
     role: '',
   });
 
+  const clearFilters = () => {
+    setFilters({
+      name: '',
+      lastname: '',
+      role: '',
+    });
+
+    form.reset(); // Restablece los valores en el formulario
+  };
+
   useEffect(() => {
     const getUsers = async () => {
       const response = await fetchUsers();
@@ -122,13 +132,24 @@ export function UserView() {
     applyFilters();
   }, [filters, users]);
 
+  console.log(filteredUsers)
+
   function onSubmit(data: z.infer<typeof filterUsersSchema>) { }
 
   return (
     <div className="flex justify-start">
       <Card className="w-full">
         <div className=" p-4 gap-4 ">
-          <h2 className="font-bold text-xl">Filters</h2>
+          <div className="flex items-center justify-between gap-2">
+            <h2 className="font-bold text-xl">Filters</h2>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={clearFilters}
+            >
+              Clear Filters
+            </Button>
+          </div>
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
@@ -187,6 +208,7 @@ export function UserView() {
                     <FormItem>
                       <FormLabel>Role</FormLabel>
                       <Select
+                        value={filters.role}
                         onValueChange={(value) => {
                           field.onChange(value)
                           handleSelectChange("role", value)
@@ -233,6 +255,7 @@ export function UserView() {
                 <TableHead>Phone Number</TableHead>
                 <TableHead>Role</TableHead>
                 <TableHead>Account status</TableHead>
+                <TableHead>Email Verified</TableHead>
                 <TableHead>Accions</TableHead>
               </TableRow>
             </TableHeader>
@@ -247,7 +270,8 @@ export function UserView() {
                     <TableCell>{value.address}</TableCell>
                     <TableCell>{value.phone}</TableCell>
                     <TableCell>{value.role}</TableCell>
-                    <TableCell>{value.status}</TableCell>
+                    <TableCell>{value.statusAccount}</TableCell>
+                    <TableCell>{value.emailVerified ? "Yes" : "No"}</TableCell>
                     <TableCell>
                       <div className="flex justify-between items-center">
                         <Dialog>

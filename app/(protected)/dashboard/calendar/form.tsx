@@ -68,9 +68,10 @@ const formSchema = z.object({
 
 interface Props {
   accessToken: string;
+  selectedDate?: Date;
 }
 
-export function CreateTaskForm({ accessToken }: Props) {
+export function CreateTaskForm({ accessToken, selectedDate }: Props) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
@@ -79,7 +80,7 @@ export function CreateTaskForm({ accessToken }: Props) {
   const [providers, setProviders] = useState<User[]>([]);
   const [startTime, setStartTime] = useState<string | string[]>("00:00");
   const [endTime, setEndTime] = useState<string | string[]>("00:00");
-  const [day, setDay] = useState<Date | undefined>(undefined);
+  const [day, setDay] = useState<Date | undefined>(selectedDate);
   const [priorities, setPriorities] = useState<string[]>(["low", "medium", "high"]);
   const [status, setStatus] = useState<string[]>(["todo", "in progress", "done", "canceled"]);
   const [alert, setAlert] = useState({ title: "", description: "", type: "default", show: false });
@@ -251,17 +252,17 @@ export function CreateTaskForm({ accessToken }: Props) {
 
     const { name, categoryId, subcategoryId, priority, propertyId, status, taskProviderId, datetimeAssigment, datetimeEnd, observations } = values;
 
+    if (!day) {
+      resetAlert();
+      setAlert({ title: "Please select a day!", description: "You don't have selected any day.", type: "error", show: true });
+      setTimeout(() => {
+        resetAlert();
+      }, 3000);
+      return null;
+    }
+
     try {
       setIsLoading(true);
-
-      if (!day) {
-        resetAlert();
-        setAlert({ title: "Please select a day!", description: "You don't have selected any day.", type: "error", show: true });
-        setTimeout(() => {
-          resetAlert();
-        }, 3000);
-        return null;
-      }
 
       const response = await fetch(`${apiUrl}api/create-task`, {
         method: "POST",
@@ -286,7 +287,7 @@ export function CreateTaskForm({ accessToken }: Props) {
 
       if (!response.ok) {
         resetAlert();
-        setAlert({ title: "Error", description: "Error trying to create a new task", type: "error", show: true });
+        setAlert({ title: "Error", description: "There was a problem creating the task.", type: "error", show: true });
         setTimeout(() => {
           resetAlert();
         }, 3000);
@@ -305,18 +306,23 @@ export function CreateTaskForm({ accessToken }: Props) {
       }
 
       resetAlert();
+
       setAlert({ title: result.title, description: result.msg, type: result.type, show: true });
+
       setTimeout(() => {
         resetAlert();
       }, 3000);
+
       router.refresh();
     } catch (error) {
       resetAlert();
+
       setAlert({ title: "Error!", description: "Error trying to create a new Services Provider", type: "error", show: true });
+
       setTimeout(() => {
         resetAlert()
       }, 3000);
-      console.log(error);
+
       return;
     }
   }
@@ -507,9 +513,9 @@ export function CreateTaskForm({ accessToken }: Props) {
             </div>
 
             <div className="w-full">
-              <FormItem className="flex flex-col gap-2">
+              <FormItem className="flex flex-col gap-2 w-full">
                 <FormLabel>Day</FormLabel>
-                <MainDatePicker onChange={handleDateChange} />
+                <MainDatePicker selectedDate={day} onChange={handleDateChange} />
               </FormItem>
             </div>
           </div>
