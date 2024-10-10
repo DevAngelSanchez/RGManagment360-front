@@ -10,6 +10,7 @@ const tasks = Array.from({ length: 100 }, () => ({
   status: faker.helpers.arrayElement(statuses).value,
   label: faker.helpers.arrayElement(labels).value,
   priority: faker.helpers.arrayElement(priorities).value,
+   date: faker.date.anytime(),
 }))
 
 fs.writeFileSync(
