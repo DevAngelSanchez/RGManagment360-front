@@ -135,8 +135,6 @@ const ServiceProvidersList: React.FC<Props> = ({ serviceProviders }) => {
     },
   });
 
-  console.log(filteredUsers)
-
   return (
     <Card>
       <CardHeader>

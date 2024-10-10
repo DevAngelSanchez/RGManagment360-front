@@ -25,11 +25,18 @@ import { CreateTaskForm } from "./form";
 
 export default async function page() {
 
-  const session = await auth()
-  console.log(session?.accessToken)
+  const session = await auth();
 
-  if (!session?.accessToken) {
+  if (!session?.user?.accessToken) {
     return redirect("/login");
+  }
+
+  if (session?.user.role === "MANAGER" || session?.user.role === "ASSISTANT") {
+    return redirect("/dashboard");
+  }
+
+  if (session?.user.role === "CUSTOMER") {
+    return redirect("/dashboard");
   }
 
   return (
@@ -48,14 +55,14 @@ export default async function page() {
                   <DialogHeader>
                     <DialogTitle>Create a new task</DialogTitle>
                     <DialogClose asChild >
-                      <CreateTaskForm accessToken={session?.accessToken} />
+                      <CreateTaskForm accessToken={session?.user.accessToken} />
                     </DialogClose>
                   </DialogHeader>
                 </DialogContent>
               </Dialog>
             </div>
             <Suspense fallback="Loading Calendar...">
-              <MyCalendar accessToken={session?.accessToken} />
+              <MyCalendar accessToken={session?.user.accessToken} />
             </Suspense>
           </div>
         </section>

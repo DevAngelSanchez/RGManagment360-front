@@ -39,6 +39,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         } else {
           // Si el usuario se loguea con credentials, ya viene con el rol desde la API de login
           token.role = user.role;
+          token.accessToken = user.accessToken;
         }
       }
 
@@ -46,7 +47,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     },
     session({ session, token }) {
       session.user.role = token.role;
-      session.accessToken = token.accessToken;
+      session.user.accessToken = token.accessToken;
       session.user.username = token.username;
       return session
     },
@@ -54,12 +55,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   ...authConfig,
 
 })
-
-declare module "next-auth" {
-  interface Session {
-    accessToken?: string
-  }
-}
 
 declare module "next-auth/jwt" {
   interface JWT {

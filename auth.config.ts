@@ -38,6 +38,7 @@ export default {
           email: result.email,
           image: result.image,
           role: result.role,
+          accessToken: result.accessToken
         };
       },
     }),

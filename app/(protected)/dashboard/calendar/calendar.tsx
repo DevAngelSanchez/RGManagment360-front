@@ -58,7 +58,6 @@ const MyCalendar: React.FC<Props> = ({ accessToken }) => {
   const handleSelectSlot = (slotInfo: SlotInfo) => {
     setNewEvent({ ...newEvent, start: slotInfo.start, end: slotInfo.end });
     setSelectedDate(slotInfo.start.toISOString());
-    console.log(selectedDate)
     setDialogOpen(true);
   };
 
@@ -101,7 +100,6 @@ const MyCalendar: React.FC<Props> = ({ accessToken }) => {
 
       if (response.ok) {
         const data = await response.json();
-        console.log('Tarea creada con éxito:', data);
 
         // Opcional: Actualizar los eventos en el calendario
         setEvents([...events, newEvent]);

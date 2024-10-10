@@ -2,33 +2,27 @@ import LayoutSelector from "@/components/custom/LayoutSelector";
 import { redirect } from "next/navigation";
 
 import { Suspense } from "react";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Event } from "@/lib/types";
 
 import MyCalendar from "./calendar";
-import dayjs from "dayjs";
 import { auth } from "@/auth";
 
 import {
   Dialog,
   DialogContent,
   DialogClose,
-  DialogDescription,
   DialogTitle,
   DialogTrigger,
   DialogHeader,
 } from "@/components/ui/dialog";
 
-import { apiUrl } from "@/auth.config";
 import { IconPlus } from "@tabler/icons-react";
 import { CreateTaskForm } from "./form";
 
 export default async function page() {
 
-  const session = await auth()
-  console.log(session?.accessToken)
+  const session = await auth();
 
-  if (!session?.accessToken) {
+  if (!session?.user?.accessToken) {
     return redirect("/login");
   }
 
@@ -48,14 +42,14 @@ export default async function page() {
                   <DialogHeader>
                     <DialogTitle>Create a new task</DialogTitle>
                     <DialogClose asChild >
-                      <CreateTaskForm accessToken={session?.accessToken} />
+                      <CreateTaskForm accessToken={session?.user?.accessToken} />
                     </DialogClose>
                   </DialogHeader>
                 </DialogContent>
               </Dialog>
             </div>
             <Suspense fallback="Loading Calendar...">
-              <MyCalendar accessToken={session?.accessToken} />
+              <MyCalendar accessToken={session?.user?.accessToken} />
             </Suspense>
           </div>
         </section>

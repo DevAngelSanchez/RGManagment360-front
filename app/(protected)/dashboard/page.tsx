@@ -20,10 +20,17 @@ import { User } from "@/lib/types";
 
 export default async function Dashboard() {
   const session = await auth();
-  console.log(session)
 
   if (!session) {
     return redirect("/login");
+  }
+
+  if (session?.user?.role === "SERVICE_PROVIDER") {
+    return redirect("/service-provider");
+  }
+
+  if (session?.user?.role === "CUSTOMER") {
+    return redirect("/customer");
   }
 
   const serviceProvidersResult = await fetchServiceProviders();
