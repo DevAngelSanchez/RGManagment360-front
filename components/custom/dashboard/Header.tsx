@@ -22,6 +22,7 @@ export default function Header({ name, email }: HeaderProps) {
 
   const handleClick = async () => {
     await signOut({
+      redirect: true,
       callbackUrl: "/login"
     })
   }

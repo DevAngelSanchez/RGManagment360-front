@@ -9,7 +9,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     signIn: "/login"
   },
   session: {
-    strategy: "jwt"
+    strategy: "jwt",
   },
   callbacks: {
     async jwt({ token, user, account }) {
@@ -32,6 +32,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           if (result.success) {
             // Si el usuario está registrado, asignamos el rol correspondiente
             token.role = result.role;
+            token.expires = Math.floor(Date.now() / 1000) + 60 * 60; // Expira en 1 hora
           } else {
             // Si no está registrado, rechazamos el inicio de sesión
             throw new Error("Unauthorized: You must be registered in the app to sign in with Google.");
@@ -40,6 +41,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           // Si el usuario se loguea con credentials, ya viene con el rol desde la API de login
           token.role = user.role;
           token.accessToken = user.accessToken;
+          token.expires = Math.floor(Date.now() / 1000) + 60 * 60; // Expira en 1 hora
         }
       }
 
