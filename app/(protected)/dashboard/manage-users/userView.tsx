@@ -132,8 +132,6 @@ export function UserView() {
     applyFilters();
   }, [filters, users]);
 
-  console.log(filteredUsers)
-
   function onSubmit(data: z.infer<typeof filterUsersSchema>) { }
 
   return (
