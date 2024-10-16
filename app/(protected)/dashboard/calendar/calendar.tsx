@@ -7,22 +7,16 @@ import {
   SlotInfo,
 } from "react-big-calendar";
 import "react-big-calendar/lib/css/react-big-calendar.css";
-//import { Event } from '@/lib/types';
-import moment from "moment";
 import dayjs from "dayjs";
 import { apiUrl } from "@/auth.config";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
-  DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import "./index.css";
 import { CreateTaskForm } from "./form";
+import { EditTaskForm } from "./editTaskForm";
 
 interface Props {
   accessToken: string;
@@ -48,6 +42,8 @@ const MyCalendar: React.FC<Props> = ({ accessToken }) => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   const [selectedDate, setSelectedDate] = useState<any | null>(null);
+  const [selectedTask, setSelectedTask] = useState(undefined);
+
   const [newEvent, setNewEvent] = useState<Event>({
     id: "",
     title: "",
@@ -61,57 +57,34 @@ const MyCalendar: React.FC<Props> = ({ accessToken }) => {
     setDialogOpen(true);
   };
 
-  const handleSelectEvent = (event: Event) => {
+  const handleSelectEvent = async (event: any) => {
     setSelectedEvent(event);
     setDialogOpen(true);
-  };
+    const taskId = event.data.extendedProperties?.private?.taskId;
 
-  const handleDeleteEvent = () => {
-    if (selectedEvent) {
-      const updatedEvents = events.filter((ev) => ev.id !== selectedEvent.id);
-      setEvents(updatedEvents);
-      setSelectedEvent(null);
-      setDialogOpen(false);
-    }
-  };
+    if (taskId) {
+      try {
+        // Llama a tu API para obtener la tarea asociada
+        const response = await fetch(`${apiUrl}api/task`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            id: taskId
+          })
+        });
 
-  // Función para crear la tarea
-  const handleSaveEvent = async () => {
-    try {
-      const response = await fetch(`${apiUrl}api/tasks/create`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: newEvent.title,
-          categoryId: 1,  // Cambia esto según tu lógica
-          subcategoryId: null,
-          priority: "High",  // Esto también puede ser dinámico
-          propertyId: 1, // Cambia esto con el valor adecuado
-          status: "Pending",
-          taskProviderId: 2, // Cambia esto con el valor adecuado
-          datetimeAssigment: newEvent.start.toISOString(),
-          datetimeEnd: newEvent.end ? newEvent.end.toISOString() : null,
-          observations: "None", // Esto también puede ser dinámico
-          accessToken: accessToken,
-        }),
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-
-        // Opcional: Actualizar los eventos en el calendario
-        setEvents([...events, newEvent]);
-        setNewEvent({ id: "", title: "", start: new Date(), end: new Date() }); // Resetear el evento
-      } else {
-        console.error('Error al crear la tarea');
+        if (response.ok) {
+          const taskData = await response.json();
+          setSelectedTask(taskData);
+        } else {
+          console.error('Error fetching task:', response.statusText);
+        }
+      } catch (error) {
+        console.error('Error fetching task:', error);
       }
-    } catch (error) {
-      console.error('Error al guardar la tarea:', error);
     }
-
-    setDialogOpen(false); // Cerrar el modal
   };
 
   useEffect(() => {
@@ -161,10 +134,12 @@ const MyCalendar: React.FC<Props> = ({ accessToken }) => {
       />
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogContent className="bg-white rounded-lg">
-          <DialogTitle className="text-lg font-bold mb-4">
+          <DialogTitle className="text-lg font-bold mb-2">
             {selectedEvent ? "Editar tarea" : "Crear tarea"}
           </DialogTitle>
-          <CreateTaskForm selectedDate={selectedDate} accessToken={accessToken} />
+          {selectedEvent ? <EditTaskForm selectedDate={selectedDate} accessToken={accessToken} task={selectedTask} /> :
+            <CreateTaskForm selectedDate={selectedDate} accessToken={accessToken} />
+          }
         </DialogContent>
       </Dialog>
     </div>

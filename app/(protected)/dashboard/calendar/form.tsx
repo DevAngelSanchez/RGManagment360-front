@@ -28,7 +28,7 @@ import { useRouter } from "next/navigation";
 import { apiUrl } from "@/auth.config";
 import { IconPlus } from "@tabler/icons-react";
 import AlertComponent from "@/components/custom/alert";
-import { Category, Property, Subcategory, User } from "@/lib/types";
+import { Category, Property, Subcategory, Task, User } from "@/lib/types";
 
 import { fetchCategories, fetchProperties, fetchServiceProviders, fetchSubcategories } from "@/lib/fetch";
 
@@ -70,6 +70,7 @@ const formSchema = z.object({
 interface Props {
   accessToken: string;
   selectedDate?: Date;
+  task?: Task;
 }
 
 export function CreateTaskForm({ accessToken, selectedDate }: Props) {
@@ -80,8 +81,6 @@ export function CreateTaskForm({ accessToken, selectedDate }: Props) {
   const [filteredSubcategories, setFilteredSubcategories] = useState<Subcategory[]>([]);
   const [properties, setProperties] = useState<Property[]>([]);
   const [providers, setProviders] = useState<User[]>([]);
-  const [startTime, setStartTime] = useState<string | string[]>("00:00");
-  const [endTime, setEndTime] = useState<string | string[]>("00:00");
   const [day, setDay] = useState<Date | undefined>(selectedDate);
   const [priorities, setPriorities] = useState<string[]>(["low", "medium", "high"]);
   const [status, setStatus] = useState<string[]>(["todo", "in progress", "done", "canceled"]);
@@ -146,13 +145,6 @@ export function CreateTaskForm({ accessToken, selectedDate }: Props) {
     },
   });
 
-  const handleStartTimeChange: TimePickerProps["onChange"] = (time, timeString) => {
-    setStartTime(timeString);
-  }
-  const handleEndTimeChange: TimePickerProps["onChange"] = (time, timeString) => {
-    setEndTime(timeString);
-  }
-
   const handleDateChange = (selectedDay: Date | undefined) => {
     setDay(selectedDay); // Aquí guardamos el día seleccionado
   };
@@ -164,7 +156,7 @@ export function CreateTaskForm({ accessToken, selectedDate }: Props) {
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
 
-    const { name, categoryId, subcategoryId, priority, propertyId, status, taskProviderId, datetimeAssigment, datetimeEnd, observations } = values;
+    const { name, categoryId, subcategoryId, priority, propertyId, status, taskProviderId, observations } = values;
 
     if (!day) {
       resetAlert();
@@ -174,6 +166,9 @@ export function CreateTaskForm({ accessToken, selectedDate }: Props) {
       }, 3000);
       return null;
     }
+
+    const startTime = "00:00";
+    const endTime = "23:59";
 
     try {
       setIsLoading(true);
@@ -243,7 +238,7 @@ export function CreateTaskForm({ accessToken, selectedDate }: Props) {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 min-w-[360px]">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2 min-w-[360px]">
         <div className="flex flex-col gap-4">
           <div className="w-full">
             <FormField
@@ -442,39 +437,6 @@ export function CreateTaskForm({ accessToken, selectedDate }: Props) {
             </div>
           </div>
 
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-            <div className="w-full">
-              <FormField
-                control={form.control}
-                name="datetimeAssigment"
-                render={({ field }) => (
-                  <FormItem className="flex flex-col gap-2">
-                    <FormLabel>Start time</FormLabel>
-                    <FormControl>
-                      <TimePicker onChange={handleStartTimeChange} defaultOpenValue={dayjs("00:00:00", "HH:mm:ss")} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-            <div className="w-full">
-              <FormField
-                control={form.control}
-                name="datetimeEnd"
-                render={({ field }) => (
-                  <FormItem className="flex flex-col gap-2">
-                    <FormLabel>End time</FormLabel>
-                    <FormControl>
-                      <TimePicker onChange={handleEndTimeChange} defaultOpenValue={dayjs("00:00:00", "HH:mm:ss")} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-          </div>
           <div className="w-full">
             <FormField
               control={form.control}
