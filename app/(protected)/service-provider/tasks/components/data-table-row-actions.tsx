@@ -1,5 +1,5 @@
 "use client"
-import { IconDots } from "@tabler/icons-react";
+import { IconDots, IconTrash } from "@tabler/icons-react";
 import { Row } from "@tanstack/react-table"
 
 import { Button } from "@/components/ui/button";
@@ -19,6 +19,8 @@ import {
 
 import { labels } from "../data/data"
 import { taskSchema } from "../data/schema"
+import { apiUrl } from "@/auth.config";
+import { useRouter } from "next/navigation";
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>
@@ -28,6 +30,9 @@ export function DataTableRowActions<TData>({
   row,
 }: DataTableRowActionsProps<TData>) {
   const task = taskSchema.parse(row.original)
+
+  const statusOptions = ["todo", "in progress", "done", "canceled"];
+  const priorityOptions = ["low", "medium", "high"];
 
   return (
     <DropdownMenu>
@@ -41,17 +46,78 @@ export function DataTableRowActions<TData>({
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-[160px]">
-        <DropdownMenuItem>Edit</DropdownMenuItem>
-        <DropdownMenuItem>Make a copy</DropdownMenuItem>
-        <DropdownMenuItem>Favorite</DropdownMenuItem>
+        <DropdownMenuSub>
+          <DropdownMenuSubTrigger>Edit status</DropdownMenuSubTrigger>
+          <DropdownMenuSubContent>
+            <DropdownMenuRadioGroup
+              value={task.status}
+              onValueChange={async (newStatus) => {
+                try {
+                  // Llamada al backend para actualizar el estado de la tarea
+                  const response = await fetch(`${apiUrl}api/tasks/${task.id}/status`, {
+                    method: "PUT",
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ status: newStatus }),
+                  });
+
+                  console.log(response)
+
+                  if (!response.ok) {
+                    throw new Error("Failed to update status");
+                  }
+
+                  console.log("Task status updated to:", newStatus);
+                  window.location.reload()
+                  // Opcional: Actualizar el estado local del componente o mostrar una notificación
+                } catch (error) {
+                  console.error("Error updating task status:", error);
+                }
+              }}
+            >
+              {statusOptions.map((status, index) => (
+                <DropdownMenuRadioItem key={index} value={status}>
+                  {status}
+                </DropdownMenuRadioItem>
+              ))}
+            </DropdownMenuRadioGroup>
+          </DropdownMenuSubContent>
+        </DropdownMenuSub>
         <DropdownMenuSeparator />
         <DropdownMenuSub>
-          <DropdownMenuSubTrigger>Labels</DropdownMenuSubTrigger>
+          <DropdownMenuSubTrigger>Edit Priority</DropdownMenuSubTrigger>
           <DropdownMenuSubContent>
-            <DropdownMenuRadioGroup value={task.label}>
-              {labels.map((label) => (
-                <DropdownMenuRadioItem key={label.value} value={label.value}>
-                  {label.label}
+            <DropdownMenuRadioGroup
+              value={task.priority}
+              onValueChange={async (newPriority) => {
+                try {
+                  // Llamada al backend para actualizar el estado de la tarea
+                  const response = await fetch(`${apiUrl}api/tasks/${task.id}/priority`, {
+                    method: "PUT",
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ priority: newPriority }),
+                  });
+
+                  console.log(response)
+
+                  if (!response.ok) {
+                    throw new Error("Failed to update status");
+                  }
+
+                  console.log("Task status updated to:", newPriority);
+                  window.location.reload()
+                  // Opcional: Actualizar el estado local del componente o mostrar una notificación
+                } catch (error) {
+                  console.error("Error updating task status:", error);
+                }
+              }}
+            >
+              {priorityOptions.map((priority, index) => (
+                <DropdownMenuRadioItem key={index} value={priority}>
+                  {priority}
                 </DropdownMenuRadioItem>
               ))}
             </DropdownMenuRadioGroup>
@@ -59,8 +125,8 @@ export function DataTableRowActions<TData>({
         </DropdownMenuSub>
         <DropdownMenuSeparator />
         <DropdownMenuItem>
+          <IconTrash size={20} className="mr-2" />
           Delete
-          <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
