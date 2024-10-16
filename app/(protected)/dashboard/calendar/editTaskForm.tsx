@@ -164,7 +164,9 @@ export function EditTaskForm({ accessToken, selectedDate, task }: Props) {
       setAlert({ title: "Success", description: "Task deleted successfully.", type: "success", show: true });
       setTimeout(() => {
         resetAlert();
-        router.refresh();
+        // router.refresh();
+        window.location.reload();
+
       }, 3000)
     } else {
       setAlert({ title: "Error", description: "Could not delete the task.", type: "error", show: true });
@@ -240,7 +242,8 @@ export function EditTaskForm({ accessToken, selectedDate, task }: Props) {
         resetAlert();
       }, 3000);
 
-      router.refresh();
+      // router.refresh();
+      window.location.reload();
     } catch (error) {
       resetAlert();
 

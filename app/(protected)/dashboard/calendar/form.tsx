@@ -222,7 +222,9 @@ export function CreateTaskForm({ accessToken, selectedDate }: Props) {
         resetAlert();
       }, 3000);
 
-      router.refresh();
+      // router.refresh();
+      window.location.reload();
+
     } catch (error) {
       resetAlert();
 
