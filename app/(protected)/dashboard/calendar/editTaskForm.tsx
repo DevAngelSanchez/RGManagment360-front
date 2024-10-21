@@ -493,7 +493,7 @@ export function EditTaskForm({ accessToken, selectedDate, task }: Props) {
             <React.Fragment>
               <div> -------- Or -------- </div>
 
-              <Button className="w-full" disabled={isLoading} variant="destructive" onClick={(e) => {
+              <Button className="w-full" type="button" disabled={isLoading} variant="destructive" onClick={(e) => {
                 handleDeleteTask(task?.id)
               }}>
                 {isLoading ? (

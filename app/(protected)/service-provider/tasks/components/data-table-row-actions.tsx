@@ -17,7 +17,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import { labels } from "../data/data"
+import { labels } from "../data/data";
 import { taskSchema } from "../data/schema"
 import { apiUrl } from "@/auth.config";
 import { useRouter } from "next/navigation";
@@ -33,6 +33,23 @@ export function DataTableRowActions<TData>({
 
   const statusOptions = ["todo", "in progress", "done", "canceled"];
   const priorityOptions = ["low", "medium", "high"];
+
+  const handleDeleteTask = async (taskId: number) => {
+    const response = await fetch(`${apiUrl}api/delete-task`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ taskId }),
+    });
+
+    if (response.ok) {
+      console.log("task delete successfully")
+      window.location.reload();
+    } else {
+      console.log("Error trying to delete this task")
+    }
+  };
 
   return (
     <DropdownMenu>
