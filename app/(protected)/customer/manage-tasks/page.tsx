@@ -6,7 +6,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export default async function Page() {
   return (
-    <LayoutSelector layout="customer">
+    <LayoutSelector layout="service-provider">
       <main className="w-full h-full bg-slate-50 ">
         <section className="p-4 overflow-y-auto">
           <ServicesUI />

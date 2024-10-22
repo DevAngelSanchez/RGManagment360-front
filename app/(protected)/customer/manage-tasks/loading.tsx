@@ -3,7 +3,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export default async function loading() {
   return (
-    <LayoutSelector layout="customer">
+    <LayoutSelector layout="service-provider">
       <main className="w-full">
         <section className=" flex flex-col overflow-y-auto p-4 w-full">
           <div className="flex flex-col space-y-10">
