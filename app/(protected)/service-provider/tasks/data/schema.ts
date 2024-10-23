@@ -8,6 +8,7 @@ export const taskSchema = z.object({
   status: z.string(),
   label: z.string(),
   priority: z.string(),
+  provider: z.string(),
 })
 
 export const myTaskSchema = z.object({

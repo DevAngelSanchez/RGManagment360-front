@@ -41,7 +41,7 @@ export const columns: ColumnDef<Task>[] = [
   {
     accessorKey: "id",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Task" />
+      <DataTableColumnHeader column={column} title="Task ID" />
     ),
     cell: ({ row }) => <div className="w-[80px]">{row.getValue("id")}</div>,
     enableSorting: false,
@@ -53,13 +53,32 @@ export const columns: ColumnDef<Task>[] = [
       <DataTableColumnHeader column={column} title="Title" />
     ),
     cell: ({ row }) => {
-      const label = labels.find((label) => label.value === row.original.label);
+      const label = labels.find((label) => label.label === row.original.label);
+
+      console.log(row)
+      // TODO: Meter un for para listar las categorias
 
       return (
         <div className="flex space-x-2">
           {label && <Badge variant="outline">{label.label}</Badge>}
           <span className="max-w-[500px] truncate font-medium">
             {row.getValue("title")}
+          </span>
+        </div>
+      );
+    },
+  },
+  {
+    accessorKey: "provider",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Provider" />
+    ),
+    cell: ({ row }) => {
+
+      return (
+        <div className="flex space-x-2">
+          <span className="max-w-[500px] truncate font-medium">
+            {row.getValue("provider")}
           </span>
         </div>
       );
@@ -79,8 +98,25 @@ export const columns: ColumnDef<Task>[] = [
         return null;
       }
 
+      let statusColor: string = "border-indigo-500/50 ";
+
+      switch (status.value) {
+        case "in progress":
+          statusColor = "border-yellow-500/50 ";
+          break;
+        case "done":
+          statusColor = "border-green-500/50 ";
+          break;
+        case "canceled":
+          statusColor = "border-red-500/50 ";
+          break;
+        default:
+          statusColor = "border-indigo-500/50 ";
+          break;
+      }
+
       return (
-        <div className="flex w-[100px] items-center">
+        <div className={"flex w-fit max-w-[120px] items-center rounded-full px-2 py-1 border " + statusColor}>
           {status.icon && (
             <status.icon className="mr-2 h-4 w-4 text-muted-foreground" />
           )}
