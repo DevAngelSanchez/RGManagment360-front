@@ -1,4 +1,4 @@
-import { z } from "zod"
+import { any, z } from "zod"
 
 // We're keeping a simple non-relational schema here.
 // IRL, you will have a schema for your data models.
@@ -33,6 +33,13 @@ export const myTaskSchema = z.object({
   userId: z.number(),
   datetimeAssigment: z.date(),
   datetimeEnd: z.date()
+})
+
+export const categorySchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  subcategories: z.array(any()),
+  users: z.array(any())
 })
 
 export type Task = z.infer<typeof taskSchema>
