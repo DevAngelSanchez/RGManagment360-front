@@ -25,7 +25,8 @@ export default async function ServicesUI() {
   const subcategoriesResult = await fetchSubcategories();
 
   const categories: Category[] = categoriesResult.data || [];
-  const subcategories: SubcategoryType[] = subcategoriesResult && subcategoriesResult.data;
+  // const subcategories: SubcategoryType[] = subcategoriesResult && subcategoriesResult?.data;
+  const subcategories: SubcategoryType[] =  subcategoriesResult?.data ?? [];
 
   return (
     <Fragment>
