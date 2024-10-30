@@ -36,7 +36,8 @@ export interface Subcategory {
   name: string;
   categoryId: number;
   mayorCategory: Category;
-  users: User[]
+  users: User[];
+  category?: string;
 }
 
 export interface Property {

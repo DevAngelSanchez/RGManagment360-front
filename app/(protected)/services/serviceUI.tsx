@@ -18,13 +18,14 @@ import DialogSubcategoryForm from "./DialogSubcategoryForm";
 import { Fragment } from "react";
 import { DataTable } from "../service-provider/tasks/components/data-table";
 import { categoryColums, subcategoryColumns } from "../service-provider/tasks/components/columns";
+import { SubcategoryType } from "../service-provider/tasks/data/schema";
 
 export default async function ServicesUI() {
   const categoriesResult = await fetchCategories();
   const subcategoriesResult = await fetchSubcategories();
 
   const categories: Category[] = categoriesResult.data || [];
-  const subcategories: Subcategory[] = subcategoriesResult.data || [];
+  const subcategories: SubcategoryType[] = subcategoriesResult && subcategoriesResult.data;
 
   return (
     <Fragment>
@@ -108,6 +109,8 @@ export default async function ServicesUI() {
               <DataTable
                 data={categories || []}
                 columns={categoryColums}
+                inputQuery="name"
+                placeholder="Filter by name..."
               />
             </div>
           </div>
@@ -126,6 +129,9 @@ export default async function ServicesUI() {
               <DataTable
                 data={subcategories || []}
                 columns={subcategoryColumns}
+                categories={categories}
+                inputQuery="name"
+                placeholder="Filter by name..."
               />
             </div>
           </div>

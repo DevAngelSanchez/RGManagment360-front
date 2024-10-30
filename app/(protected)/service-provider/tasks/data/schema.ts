@@ -42,4 +42,13 @@ export const categorySchema = z.object({
   users: z.array(any())
 })
 
+export const subcategorySchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  mayorCategory: z.object({}),
+  users: z.array(any()),
+  category: z.string(),
+})
+
 export type Task = z.infer<typeof taskSchema>
+export type SubcategoryType = z.infer<typeof subcategorySchema>

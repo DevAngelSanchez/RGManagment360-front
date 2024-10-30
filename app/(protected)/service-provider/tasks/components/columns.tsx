@@ -9,10 +9,23 @@ import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 
 import { labels, priorities, statuses } from "../data/data";
-import { Task } from "../data/schema";
+import { SubcategoryType, Task } from "../data/schema";
 import { DataTableColumnHeader } from "./data-table-column-header";
 import { DataTableRowActions } from "./data-table-row-actions";
 import { Category, Subcategory } from "@/lib/types";
+import { fetchCategories } from "@/lib/fetch";
+import { useEffect } from "react";
+
+const getCategories = async () => {
+  const response = await fetchCategories();
+  if (response) {
+    return response.data
+  } else {
+    return []
+  }
+}
+
+console.log(getCategories())
 
 export const columns: ColumnDef<Task>[] = [
   {
@@ -56,7 +69,6 @@ export const columns: ColumnDef<Task>[] = [
     cell: ({ row }) => {
       const label = labels.find((label) => label.label === row.original.label);
 
-      console.log(row)
       // TODO: Meter un for para listar las categorias
 
       return (
@@ -208,7 +220,7 @@ export const categoryColums: ColumnDef<Category>[] = [
   },
 ];
 
-export const subcategoryColumns: ColumnDef<Subcategory>[] = [
+export const subcategoryColumns: ColumnDef<SubcategoryType>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -249,15 +261,32 @@ export const subcategoryColumns: ColumnDef<Subcategory>[] = [
     },
   },
   {
-    accessorKey: "mayorCategory",
+    accessorKey: "category",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Mayor Category" />
+      <DataTableColumnHeader column={column} title="Category" />
     ),
-    cell: ({ row }) => {
+    cell: async ({ row }) => {
+
+      const categories = await getCategories();
+
+      if (!categories) {
+        console.log("Without categories")
+      }
+
+      console.log(row.getValue('category'))
+
+      const category = categories?.find(
+        (category) => category.name === row.getValue("category")
+      )
+
+      if (!category) {
+        return null
+      }
+
       return (
         <div className="flex space-x-2">
           <span className="max-w-[500px] truncate font-medium">
-            {row.original.mayorCategory.name}
+            {category.name}
           </span>
         </div>
       );

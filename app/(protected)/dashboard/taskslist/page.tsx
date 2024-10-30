@@ -40,6 +40,8 @@ export default async function TaskPage() {
               <DataTable
                 data={tasksData || []}
                 columns={columns}
+                inputQuery="title"
+                placeholder="Filter tasks..."
               />
             </div>
           </div>
