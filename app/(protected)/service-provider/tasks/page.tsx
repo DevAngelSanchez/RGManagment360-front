@@ -62,7 +62,12 @@ export default async function TaskPage() {
                   <UserNav />
                 </div>
               </div>
-              <DataTable data={tasks} columns={columns} />
+              <DataTable
+                data={tasks}
+                columns={columns}
+                inputQuery="title"
+                placeholder="Filter tasks..."
+              />
             </div>
           </Fragment>
         </section>
