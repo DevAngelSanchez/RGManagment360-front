@@ -1,4 +1,4 @@
-import { z } from "zod"
+import { any, z } from "zod"
 
 // We're keeping a simple non-relational schema here.
 // IRL, you will have a schema for your data models.
@@ -8,7 +8,24 @@ export const taskSchema = z.object({
   status: z.string(),
   label: z.string(),
   priority: z.string(),
+  provider: z.string(),
+});
+
+export const categorySchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  subcategories: z.array(any()),
+  users: z.array(any())
 })
+
+export const subcategorySchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  mayorCategory: categorySchema.optional(),
+  users: z.array(any()),
+  category: z.string(),
+})
+
 
 export const myTaskSchema = z.object({
   id: z.number(),
@@ -34,4 +51,39 @@ export const myTaskSchema = z.object({
   datetimeEnd: z.date()
 })
 
+
+export const propertySchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  address: z.string(),
+  phone: z.string(),
+  city: z.string(),
+  state: z.string(),
+  zipPostalCode: z.string(),
+  ownerId: z.string().optional(),
+})
+
+
+export const userSchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  lastname: z.string(),
+  username: z.string().optional(),
+  email: z.string(),
+  role: z.string(),
+  isActive: z.string(),
+  address: z.string().optional(),
+  phone: z.string().optional(),
+  tasks: myTaskSchema.optional(),
+  categories: categorySchema.optional(),
+  subcategories: subcategorySchema.optional(),
+  properties: propertySchema.optional(),
+  statusAccount: z.string().optional(),
+  emailVerified: z.string().optional(),
+})
+
+
+
 export type Task = z.infer<typeof taskSchema>
+export type SubcategoryType = z.infer<typeof subcategorySchema>
+export type UserType = z.infer<typeof userSchema>

@@ -11,16 +11,24 @@ import {
 
 export const labels = [
   {
-    value: "bug",
-    label: "Bug",
+    value: "jardineria",
+    label: "Jardineria",
   },
   {
-    value: "feature",
-    label: "Feature",
+    value: "electricidad",
+    label: "Electricidad",
   },
   {
-    value: "documentation",
-    label: "Documentation",
+    value: "piscinas",
+    label: "Piscinas",
+  },
+  {
+    value: "mantenimiento",
+    label: "Mantenimiento",
+  },
+  {
+    value: "plomeria",
+    label: "Plomeria",
   },
 ];
 

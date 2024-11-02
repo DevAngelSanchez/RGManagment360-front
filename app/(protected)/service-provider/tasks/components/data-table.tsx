@@ -27,15 +27,22 @@ import {
 
 import { DataTablePagination } from "./data-table-pagination"
 import { DataTableToolbar } from "./data-table-toolbar"
+import { Category } from "@/lib/types"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
+  inputQuery: string
+  placeholder: string
+  categories?: Category[]
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  inputQuery,
+  placeholder,
+  categories,
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({})
   const [columnVisibility, setColumnVisibility] =
@@ -69,7 +76,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <div className="space-y-4">
-      <DataTableToolbar table={table} />
+      <DataTableToolbar table={table} inputQuery={inputQuery} placeholder={placeholder} categories={categories} />
       <div className="rounded-md border">
         <Table>
           <TableHeader>

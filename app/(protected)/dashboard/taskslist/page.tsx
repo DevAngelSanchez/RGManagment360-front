@@ -17,6 +17,7 @@ export default async function TaskPage() {
   const tasksData = fetchResult.data?.map(item => ({
     id: item.id.toString(),
     title: item.name,
+    provider: item.taskProvider ? item.taskProvider.name : "No Provider",
     label: item.category?.name || "No Category ",
     status: item.status,
     priority: item.priority
@@ -39,6 +40,8 @@ export default async function TaskPage() {
               <DataTable
                 data={tasksData || []}
                 columns={columns}
+                inputQuery="title"
+                placeholder="Filter tasks..."
               />
             </div>
           </div>

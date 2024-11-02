@@ -14,8 +14,8 @@ import { IconPlus } from "@tabler/icons-react";
 import CreateUserForm from "./CreateUserForm";
 import { Button } from "@/components/ui/button";
 
-import { UserView } from "./userView";
 import { Skeleton } from "@/components/ui/skeleton";
+import UsersTable from "./usersTable";
 
 const ManageUsers = async () => {
 
@@ -43,7 +43,7 @@ const ManageUsers = async () => {
             </Dialog>
           </div>
           <Suspense fallback={<Skeleton />}>
-            <UserView />
+            <UsersTable />
           </Suspense>
         </section>
       </LayoutSelector>

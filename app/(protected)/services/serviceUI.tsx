@@ -16,17 +16,21 @@ import {
 import DialogCategoryForm from "./DialogCategoryForm";
 import DialogSubcategoryForm from "./DialogSubcategoryForm";
 import { Fragment } from "react";
+import { DataTable } from "../service-provider/tasks/components/data-table";
+import { categoryColums, subcategoryColumns } from "../service-provider/tasks/components/columns";
+import { SubcategoryType } from "../service-provider/tasks/data/schema";
 
 export default async function ServicesUI() {
   const categoriesResult = await fetchCategories();
   const subcategoriesResult = await fetchSubcategories();
 
   const categories: Category[] = categoriesResult.data || [];
-  const subcategories: Subcategory[] = subcategoriesResult.data || [];
+  // const subcategories: SubcategoryType[] = subcategoriesResult && subcategoriesResult?.data;
+  const subcategories: SubcategoryType[] = subcategoriesResult?.data ?? [];
 
   return (
     <Fragment>
-      <div className="flex flex-col sm:flex-row  sm:justify-between">
+      <div className="flex flex-col sm:flex-row  sm:justify-between mb-4">
         <h1 className="text-4xl font-bold mb-4">Services</h1>
         <div className="flex gap-3">
           <Dialog>
@@ -80,17 +84,49 @@ export default async function ServicesUI() {
           </Dialog>
         </div>
       </div>
-      <div className="flex flex-col items-start w-full mt-4 gap-8 mb-6 md:flex-row">
-        <div className="lg:w-2/5 xl:w-2/5 w-full">
-          <CategoryTable category={categories} />
-        </div>
-        <div className="lg:w-3/5 w-full">
-          <SubCategoryTable
-            categories={categories}
-            subcategories={subcategories}
-          />
-        </div>
-      </div>
+      <main className="w-full h-full bg-slate-50 flex flex-col md:flex-row gap-2">
+        <section className="overflow-y-auto w-full">
+          <div className="bg-white rounded-md border shadow-black/50">
+            <div className="hidden h-full flex-1 flex-col space-y-8 p-8 md:flex">
+              <div className="flex items-center justify-between space-y-2">
+                <div>
+                  <h2 className="text-2xl font-bold tracking-tight">Categories</h2>
+                  <p className="text-muted-foreground">
+                    Here&apos;s a list of all categories!
+                  </p>
+                </div>
+              </div>
+              <DataTable
+                data={categories || []}
+                columns={categoryColums}
+                inputQuery="name"
+                placeholder="Filter by name..."
+              />
+            </div>
+          </div>
+        </section>
+        <section className="overflow-y-auto w-full">
+          <div className="bg-white rounded-md border shadow-black/50">
+            <div className="hidden h-full flex-1 flex-col space-y-8 p-8 md:flex">
+              <div className="flex items-center justify-between space-y-2">
+                <div>
+                  <h2 className="text-2xl font-bold tracking-tight">Subcategories</h2>
+                  <p className="text-muted-foreground">
+                    Here&apos;s a list of all subcategories!
+                  </p>
+                </div>
+              </div>
+              <DataTable
+                data={subcategories || []}
+                columns={subcategoryColumns}
+                categories={categories}
+                inputQuery="name"
+                placeholder="Filter by name..."
+              />
+            </div>
+          </div>
+        </section>
+      </main>
     </Fragment>
   );
 }
