@@ -1,5 +1,5 @@
 "use client";
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { z } from "zod";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -26,10 +26,12 @@ import { Category, Subcategory } from "@/lib/types";
 import { EditSubcategory } from "./actions";
 import AlertComponent from "@/components/custom/alert";
 import { IconEdit } from "@tabler/icons-react";
+import { SubcategoryType } from "../service-provider/tasks/data/schema";
+import { fetchCategories } from "@/lib/fetch";
 
 interface EditSubCategoryProps {
-  categories: Category[] | null;
-  subcategory: Subcategory;
+  // categories: Category[] | null;
+  subcategory: SubcategoryType;
 }
 
 const formSchema = z.object({
@@ -39,11 +41,23 @@ const formSchema = z.object({
   parentCategoryId: z.string(),
 });
 
-export const EditFormSubCategory: FC<EditSubCategoryProps> = ({ categories, subcategory }) => {
+export const EditFormSubCategory: FC<EditSubCategoryProps> = ({ subcategory }) => {
   const router = useRouter();
 
   const [isLoading, setIsLoading] = useState(false);
   const [alert, setAlert] = useState({ title: "", description: "", type: "default", show: false });
+  const [categories, setCategories] = useState<Category[]>([])
+
+  useEffect(() => {
+    async function getCategories() {
+      const response = await fetchCategories();
+      if (response.data) {
+        return setCategories(response.data)
+      }
+    }
+
+    getCategories();
+  })
 
   function resetAlert() {
     return setAlert({ title: "", description: "", type: "default", show: false });
@@ -82,7 +96,7 @@ export const EditFormSubCategory: FC<EditSubCategoryProps> = ({ categories, subc
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: subcategory.name,
-      parentCategoryId: subcategory.mayorCategory.id.toString()
+      parentCategoryId: subcategory.mayorCategory?.id.toString()
     },
   });
 

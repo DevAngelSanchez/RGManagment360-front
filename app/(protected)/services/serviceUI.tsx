@@ -26,7 +26,7 @@ export default async function ServicesUI() {
 
   const categories: Category[] = categoriesResult.data || [];
   // const subcategories: SubcategoryType[] = subcategoriesResult && subcategoriesResult?.data;
-  const subcategories: SubcategoryType[] =  subcategoriesResult?.data ?? [];
+  const subcategories: SubcategoryType[] = subcategoriesResult?.data ?? [];
 
   return (
     <Fragment>
@@ -84,17 +84,6 @@ export default async function ServicesUI() {
           </Dialog>
         </div>
       </div>
-      {/* <div className="flex flex-col items-start w-full mt-4 gap-8 mb-6 md:flex-row">
-        <div className="lg:w-2/5 xl:w-2/5 w-full">
-          <CategoryTable category={categories} />
-        </div>
-        <div className="lg:w-3/5 w-full">
-          <SubCategoryTable
-            categories={categories}
-            subcategories={subcategories}
-          />
-        </div>
-      </div> */}
       <main className="w-full h-full bg-slate-50 flex flex-col md:flex-row gap-2">
         <section className="overflow-y-auto w-full">
           <div className="bg-white rounded-md border shadow-black/50">

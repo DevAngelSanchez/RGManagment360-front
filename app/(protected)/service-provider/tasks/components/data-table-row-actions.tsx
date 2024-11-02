@@ -29,7 +29,7 @@ interface DataTableRowActionsProps<TData> {
 export function DataTableRowActions<TData>({
   row,
 }: DataTableRowActionsProps<TData>) {
-  // const task = categorySchema.parse(row.original)
+  const task = taskSchema.parse(row.original)
 
   const statusOptions = ["todo", "in progress", "done", "canceled"];
   const priorityOptions = ["low", "medium", "high"];
@@ -62,7 +62,7 @@ export function DataTableRowActions<TData>({
           <span className="sr-only">Open menu</span>
         </Button>
       </DropdownMenuTrigger>
-      {/* <DropdownMenuContent align="end" className="w-[160px]">
+      <DropdownMenuContent align="end" className="w-[160px]">
         <DropdownMenuSub>
           <DropdownMenuSubTrigger>Edit status</DropdownMenuSubTrigger>
           <DropdownMenuSubContent>
@@ -145,7 +145,7 @@ export function DataTableRowActions<TData>({
           <IconTrash size={20} className="mr-2" />
           Delete
         </DropdownMenuItem>
-      </DropdownMenuContent> */}
+      </DropdownMenuContent>
     </DropdownMenu>
   )
 }
