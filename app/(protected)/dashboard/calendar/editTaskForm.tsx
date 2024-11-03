@@ -25,21 +25,17 @@ import {
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
 import { apiUrl } from "@/auth.config";
-import { IconEdit, IconPlus, IconTrash } from "@tabler/icons-react";
+import { IconEdit, IconTrash } from "@tabler/icons-react";
 import AlertComponent from "@/components/custom/alert";
 import { Category, Property, Subcategory, Task, User } from "@/lib/types";
 
 import { fetchCategories, fetchProperties, fetchServiceProviders, fetchSubcategories } from "@/lib/fetch";
-
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Textarea } from "@/components/ui/textarea";
-
-import type { TimePickerProps } from 'antd';
-import { TimePicker } from 'antd';
 
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { MainDatePicker } from "@/components/custom/DatePicker";
+import { SubcategoryType } from "../../service-provider/tasks/data/schema";
 
 dayjs.extend(customParseFormat);
 
@@ -75,8 +71,8 @@ export function EditTaskForm({ accessToken, selectedDate, task }: Props) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
-  const [subcategories, setSubcategories] = useState<Subcategory[]>([]);
-  const [filteredSubcategories, setFilteredSubcategories] = useState<Subcategory[]>([]);
+  const [subcategories, setSubcategories] = useState<SubcategoryType[]>([]);
+  const [filteredSubcategories, setFilteredSubcategories] = useState<SubcategoryType[]>([]);
   const [properties, setProperties] = useState<Property[]>([]);
   const [providers, setProviders] = useState<User[]>([]);
   const [priorities, setPriorities] = useState<string[]>(["low", "medium", "high"]);
