@@ -1,5 +1,4 @@
 import { CategoryTable } from "./categoryTable";
-import { SubCategoryTable } from "./subCategoryTable";
 import { Category, Subcategory } from "@/lib/types";
 import { fetchCategories, fetchSubcategories } from "@/lib/fetch";
 

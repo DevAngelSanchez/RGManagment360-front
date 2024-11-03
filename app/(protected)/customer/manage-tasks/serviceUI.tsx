@@ -1,5 +1,4 @@
 import { TaskTable } from "./TaskTable";
-import { SubCategoryTable } from "./subCategoryTable";
 import { Category, Subcategory } from "@/lib/types";
 import { fetchCategories, fetchSubcategories } from "@/lib/fetch";
 
@@ -28,7 +27,7 @@ export default async function ServicesUI() {
     <Fragment>
       <div className="flex flex-col sm:flex-row  sm:justify-between">
         <h1 className="text-4xl font-bold mb-4">Incidences</h1>
-       
+
       </div>
       <div className="flex flex-col items-start w-full mt-4 gap-8 mb-6 md:flex-row">
         <div className=" w-full">

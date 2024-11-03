@@ -31,6 +31,7 @@ import AlertComponent from "@/components/custom/alert";
 
 import { Category, Subcategory } from "@/lib/types";
 import { fetchCategories, fetchSubcategories } from "@/lib/fetch";
+import { SubcategoryType } from "../../service-provider/tasks/data/schema";
 
 const formSchema = z.object({
   name: z.string().min(3, {
@@ -65,8 +66,8 @@ const formSchema = z.object({
 export function CreateServiceProviderForm() {
   const router = useRouter();
   const [categories, setCategories] = useState<Category[]>([]);
-  const [subcategories, setSubcategories] = useState<Subcategory[]>([]);
-  const [filteredSubcategories, setFilteredSubcategories] = useState<Subcategory[]>([]);
+  const [subcategories, setSubcategories] = useState<SubcategoryType[]>([]);
+  const [filteredSubcategories, setFilteredSubcategories] = useState<SubcategoryType[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
   const [alert, setAlert] = useState({ title: "", description: "", type: "default", show: false });

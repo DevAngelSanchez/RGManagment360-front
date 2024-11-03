@@ -39,6 +39,7 @@ import { Input } from "@/components/ui/input";
 import { filterServicesProvidersSchema } from '@/lib/zodSchemas';
 import { fetchCategories, fetchSubcategories } from '@/lib/fetch';
 import { Button } from '@/components/ui/button';
+import { SubcategoryType } from '../../service-provider/tasks/data/schema';
 
 
 interface Props {
@@ -50,8 +51,8 @@ const ServiceProvidersList: React.FC<Props> = ({ serviceProviders }) => {
   const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [selectedCategoryField, setSelectedCategory] = useState<string>('');
-  const [subcategories, setSubcategories] = useState<Subcategory[]>([]);
-  const [filteredSubcategories, setFilteredSubcategories] = useState<Subcategory[]>([]);
+  const [subcategories, setSubcategories] = useState<SubcategoryType[]>([]);
+  const [filteredSubcategories, setFilteredSubcategories] = useState<SubcategoryType[]>([]);
   const [filters, setFilters] = useState({
     name: '',
     category: '',

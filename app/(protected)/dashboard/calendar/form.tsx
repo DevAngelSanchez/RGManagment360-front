@@ -41,6 +41,7 @@ import { TimePicker } from 'antd';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { MainDatePicker } from "@/components/custom/DatePicker";
+import { SubcategoryType } from "../../service-provider/tasks/data/schema";
 
 dayjs.extend(customParseFormat);
 
@@ -77,8 +78,8 @@ export function CreateTaskForm({ accessToken, selectedDate }: Props) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
-  const [subcategories, setSubcategories] = useState<Subcategory[]>([]);
-  const [filteredSubcategories, setFilteredSubcategories] = useState<Subcategory[]>([]);
+  const [subcategories, setSubcategories] = useState<SubcategoryType[]>([]);
+  const [filteredSubcategories, setFilteredSubcategories] = useState<SubcategoryType[]>([]);
   const [properties, setProperties] = useState<Property[]>([]);
   const [providers, setProviders] = useState<User[]>([]);
   const [day, setDay] = useState<Date | undefined>(selectedDate);
