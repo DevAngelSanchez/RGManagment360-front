@@ -1,3 +1,5 @@
+import { SubcategoryType } from "@/app/(protected)/service-provider/tasks/data/schema";
+
 export interface User {
   id: number;
   name: string;
@@ -27,7 +29,7 @@ export interface Supplier {
 export interface Category {
   id: number;
   name: string;
-  subcategories: Subcategory[];
+  subcategories: SubcategoryType[];
   users: User[];
 }
 
