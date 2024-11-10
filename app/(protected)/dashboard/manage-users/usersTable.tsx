@@ -4,8 +4,8 @@ import { fetchUsers } from "@/lib/fetch";
 
 import { Fragment, useEffect, useState } from "react";
 import { DataTable } from "../../service-provider/tasks/components/data-table";
-import { UserType } from "../../service-provider/tasks/data/schema";
 import { usersColumns } from "../../service-provider/tasks/components/columns";
+import { UserType } from "@/lib/schemas/userSchema";
 
 export default async function UsersTable() {
 
