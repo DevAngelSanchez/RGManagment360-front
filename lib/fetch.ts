@@ -1,6 +1,7 @@
 import { apiUrl } from "@/auth.config";
 import { Category, Property, Subcategory, Supplier, Task, User } from "./types";
-import { SubcategoryType, UserType } from "@/app/(protected)/service-provider/tasks/data/schema";
+import { SubcategoryType } from "@/app/(protected)/service-provider/tasks/data/schema";
+import { UserType } from "./schemas/userSchema";
 
 interface FetchResult<Type> {
   data?: Type;

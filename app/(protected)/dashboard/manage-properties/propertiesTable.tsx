@@ -1,136 +1,44 @@
-import * as React from "react";
+"use client"
 
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { IconTrash, IconEdit } from "@tabler/icons-react";
+import { fetchProperties, } from "@/lib/fetch";
 
-//empieza la tabla
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableFooter,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { Fragment, useEffect, useState } from "react";
+import { DataTable } from "../../service-provider/tasks/components/data-table";
+import { propertiesColumns } from "../../service-provider/tasks/components/columns";
+import { PropertyType } from "../../service-provider/tasks/data/schema";
 
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
+export default async function PropertiesTable() {
 
-import { DeletePropertyForm } from "./deleteForm";
-import { EditPropertyForm } from "./editForm";
-import { Property } from "@/lib/types";
+  const [properties, setProperties] = useState<PropertyType[]>([]);
+
+  useEffect(() => {
+    const get = async () => {
+      const response = await fetchProperties();
+      if (response.data) {
+        setProperties(response.data)
+      }
+    }
+    get();
+  }, [])
 
 
-type PropertiesTableProps = {
-  properties: Property[];
-}
-
-export const PropertiesTable: React.FC<PropertiesTableProps> = ({ properties }) => {
   return (
-    <Card className="w-full">
-      <CardHeader className="bg-green-200 rounded-t-md">
-        <CardTitle>Properties List</CardTitle>
-        <CardDescription>
-          This is a list of the registered properties.
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        {/*se renderiza la tabla*/}
-        <Table>
-          {/*  <TableCaption>A list of your users.</TableCaption> */}
-          <TableHeader>
-            <TableRow>
-              {/* <TableHead className="w-[100px]">User</TableHead> */}
-              <TableHead>Name</TableHead>
-              <TableHead>Owner</TableHead>
-              <TableHead>Phone Number</TableHead>
-              <TableHead>Address</TableHead>
-              <TableHead>City</TableHead>
-              <TableHead>State</TableHead>
-              <TableHead>Postal Code</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {properties && properties.map((value) => (
-              <TableRow key={value.id}>
-                <TableCell>{value.name}</TableCell>
-                <TableCell>{value.owner?.name}</TableCell>
-                <TableCell>{value.phone}</TableCell>
-                <TableCell>{value.address}</TableCell>
-                <TableCell>{value.city}</TableCell>
-                <TableCell>{value.state}</TableCell>
-                <TableCell>{value.zipPostalCode}</TableCell>
-                <TableCell>
-                  <div className="flex justify-between items-center">
-                    <Dialog>
-                      <DialogTrigger asChild>
-                        <Button variant="secondary" className="w-8 h-8 p-0">
-                          <IconEdit className="p-0" height={17} />
-                        </Button>
-                      </DialogTrigger>
-                      <DialogContent>
-                        <DialogHeader>
-                          <DialogTitle>Edit Property?</DialogTitle>
-                          <DialogDescription>
-                            Make the changes that you want to this property
-                          </DialogDescription>
-                        </DialogHeader>
-                        <DialogClose asChild>
-                          <EditPropertyForm property={value} />
-                        </DialogClose>
-                      </DialogContent>
-                    </Dialog>
-                    <Dialog>
-                      <DialogTrigger asChild>
-                        <Button variant="destructive" className="w-8 h-8 p-0">
-                          <IconTrash className="p-0" height={16} />
-                        </Button>
-                      </DialogTrigger>
-                      <DialogContent>
-                        <DialogHeader>
-                          <DialogTitle>Delete Property?</DialogTitle>
-                          <DialogDescription>
-                            Are you sure do you want to delete this property?
-                          </DialogDescription>
-                        </DialogHeader>
-                        <DialogClose asChild>
-                          <DeletePropertyForm id={value.id} name={value.name} />
-                        </DialogClose>
-                      </DialogContent>
-                    </Dialog>
-                  </div>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-          <TableFooter>
-            <TableRow>
-              <TableCell>Total properties</TableCell>
-              <TableCell className="text-right">
-                {properties.length} Properties
-              </TableCell>
-            </TableRow>
-          </TableFooter>
-        </Table>
-      </CardContent>
-    </Card>
+    <Fragment>
+      <main className="w-full h-full bg-slate-50 flex flex-col md:flex-row gap-2">
+        <section className="overflow-y-auto w-full">
+          <div className="bg-white rounded-md border shadow-black/50">
+            <div className="hidden h-full flex-1 flex-col space-y-8 p-8 md:flex">
+              <DataTable
+                data={properties || []}
+                columns={propertiesColumns}
+                inputQuery="name"
+                placeholder="Filter by name..."
+              />
+            </div>
+          </div>
+        </section>
+      </main>
+    </Fragment>
   );
 }
+

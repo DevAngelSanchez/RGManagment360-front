@@ -1,3 +1,4 @@
+import { userSchema } from "@/lib/schemas/userSchema";
 import { any, z } from "zod"
 
 // We're keeping a simple non-relational schema here.
@@ -64,26 +65,6 @@ export const propertySchema = z.object({
 })
 
 
-export const userSchema = z.object({
-  id: z.number(),
-  name: z.string(),
-  lastname: z.string(),
-  username: z.string().optional(),
-  email: z.string(),
-  role: z.string(),
-  isActive: z.string(),
-  address: z.string().optional(),
-  phone: z.string().optional(),
-  tasks: myTaskSchema.optional(),
-  categories: categorySchema.optional(),
-  subcategories: subcategorySchema.optional(),
-  properties: propertySchema.optional(),
-  statusAccount: z.string().optional(),
-  emailVerified: z.string().optional(),
-})
-
-
-
 export type Task = z.infer<typeof taskSchema>
 export type SubcategoryType = z.infer<typeof subcategorySchema>
-export type UserType = z.infer<typeof userSchema>
+export type PropertyType = z.infer<typeof propertySchema>

@@ -1,14 +1,11 @@
-import { PropertiesTable } from "./propertiesTable";
-import { fetchProperties } from "@/lib/fetch";
-import { Property } from "@/lib/types";
+"use client";
 
-export default async function PropertiesUI() {
-  const propertiesResult = await fetchProperties();
-  const properties: Property[] = propertiesResult.data || [];
+import PropertiesTable from "./propertiesTable";
 
+export default function PropertiesUI() {
   return (
     <div className="w-full flex flex-col gap-4 mb-6">
-      <PropertiesTable properties={properties} />
+      <PropertiesTable />
     </div>
-  )
+  );
 }
