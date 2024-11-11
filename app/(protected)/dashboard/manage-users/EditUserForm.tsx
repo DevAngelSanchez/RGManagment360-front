@@ -37,22 +37,10 @@ interface Props {
 }
 
 const formSchema = z.object({
-  name: z
+  fullname: z
     .string()
     .min(3, {
-      message: "The user name must have more than 3 characters",
-    })
-    .trim(),
-  lastname: z
-    .string()
-    .min(3, {
-      message: "The user lastname must have more than 3 characters",
-    })
-    .trim(),
-  username: z
-    .string()
-    .min(3, {
-      message: "The user nickname must have more than 3 characters",
+      message: "The user full name must have more than 3 characters",
     })
     .trim(),
   email: z
@@ -91,9 +79,7 @@ export const EditUserForm: FC<Props> = ({ user }) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: user.name,
-      lastname: user.lastname,
-      username: user.username,
+      fullname: user.fullname,
       email: user.email,
       phone: user.phone,
       address: user.address,
@@ -104,11 +90,11 @@ export const EditUserForm: FC<Props> = ({ user }) => {
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    const { name, lastname, username, email, phone, address, role, isActive } = values;
+    const { fullname, email, phone, address, role, isActive } = values;
 
     try {
       setIsLoading(true);
-      const result = await EditUser(user.id, name, lastname, username, email, phone, address, role, isActive);
+      const result = await EditUser(user.id, fullname, email, phone, address, role, isActive);
       setIsLoading(false);
       if (result.type === "error") {
         resetAlert();
@@ -140,72 +126,34 @@ export const EditUserForm: FC<Props> = ({ user }) => {
         onSubmit={form.handleSubmit(onSubmit)}
         className="space-y-4 min-w-[360px] "
       >
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
-          <div className="w-full">
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Name</FormLabel>
-                  <FormControl>
-                    <Input placeholder="John" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-          <div className="w-full">
-            <FormField
-              control={form.control}
-              name="lastname"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Lastname</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Doe" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-        </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
-          <div className="w-full">
-            <FormField
-              control={form.control}
-              name="username"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Username</FormLabel>
-                  <FormControl>
-                    <Input placeholder="JohnDoe2" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
+        <FormField
+          control={form.control}
+          name="fullname"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Full Name</FormLabel>
+              <FormControl>
+                <Input placeholder="John Doe" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-          <div className="w-full">
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Email</FormLabel>
-                  <FormControl>
-                    <Input type="email" placeholder="john@gmail.com" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-        </div>
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Email</FormLabel>
+              <FormControl>
+                <Input type="email" placeholder="john@gmail.com" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
         <FormField
           control={form.control}

@@ -34,13 +34,10 @@ import { fetchCategories, fetchSubcategories } from "@/lib/fetch";
 import { SubcategoryType } from "../../service-provider/tasks/data/schema";
 
 const formSchema = z.object({
-  name: z.string().min(3, {
+  fullname: z.string().min(3, {
     message: "Minimun 3 characters"
   }).trim(),
-  lastname: z.string().min(2, {
-    message: "Minimun 3 characters"
-  }).trim(),
-  username: z.string().min(3, {
+  companyName: z.string().min(3, {
     message: "Minimun 3 characters"
   }).trim(),
   category: z.string({
@@ -110,9 +107,8 @@ export function CreateServiceProviderForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
-      lastname: "",
-      username: "",
+      fullname: "",
+      companyName: "",
       category: "",
       subcategory: "",
       address: "",
@@ -125,11 +121,11 @@ export function CreateServiceProviderForm() {
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
 
-    const { name, lastname, username, email, password, phone, address, category, subcategory } = values;
+    const { fullname, companyName, email, password, phone, address, category, subcategory } = values;
 
     try {
       setIsLoading(true);
-      const result = await CreateServiceProvider(name, lastname, username, email, password, phone, address, category, subcategory);
+      const result = await CreateServiceProvider(fullname, companyName, email, password, phone, address, category, subcategory);
       setIsLoading(false);
       if (result.type === "error") {
         resetAlert();
@@ -163,12 +159,12 @@ export function CreateServiceProviderForm() {
             <div className="w-full">
               <FormField
                 control={form.control}
-                name="name"
+                name="fullname"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Name</FormLabel>
+                    <FormLabel>Full Name</FormLabel>
                     <FormControl>
-                      <Input placeholder="John" {...field} />
+                      <Input placeholder="John Doe" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -178,12 +174,12 @@ export function CreateServiceProviderForm() {
             <div className="w-full">
               <FormField
                 control={form.control}
-                name="lastname"
+                name="companyName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Lastname</FormLabel>
+                    <FormLabel>Company</FormLabel>
                     <FormControl>
-                      <Input placeholder="Doe" {...field} />
+                      <Input placeholder="My company" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -191,19 +187,6 @@ export function CreateServiceProviderForm() {
               />
             </div>
           </div>
-          <FormField
-            control={form.control}
-            name="username"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Username</FormLabel>
-                <FormControl>
-                  <Input placeholder="johndoe23" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
           <FormField
             control={form.control}
             name="email"

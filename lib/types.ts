@@ -2,9 +2,8 @@ import { SubcategoryType } from "@/app/(protected)/service-provider/tasks/data/s
 
 export interface User {
   id: number;
-  name: string;
-  lastname: string;
-  username?: string;
+  fullname: string;
+  companyName?: string;
   email: string;
   role: string;
   isActive: string;

@@ -3,9 +3,8 @@ import { propertySchema, myTaskSchema, categorySchema, subcategorySchema } from 
 
 export const userSchema = z.object({
   id: z.number(),
-  name: z.string(),
-  lastname: z.string(),
-  username: z.string().optional(),
+  fullname: z.string(),
+  companyName: z.string().optional(),
   email: z.string(),
   role: z.string(),
   isActive: z.string(),

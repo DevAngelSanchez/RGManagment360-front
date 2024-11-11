@@ -30,13 +30,7 @@ import AlertComponent from "@/components/custom/alert";
 import { CreateUser } from "./actions";
 
 const formSchema = z.object({
-	name: z.string().min(3, {
-		message: "Minimun 3 characters"
-	}).trim(),
-	lastname: z.string().min(3, {
-		message: "Minimun 3 characters"
-	}).trim(),
-	username: z.string().min(3, {
+	fullname: z.string().min(3, {
 		message: "Minimun 3 characters"
 	}).trim(),
 	email: z
@@ -65,9 +59,7 @@ export default function CreateUserForm() {
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
-			name: "",
-			lastname: "",
-			username: '',
+			fullname: '',
 			email: "",
 			password: "",
 			address: "",
@@ -78,9 +70,9 @@ export default function CreateUserForm() {
 
 	async function onSubmit(values: z.infer<typeof formSchema>) {
 		try {
-			const { name, lastname, username, email, password, address, phone, role } = values;
+			const { fullname, email, password, address, phone, role } = values;
 			setIsLoading(true);
-			const result = await CreateUser(name, lastname, username, email, password, address, phone, role);
+			const result = await CreateUser(fullname, email, password, address, phone, role);
 			setIsLoading(false);
 			if (result.type === "error") {
 				resetAlert();
@@ -109,71 +101,34 @@ export default function CreateUserForm() {
 	return (
 		<Form {...form}>
 			<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 min-w-[360px]">
-				<div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
-					<div className="w-full">
-						<FormField
-							control={form.control}
-							name="name"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>Name</FormLabel>
-									<FormControl>
-										<Input placeholder="John" {...field} />
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-					</div>
-					<div className="w-full">
-						<FormField
-							control={form.control}
-							name="lastname"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>Lastname</FormLabel>
-									<FormControl>
-										<Input placeholder="Doe" {...field} />
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-					</div>
-				</div>
 
-				<div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
-					<div className="w-full">
-						<FormField
-							control={form.control}
-							name="username"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>Username</FormLabel>
-									<FormControl>
-										<Input placeholder="JohnDoe2" {...field} />
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-					</div>
-					<div className="w-full">
-						<FormField
-							control={form.control}
-							name="email"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>Email</FormLabel>
-									<FormControl>
-										<Input type="email" placeholder="john@gmail.com" {...field} />
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-					</div>
-				</div>
+				<FormField
+					control={form.control}
+					name="fullname"
+					render={({ field }) => (
+						<FormItem>
+							<FormLabel>Full Name</FormLabel>
+							<FormControl>
+								<Input placeholder="John Doe" {...field} />
+							</FormControl>
+							<FormMessage />
+						</FormItem>
+					)}
+				/>
+
+				<FormField
+					control={form.control}
+					name="email"
+					render={({ field }) => (
+						<FormItem>
+							<FormLabel>Email</FormLabel>
+							<FormControl>
+								<Input type="email" placeholder="john@gmail.com" {...field} />
+							</FormControl>
+							<FormMessage />
+						</FormItem>
+					)}
+				/>
 
 				<FormField
 					control={form.control}

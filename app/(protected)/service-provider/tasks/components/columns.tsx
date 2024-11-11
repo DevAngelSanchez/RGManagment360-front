@@ -412,45 +412,15 @@ export const usersColumns: ColumnDef<UserType>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "name",
+    accessorKey: "fullname",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Name" />
+      <DataTableColumnHeader column={column} title="Full Name" />
     ),
     cell: ({ row }) => {
       return (
         <div className="flex space-x-2">
           <span className="max-w-[500px] truncate font-medium">
-            {row.getValue("name")}
-          </span>
-        </div>
-      );
-    },
-  },
-  {
-    accessorKey: "lastname",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Lastname" />
-    ),
-    cell: ({ row }) => {
-      return (
-        <div className="flex space-x-2">
-          <span className="max-w-[500px] truncate font-medium">
-            {row.getValue("lastname")}
-          </span>
-        </div>
-      );
-    },
-  },
-  {
-    accessorKey: "username",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Username" />
-    ),
-    cell: ({ row }) => {
-      return (
-        <div className="flex space-x-2">
-          <span className="max-w-[500px] truncate font-medium">
-            {row.getValue("username")}
+            {row.getValue("fullname")}
           </span>
         </div>
       );
@@ -562,9 +532,7 @@ export const usersColumns: ColumnDef<UserType>[] = [
               <DialogClose asChild>
                 <EditUserForm user={{
                   id: row.original.id,
-                  name: row.original.name,
-                  lastname: row.original.lastname,
-                  username: row.original.username,
+                  fullname: row.original.fullname,
                   email: row.original.email,
                   role: row.original.role,
                   isActive: row.original.isActive,
@@ -594,7 +562,7 @@ export const usersColumns: ColumnDef<UserType>[] = [
               <DialogClose asChild>
                 <DeleteUserForm
                   id={Number(row.original.id)}
-                  name={row.original.name}
+                  name={row.original.fullname}
                 />
               </DialogClose>
             </DialogHeader>
