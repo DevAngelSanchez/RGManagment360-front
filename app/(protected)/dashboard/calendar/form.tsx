@@ -28,15 +28,12 @@ import { useRouter } from "next/navigation";
 import { apiUrl } from "@/auth.config";
 import { IconPlus } from "@tabler/icons-react";
 import AlertComponent from "@/components/custom/alert";
-import { Category, Property, Subcategory, Task, User } from "@/lib/types";
+import { Category, Property, Task, User } from "@/lib/types";
 
 import { fetchCategories, fetchProperties, fetchServiceProviders, fetchSubcategories } from "@/lib/fetch";
 
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Textarea } from "@/components/ui/textarea";
 
-import type { TimePickerProps } from 'antd';
-import { TimePicker } from 'antd';
 
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
@@ -421,7 +418,7 @@ export function CreateTaskForm({ accessToken, selectedDate }: Props) {
                       <SelectContent>
                         {providers && providers.map(item => (
                           <SelectItem key={item?.id} value={item.id.toString() || "Invalid ID"}>
-                            {item?.name}
+                            {item?.fullname}
                           </SelectItem>
                         ))}
                       </SelectContent>

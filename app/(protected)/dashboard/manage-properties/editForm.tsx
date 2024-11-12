@@ -36,7 +36,7 @@ interface EditPropertyFormProps {
 
 interface Customer {
   id: number;
-  name: string;
+  fullname: string;
   phone: string;
   email: string;
   role: string;
@@ -252,8 +252,8 @@ export const EditPropertyForm: FC<EditPropertyFormProps> = ({ property }) => {
                     </FormControl>
                     <SelectContent>
                       {customers && customers.map((customer, index) => (
-                        <SelectItem key={index} textValue={customer.name} value={customer.id?.toString()}>
-                          {customer.name}
+                        <SelectItem key={index} textValue={customer.fullname} value={customer.id?.toString()}>
+                          {customer.fullname}
                         </SelectItem>
                       ))}
                     </SelectContent>

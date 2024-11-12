@@ -17,10 +17,10 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import { labels } from "../data/data";
+
 import { categorySchema, taskSchema } from "../data/schema"
 import { apiUrl } from "@/auth.config";
-import { useRouter } from "next/navigation";
+
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>

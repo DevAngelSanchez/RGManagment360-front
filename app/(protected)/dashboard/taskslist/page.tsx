@@ -17,7 +17,7 @@ export default async function TaskPage() {
   const tasksData = fetchResult.data?.map(item => ({
     id: item.id.toString(),
     title: item.name,
-    provider: item.taskProvider ? item.taskProvider.name : "No Provider",
+    provider: item.taskProvider ? item.taskProvider.fullname : "No Provider",
     label: item.category?.name || "No Category ",
     status: item.status,
     priority: item.priority
@@ -31,7 +31,7 @@ export default async function TaskPage() {
             <div className="hidden h-full flex-1 flex-col space-y-8 p-8 md:flex">
               <div className="flex items-center justify-between space-y-2">
                 <div>
-                  <h2 className="text-2xl font-bold tracking-tight">Welcome back!</h2>
+                  <h2 className="text-2xl font-bold tracking-tight">Tasks</h2>
                   <p className="text-muted-foreground">
                     Here&apos;s a list of all tasks!
                   </p>

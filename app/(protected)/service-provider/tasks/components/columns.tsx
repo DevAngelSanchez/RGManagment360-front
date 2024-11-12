@@ -715,7 +715,7 @@ export const propertiesColumns: ColumnDef<PropertyType>[] = [
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Edit Property?</DialogTitle>
+              <DialogTitle>Edit Property</DialogTitle>
               <DialogDescription>
                 Make the changes that you want to this property
               </DialogDescription>
