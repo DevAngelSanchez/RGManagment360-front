@@ -26,6 +26,7 @@ import { DeleteUserForm } from "@/app/(protected)/dashboard/manage-users/DeleteU
 import { UserType } from "@/lib/schemas/userSchema";
 import { EditPropertyForm } from "@/app/(protected)/dashboard/manage-properties/editForm";
 import { DeletePropertyForm } from "@/app/(protected)/dashboard/manage-properties/deleteForm";
+import { useCategories } from "@/components/contexts/categoriesContext";
 
 export const columns: ColumnDef<Task>[] = [
   {
@@ -58,7 +59,7 @@ export const columns: ColumnDef<Task>[] = [
       <DataTableColumnHeader column={column} title="Task ID" />
     ),
     cell: ({ row }) => <div className="w-[80px]">{row.getValue("id")}</div>,
-    enableSorting: false,
+    enableSorting: true,
     enableHiding: false,
   },
   {
@@ -67,9 +68,8 @@ export const columns: ColumnDef<Task>[] = [
       <DataTableColumnHeader column={column} title="Title" />
     ),
     cell: ({ row }) => {
+      const categories = useCategories(); // Accede a las categorías aquí
       const label = labels.find((label) => label.label === row.original.label);
-
-      // TODO: Meter un for para listar las categorias
 
       return (
         <div className="flex space-x-2">
@@ -94,6 +94,29 @@ export const columns: ColumnDef<Task>[] = [
             {row.getValue("provider")}
           </span>
         </div>
+      );
+    },
+  },
+  {
+    accessorKey: "date",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Assigned Date" />
+    ),
+    cell: ({ row }) => {
+      const assignedDate = row.getValue("date");
+
+      // Verificamos que assignedDate sea un valor válido
+      const formattedDate =
+        assignedDate instanceof Date
+          ? assignedDate.toLocaleDateString()
+          : typeof assignedDate === "string" || typeof assignedDate === "number"
+            ? new Date(assignedDate).toLocaleDateString()
+            : "N/A";
+
+      return (
+        <span className="text-sm text-muted-foreground">
+          {formattedDate}
+        </span>
       );
     },
   },

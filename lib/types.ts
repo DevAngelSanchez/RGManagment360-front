@@ -73,8 +73,8 @@ export interface Task {
   createdById?: number;
   User?: User;
   userId?: number;
-  datetimeAssigment: Date;
-  datetimeEnd?: Date;
+  datetimeAssigment: string;
+  datetimeEnd?: string;
 }
 
 export interface Event {

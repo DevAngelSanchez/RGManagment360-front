@@ -9,7 +9,8 @@ export const taskSchema = z.object({
   status: z.string(),
   label: z.string(),
   priority: z.string(),
-  provider: z.string(),
+  date: z.string(),
+  provider: z.string().optional(),
 });
 
 export const categorySchema = z.object({

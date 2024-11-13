@@ -6,12 +6,14 @@ import {
 
 type AvatarProps = {
   name: string | null | undefined;
+  image: string | null | undefined;
 }
 
-export const UserAvatar: React.FC<AvatarProps> = ({ name }) => {
+export const UserAvatar: React.FC<AvatarProps> = ({ name, image }) => {
+  console.log("Image: ", image)
   return (
     <Avatar>
-      <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+      <AvatarImage src={image ? image : "https://github.com/shadcn.png"} alt="Profile Picture" />
       <AvatarFallback>{name}</AvatarFallback>
     </Avatar>
   )

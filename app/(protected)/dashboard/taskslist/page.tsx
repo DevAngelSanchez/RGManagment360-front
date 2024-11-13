@@ -5,6 +5,7 @@ import { columns } from "@/app/(protected)/service-provider/tasks/components/col
 import { DataTable } from "@/app/(protected)/service-provider/tasks/components/data-table"
 
 import { fetchTasks } from "@/lib/fetch";
+import { CategoriesProvider } from "@/components/contexts/categoriesContext";
 
 export const metadata: Metadata = {
   title: "Tasks",
@@ -20,6 +21,7 @@ export default async function TaskPage() {
     provider: item.taskProvider ? item.taskProvider.fullname : "No Provider",
     label: item.category?.name || "No Category ",
     status: item.status,
+    date: item.datetimeAssigment,
     priority: item.priority
   }));
 
@@ -37,12 +39,14 @@ export default async function TaskPage() {
                   </p>
                 </div>
               </div>
-              <DataTable
-                data={tasksData || []}
-                columns={columns}
-                inputQuery="title"
-                placeholder="Filter tasks..."
-              />
+              <CategoriesProvider>
+                <DataTable
+                  data={tasksData || []}
+                  columns={columns}
+                  inputQuery="title"
+                  placeholder="Filter tasks..."
+                />
+              </CategoriesProvider>
             </div>
           </div>
         </section>
