@@ -1,11 +1,11 @@
-"use client"
+"use client";
 
 import React, { useState, useEffect } from "react";
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -30,42 +30,51 @@ import { IconPlus } from "@tabler/icons-react";
 import AlertComponent from "@/components/custom/alert";
 import { Category, Property, Subcategory, Task, User } from "@/lib/types";
 
-import { fetchCategories, fetchProperties, fetchServiceProviders, fetchSubcategories } from "@/lib/fetch";
+import {
+  fetchCategories,
+  fetchProperties,
+  fetchServiceProviders,
+  fetchSubcategories,
+} from "@/lib/fetch";
 
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Textarea } from "@/components/ui/textarea";
 
-import type { TimePickerProps } from 'antd';
-import { TimePicker } from 'antd';
+import type { TimePickerProps } from "antd";
+import { TimePicker } from "antd";
 
-import dayjs from 'dayjs';
-import customParseFormat from 'dayjs/plugin/customParseFormat';
+import dayjs from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat";
 import { MainDatePicker } from "@/components/custom/DatePicker";
 import { SubcategoryType } from "../../service-provider/tasks/data/schema";
+import { CalendarTest } from "./calendartest";
 
 dayjs.extend(customParseFormat);
 
 const formSchema = z.object({
-  name: z.string().min(3, {
-    message: "The name must have more than 3 characters"
-  }).trim(),
+  name: z
+    .string()
+    .min(3, {
+      message: "The name must have more than 3 characters",
+    })
+    .trim(),
   categoryId: z.string().trim(),
   subcategoryId: z.string().trim(),
   priority: z.string({
-    message: 'Select a priority'
+    message: "Select a priority",
   }),
   propertyId: z.string({
-    message: "Select a property"
+    message: "Select a property",
   }),
   status: z.string({
-    message: 'Select a status'
+    message: "Select a status",
   }),
   taskProviderId: z.string({
-    message: 'Select a Service Provider'
+    message: "Select a Service Provider",
   }),
   datetimeAssigment: z.date(),
   datetimeEnd: z.date(),
-  observations: z.string().trim()
+  observations: z.string().trim(),
 });
 
 interface Props {
@@ -79,23 +88,46 @@ export function CreateTaskForm({ accessToken, selectedDate }: Props) {
   const [isLoading, setIsLoading] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
   const [subcategories, setSubcategories] = useState<SubcategoryType[]>([]);
-  const [filteredSubcategories, setFilteredSubcategories] = useState<SubcategoryType[]>([]);
+  const [filteredSubcategories, setFilteredSubcategories] = useState<
+    SubcategoryType[]
+  >([]);
   const [properties, setProperties] = useState<Property[]>([]);
   const [providers, setProviders] = useState<User[]>([]);
   const [day, setDay] = useState<Date | undefined>(selectedDate);
-  const [priorities, setPriorities] = useState<string[]>(["low", "medium", "high"]);
-  const [status, setStatus] = useState<string[]>(["todo", "in progress", "done", "canceled"]);
-  const [alert, setAlert] = useState({ title: "", description: "", type: "default", show: false });
+  const [priorities, setPriorities] = useState<string[]>([
+    "low",
+    "medium",
+    "high",
+  ]);
+  const [status, setStatus] = useState<string[]>([
+    "todo",
+    "in progress",
+    "done",
+    "canceled",
+  ]);
+  const [alert, setAlert] = useState({
+    title: "",
+    description: "",
+    type: "default",
+    show: false,
+  });
 
   function resetAlert() {
-    return setAlert({ title: "", description: "", type: "default", show: false });
+    return setAlert({
+      title: "",
+      description: "",
+      type: "default",
+      show: false,
+    });
   }
 
   const handleCategoryChange = (name: string, value: string) => {
     const selectedCategoryId = value;
 
     // Filtrar las subcategorías basadas en la categoría seleccionada
-    const selectedCategory = categories.find(cat => cat.id === parseInt(selectedCategoryId));
+    const selectedCategory = categories.find(
+      (cat) => cat.id === parseInt(selectedCategoryId)
+    );
 
     if (selectedCategory) {
       setFilteredSubcategories(selectedCategory.subcategories);
@@ -112,10 +144,10 @@ export function CreateTaskForm({ accessToken, selectedDate }: Props) {
       const responseServicesProviders = await fetchServiceProviders();
 
       if (responseCategories.data) {
-        setCategories(responseCategories.data)
+        setCategories(responseCategories.data);
       }
       if (responseSubcategories.data) {
-        setSubcategories(responseSubcategories.data)
+        setSubcategories(responseSubcategories.data);
         setFilteredSubcategories(responseSubcategories.data);
       }
       if (responseProperties.data) {
@@ -124,7 +156,7 @@ export function CreateTaskForm({ accessToken, selectedDate }: Props) {
       if (responseServicesProviders.data) {
         setProviders(responseServicesProviders.data);
       }
-    }
+    };
 
     getData();
   }, []);
@@ -142,7 +174,7 @@ export function CreateTaskForm({ accessToken, selectedDate }: Props) {
       taskProviderId: "",
       datetimeAssigment: new Date(),
       datetimeEnd: new Date(),
-      observations: ""
+      observations: "",
     },
   });
 
@@ -151,17 +183,30 @@ export function CreateTaskForm({ accessToken, selectedDate }: Props) {
   };
 
   const combineDateAndTime = (day: Date, time: string | string[]) => {
-    return dayjs(day).format('YYYY-MM-DD') + 'T' + time; // Combina el día y hora en formato ISO 8601
+    return dayjs(day).format("YYYY-MM-DD") + "T" + time; // Combina el día y hora en formato ISO 8601
   };
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
-
-    const { name, categoryId, subcategoryId, priority, propertyId, status, taskProviderId, observations } = values;
+    const {
+      name,
+      categoryId,
+      subcategoryId,
+      priority,
+      propertyId,
+      status,
+      taskProviderId,
+      observations,
+    } = values;
 
     if (!day) {
       resetAlert();
-      setAlert({ title: "Please select a day!", description: "You don't have selected any day.", type: "error", show: true });
+      setAlert({
+        title: "Please select a day!",
+        description: "You don't have selected any day.",
+        type: "error",
+        show: true,
+      });
       setTimeout(() => {
         resetAlert();
       }, 3000);
@@ -177,7 +222,7 @@ export function CreateTaskForm({ accessToken, selectedDate }: Props) {
       const response = await fetch(`${apiUrl}api/create-task`, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           name,
@@ -190,14 +235,19 @@ export function CreateTaskForm({ accessToken, selectedDate }: Props) {
           datetimeAssigment: combineDateAndTime(day, startTime),
           datetimeEnd: combineDateAndTime(day, endTime),
           observations,
-          accessToken
-        })
+          accessToken,
+        }),
       });
       setIsLoading(false);
 
       if (!response.ok) {
         resetAlert();
-        setAlert({ title: "Error", description: "There was a problem creating the task.", type: "error", show: true });
+        setAlert({
+          title: "Error",
+          description: "There was a problem creating the task.",
+          type: "error",
+          show: true,
+        });
         setTimeout(() => {
           resetAlert();
         }, 3000);
@@ -208,7 +258,12 @@ export function CreateTaskForm({ accessToken, selectedDate }: Props) {
 
       if (result.type === "error") {
         resetAlert();
-        setAlert({ title: result.title, description: result.msg, type: result.type, show: true });
+        setAlert({
+          title: result.title,
+          description: result.msg,
+          type: result.type,
+          show: true,
+        });
         setTimeout(() => {
           resetAlert();
         }, 3000);
@@ -217,7 +272,12 @@ export function CreateTaskForm({ accessToken, selectedDate }: Props) {
 
       resetAlert();
 
-      setAlert({ title: result.title, description: result.msg, type: result.type, show: true });
+      setAlert({
+        title: result.title,
+        description: result.msg,
+        type: result.type,
+        show: true,
+      });
 
       setTimeout(() => {
         resetAlert();
@@ -225,14 +285,18 @@ export function CreateTaskForm({ accessToken, selectedDate }: Props) {
 
       // router.refresh();
       window.location.reload();
-
     } catch (error) {
       resetAlert();
 
-      setAlert({ title: "Error!", description: "Error trying to create a new Services Provider", type: "error", show: true });
+      setAlert({
+        title: "Error!",
+        description: "Error trying to create a new Services Provider",
+        type: "error",
+        show: true,
+      });
 
       setTimeout(() => {
-        resetAlert()
+        resetAlert();
       }, 3000);
 
       return;
@@ -240,8 +304,12 @@ export function CreateTaskForm({ accessToken, selectedDate }: Props) {
   }
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2 min-w-[360px]">
+   <div className="z-0">
+     <Form {...form} >
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="space-y-2 min-w-[360px]"
+      >
         <div className="flex flex-col gap-4">
           <div className="w-full">
             <FormField
@@ -265,18 +333,22 @@ export function CreateTaskForm({ accessToken, selectedDate }: Props) {
               render={({ field }) => (
                 <FormItem className="">
                   <FormLabel>Select Property</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder="Select a Property" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {properties && properties.map(item => (
-                        <SelectItem key={item.id} value={item.id.toString()}>
-                          {item.name}
-                        </SelectItem>
-                      ))}
+                      {properties &&
+                        properties.map((item) => (
+                          <SelectItem key={item.id} value={item.id.toString()}>
+                            {item.name}
+                          </SelectItem>
+                        ))}
                     </SelectContent>
                   </Select>
                   <FormMessage />
@@ -284,9 +356,7 @@ export function CreateTaskForm({ accessToken, selectedDate }: Props) {
               )}
             />
           </div>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
-
-          </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-3"></div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
             <div className="w-full">
               <FormField
@@ -300,21 +370,23 @@ export function CreateTaskForm({ accessToken, selectedDate }: Props) {
                         field.onChange(value); // Update field with the category name
                         handleCategoryChange("category", value);
                       }}
-                      defaultValue={field.value}>
+                      defaultValue={field.value}
+                    >
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder="Select a Category" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {categories && categories.map(item => (
-                          <SelectItem
-                            key={item.id}
-                            value={item.id.toString()}
-                          >
-                            {item.name}
-                          </SelectItem>
-                        ))}
+                        {categories &&
+                          categories.map((item) => (
+                            <SelectItem
+                              key={item.id}
+                              value={item.id.toString()}
+                            >
+                              {item.name}
+                            </SelectItem>
+                          ))}
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -329,18 +401,25 @@ export function CreateTaskForm({ accessToken, selectedDate }: Props) {
                 render={({ field }) => (
                   <FormItem className="">
                     <FormLabel>Select a subcategory</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder="Select a Subcategory" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {filteredSubcategories && filteredSubcategories.map(item => (
-                          <SelectItem key={item.id} value={item.id.toString()}>
-                            {item.name}
-                          </SelectItem>
-                        ))}
+                        {filteredSubcategories &&
+                          filteredSubcategories.map((item) => (
+                            <SelectItem
+                              key={item.id}
+                              value={item.id.toString()}
+                            >
+                              {item.name}
+                            </SelectItem>
+                          ))}
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -357,18 +436,22 @@ export function CreateTaskForm({ accessToken, selectedDate }: Props) {
                 render={({ field }) => (
                   <FormItem className="">
                     <FormLabel>Priority</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder="Select a priority" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {priorities && priorities.map((item, index) => (
-                          <SelectItem key={index} value={item}>
-                            {item}
-                          </SelectItem>
-                        ))}
+                        {priorities &&
+                          priorities.map((item, index) => (
+                            <SelectItem key={index} value={item}>
+                              {item}
+                            </SelectItem>
+                          ))}
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -383,18 +466,22 @@ export function CreateTaskForm({ accessToken, selectedDate }: Props) {
                 render={({ field }) => (
                   <FormItem className="">
                     <FormLabel>Status</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder="Select a status" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {status && status.map((item, index) => (
-                          <SelectItem key={index} value={item}>
-                            {item}
-                          </SelectItem>
-                        ))}
+                        {status &&
+                          status.map((item, index) => (
+                            <SelectItem key={index} value={item}>
+                              {item}
+                            </SelectItem>
+                          ))}
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -412,18 +499,25 @@ export function CreateTaskForm({ accessToken, selectedDate }: Props) {
                 render={({ field }) => (
                   <FormItem className="">
                     <FormLabel>Provider</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder="Select a Provider" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {providers && providers.map(item => (
-                          <SelectItem key={item?.id} value={item.id.toString() || "Invalid ID"}>
-                            {item?.name}
-                          </SelectItem>
-                        ))}
+                        {providers &&
+                          providers.map((item) => (
+                            <SelectItem
+                              key={item?.id}
+                              value={item.id.toString() || "Invalid ID"}
+                            >
+                              {item?.name}
+                            </SelectItem>
+                          ))}
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -432,10 +526,16 @@ export function CreateTaskForm({ accessToken, selectedDate }: Props) {
               />
             </div>
 
-            <div className="w-full">
+            <div>
               <FormItem className="flex flex-col gap-2 w-full">
                 <FormLabel>Day</FormLabel>
-                <MainDatePicker selectedDate={day} onChange={handleDateChange} />
+                <div id="datepicker">
+                   <MainDatePicker
+                    selectedDate={day}
+                    onChange={handleDateChange}
+                  /> 
+                  {/* <CalendarTest /> */}
+                </div>
               </FormItem>
             </div>
           </div>
@@ -448,14 +548,16 @@ export function CreateTaskForm({ accessToken, selectedDate }: Props) {
                 <FormItem>
                   <FormLabel>Observations</FormLabel>
                   <FormControl>
-                    <Textarea placeholder="Additional task details" {...field} />
+                    <Textarea
+                      placeholder="Additional task details"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
           </div>
-
         </div>
 
         <Button className="w-full" type="submit" disabled={isLoading}>
@@ -468,13 +570,17 @@ export function CreateTaskForm({ accessToken, selectedDate }: Props) {
             </>
           )}
         </Button>
-      </form >
+      </form>
 
-      {
-        alert.show && (
-          <AlertComponent title={alert.title} msg={alert.description} type={alert.type} show={true} />
-        )
-      }
-    </Form >
-  )
+      {alert.show && (
+        <AlertComponent
+          title={alert.title}
+          msg={alert.description}
+          type={alert.type}
+          show={true}
+        />
+      )}
+    </Form>
+   </div>
+  );
 }
