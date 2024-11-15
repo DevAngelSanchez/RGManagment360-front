@@ -69,11 +69,11 @@ export const columns: ColumnDef<Task>[] = [
     ),
     cell: ({ row }) => {
       const categories = useCategories(); // Accede a las categorías aquí
-      const label = labels.find((label) => label.label === row.original.label);
+      const label = categories.find((label) => label.name === row.original.label);
 
       return (
         <div className="flex space-x-2">
-          {label && <Badge variant="outline">{label.label}</Badge>}
+          {label && <Badge variant="outline">{label.name}</Badge>}
           <span className="max-w-[500px] truncate font-medium">
             {row.getValue("title")}
           </span>

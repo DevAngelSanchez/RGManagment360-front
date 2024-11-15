@@ -43,4 +43,5 @@ export const fetchProperties = () => fetchData<Property[]>(`${apiUrl}api/propert
 export const fetchServiceProviders = () => fetchData<User[]>(`${apiUrl}api/users/by-role/SERVICE_PROVIDER`);
 export const fetchCustomers = () => fetchData<User[]>(`${apiUrl}api/users/by-role/CUSTOMER`);
 export const fetchTasks = () => fetchData<Task[]>(`${apiUrl}api/tasks`);
+export const fetchTasksByProvider = (id: number) => fetchData<Task[]>(`${apiUrl}api/tasks/${id}`);
 
