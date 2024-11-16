@@ -25,20 +25,20 @@ const ServiceProviderLayout: React.FC<DashboardLayoutProps> = async ({
 
   return (
     <div className="w-full ">
-      <Header email={session ? session.user?.email : "Username"} />
+      <Header name={session?.user.name} email={session ? session.user?.email : "Fullname"} image={session?.user.image} />
 
       <div className="flex h-screen w-full">
         <Sidebar sidebarItems={[{
           href: "/service-provider",
-          icon:  <IconCalendar />,
+          icon: <IconCalendar />,
           text: "Calendar"
         },
         {
-          href: "/service-provider/tasks",
+          href: "/service-provider/manage-tasks",
           icon: <IconChecklist />,
           text: "Tasks"
         }
-        ]}/>
+        ]} />
         {children}
       </div>
     </div>

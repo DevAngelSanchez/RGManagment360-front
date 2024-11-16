@@ -134,20 +134,20 @@ export const columns: ColumnDef<Task>[] = [
         return null;
       }
 
-      let statusColor: string = "border-indigo-500/50 ";
+      let statusColor: string = "bg-indigo-500/50 ";
 
       switch (status.value) {
         case "in progress":
-          statusColor = "border-yellow-500/50 ";
+          statusColor = "bg-yellow-500/50 ";
           break;
         case "done":
-          statusColor = "border-green-500/50 ";
+          statusColor = "bg-green-500/50 ";
           break;
         case "canceled":
-          statusColor = "border-red-500/50 ";
+          statusColor = "bg-red-500/50 ";
           break;
         default:
-          statusColor = "border-indigo-500/50 ";
+          statusColor = "bg-indigo-500/50 ";
           break;
       }
 

@@ -31,6 +31,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
           if (result.success) {
             // Si el usuario está registrado, asignamos el rol correspondiente
+            token.id = String(result.id);
             token.role = result.role;
             token.expires = Math.floor(Date.now() / 1000) + 60 * 60; // Expira en 1 hora
           } else {
@@ -48,9 +49,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       return token;
     },
     session({ session, token }) {
-      session.user.role = token.role;
-      session.user.accessToken = token.accessToken;
-      session.user.name = token.name;
+      session.user = {
+        id: String(token.id),
+        role: token.role!,
+        accessToken: token.accessToken,
+        name: token.name || "", // Manejar el caso de `undefined`
+        email: token.email || "", // Asignar un valor predeterminado
+        emailVerified: null, // Valor predeterminado si no está disponible
+      };
       return session
     },
   },

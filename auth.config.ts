@@ -34,6 +34,7 @@ export default {
         }
 
         return {
+          id: result.id,
           name: result.name,
           email: result.email,
           image: result.image,
