@@ -21,7 +21,6 @@ export default async function PropertiesTable() {
     get();
   }, [])
 
-
   return (
     <Fragment>
       <main className="w-full h-full bg-slate-50 flex flex-col md:flex-row gap-2">

@@ -26,6 +26,7 @@ import { DeleteUserForm } from "@/app/(protected)/dashboard/manage-users/DeleteU
 import { UserType } from "@/lib/schemas/userSchema";
 import { EditPropertyForm } from "@/app/(protected)/dashboard/manage-properties/editForm";
 import { DeletePropertyForm } from "@/app/(protected)/dashboard/manage-properties/deleteForm";
+import { useCategories } from "@/components/contexts/categoriesContext";
 
 export const columns: ColumnDef<Task>[] = [
   {
@@ -58,7 +59,7 @@ export const columns: ColumnDef<Task>[] = [
       <DataTableColumnHeader column={column} title="Task ID" />
     ),
     cell: ({ row }) => <div className="w-[80px]">{row.getValue("id")}</div>,
-    enableSorting: false,
+    enableSorting: true,
     enableHiding: false,
   },
   {
@@ -67,13 +68,12 @@ export const columns: ColumnDef<Task>[] = [
       <DataTableColumnHeader column={column} title="Title" />
     ),
     cell: ({ row }) => {
-      const label = labels.find((label) => label.label === row.original.label);
-
-      // TODO: Meter un for para listar las categorias
+      const categories = useCategories(); // Accede a las categorías aquí
+      const label = categories.find((label) => label.name === row.original.label);
 
       return (
         <div className="flex space-x-2">
-          {label && <Badge variant="outline">{label.label}</Badge>}
+          {label && <Badge variant="outline">{label.name}</Badge>}
           <span className="max-w-[500px] truncate font-medium">
             {row.getValue("title")}
           </span>
@@ -98,6 +98,29 @@ export const columns: ColumnDef<Task>[] = [
     },
   },
   {
+    accessorKey: "date",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Assigned Date" />
+    ),
+    cell: ({ row }) => {
+      const assignedDate = row.getValue("date");
+
+      // Verificamos que assignedDate sea un valor válido
+      const formattedDate =
+        assignedDate instanceof Date
+          ? assignedDate.toLocaleDateString()
+          : typeof assignedDate === "string" || typeof assignedDate === "number"
+            ? new Date(assignedDate).toLocaleDateString()
+            : "N/A";
+
+      return (
+        <span className="text-sm text-muted-foreground">
+          {formattedDate}
+        </span>
+      );
+    },
+  },
+  {
     accessorKey: "status",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Status" />
@@ -111,20 +134,20 @@ export const columns: ColumnDef<Task>[] = [
         return null;
       }
 
-      let statusColor: string = "border-indigo-500/50 ";
+      let statusColor: string = "bg-indigo-500/50 ";
 
       switch (status.value) {
         case "in progress":
-          statusColor = "border-yellow-500/50 ";
+          statusColor = "bg-yellow-500/50 ";
           break;
         case "done":
-          statusColor = "border-green-500/50 ";
+          statusColor = "bg-green-500/50 ";
           break;
         case "canceled":
-          statusColor = "border-red-500/50 ";
+          statusColor = "bg-red-500/50 ";
           break;
         default:
-          statusColor = "border-indigo-500/50 ";
+          statusColor = "bg-indigo-500/50 ";
           break;
       }
 
@@ -412,45 +435,15 @@ export const usersColumns: ColumnDef<UserType>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "name",
+    accessorKey: "fullname",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Name" />
+      <DataTableColumnHeader column={column} title="Full Name" />
     ),
     cell: ({ row }) => {
       return (
         <div className="flex space-x-2">
           <span className="max-w-[500px] truncate font-medium">
-            {row.getValue("name")}
-          </span>
-        </div>
-      );
-    },
-  },
-  {
-    accessorKey: "lastname",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Lastname" />
-    ),
-    cell: ({ row }) => {
-      return (
-        <div className="flex space-x-2">
-          <span className="max-w-[500px] truncate font-medium">
-            {row.getValue("lastname")}
-          </span>
-        </div>
-      );
-    },
-  },
-  {
-    accessorKey: "username",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Username" />
-    ),
-    cell: ({ row }) => {
-      return (
-        <div className="flex space-x-2">
-          <span className="max-w-[500px] truncate font-medium">
-            {row.getValue("username")}
+            {row.getValue("fullname")}
           </span>
         </div>
       );
@@ -562,9 +555,7 @@ export const usersColumns: ColumnDef<UserType>[] = [
               <DialogClose asChild>
                 <EditUserForm user={{
                   id: row.original.id,
-                  name: row.original.name,
-                  lastname: row.original.lastname,
-                  username: row.original.username,
+                  fullname: row.original.fullname,
                   email: row.original.email,
                   role: row.original.role,
                   isActive: row.original.isActive,
@@ -594,7 +585,7 @@ export const usersColumns: ColumnDef<UserType>[] = [
               <DialogClose asChild>
                 <DeleteUserForm
                   id={Number(row.original.id)}
-                  name={row.original.name}
+                  name={row.original.fullname}
                 />
               </DialogClose>
             </DialogHeader>
@@ -747,7 +738,7 @@ export const propertiesColumns: ColumnDef<PropertyType>[] = [
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Edit Property?</DialogTitle>
+              <DialogTitle>Edit Property</DialogTitle>
               <DialogDescription>
                 Make the changes that you want to this property
               </DialogDescription>

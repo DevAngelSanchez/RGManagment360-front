@@ -12,18 +12,9 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 import moment from "moment";
 import dayjs from "dayjs";
 import { apiUrl } from "@/auth.config";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+
 import "./index.css";
-import { CreateTaskForm } from "./form";
+
 
 interface Props {
   accessToken?: string;
@@ -77,7 +68,14 @@ const MyCalendar: React.FC<Props> = ({ accessToken }) => {
           }),
         });
 
+
         const data = await response.json();
+        console.log("Data: ", data)
+
+        if (data.type === 'error') {
+          alert("No events found");
+          return;
+        }
 
         const formattedEvents = data.formatedEvents.map((event: any) => ({
           ...event,

@@ -105,7 +105,7 @@ const ServiceProvidersList: React.FC<Props> = ({ serviceProviders }) => {
     const applyFilters = () => {
       const filtered = serviceProviders.filter((user) => {
         return (
-          (filters.name === '' || user.name.toLowerCase().includes(filters.name.toLowerCase())) &&
+          (filters.name === '' || user.fullname?.toLowerCase().includes(filters.name.toLowerCase())) &&
           (filters.category === '' || user.categories?.some(category => category.id === parseInt(filters.category))) &&
           (filters.subcategory === '' || user.subcategories?.some(subcategory => subcategory.id === parseInt(filters.subcategory)))
         );
@@ -256,7 +256,7 @@ const ServiceProvidersList: React.FC<Props> = ({ serviceProviders }) => {
         <ScrollArea className="h-[490px]">
           <div className='h-max pr-4'>
             {filteredUsers && filteredUsers.map(item => (
-              <DirectoryItem key={item.id} name={item.name} email={item.email} phone={item.phone} category={item.categories} subcategory={item.subcategories} />
+              <DirectoryItem key={item.id} name={item.fullname} email={item.email} phone={item.phone} category={item.categories} subcategory={item.subcategories} />
             ))}
           </div>
           <ScrollBar />

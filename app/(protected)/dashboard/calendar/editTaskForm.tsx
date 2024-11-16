@@ -437,7 +437,7 @@ export function EditTaskForm({ accessToken, selectedDate, task }: Props) {
                         <SelectContent>
                           {providers && providers.map(item => (
                             <SelectItem key={item?.id} value={item.id.toString() || "Invalid ID"}>
-                              {item?.name}
+                              {item?.fullname}
                             </SelectItem>
                           ))}
                         </SelectContent>

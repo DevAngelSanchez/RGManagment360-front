@@ -2,9 +2,8 @@ import { SubcategoryType } from "@/app/(protected)/service-provider/tasks/data/s
 
 export interface User {
   id: number;
-  name: string;
-  lastname: string;
-  username?: string;
+  fullname: string;
+  companyName?: string;
   email: string;
   role: string;
   isActive: string;
@@ -74,8 +73,8 @@ export interface Task {
   createdById?: number;
   User?: User;
   userId?: number;
-  datetimeAssigment: Date;
-  datetimeEnd?: Date;
+  datetimeAssigment: string;
+  datetimeEnd?: string;
 }
 
 export interface Event {

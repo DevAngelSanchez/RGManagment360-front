@@ -71,7 +71,7 @@ export default async function Dashboard() {
                         servicesProviders.map((item) => (
                           <DirectoryItem
                             key={item.id}
-                            name={item.name}
+                            name={item.fullname}
                             email={item.email}
                             phone={item.phone}
                           />

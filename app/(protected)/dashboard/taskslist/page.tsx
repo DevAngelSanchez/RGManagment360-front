@@ -5,6 +5,7 @@ import { columns } from "@/app/(protected)/service-provider/tasks/components/col
 import { DataTable } from "@/app/(protected)/service-provider/tasks/components/data-table"
 
 import { fetchTasks } from "@/lib/fetch";
+import { CategoriesProvider } from "@/components/contexts/categoriesContext";
 
 export const metadata: Metadata = {
   title: "Tasks",
@@ -17,9 +18,10 @@ export default async function TaskPage() {
   const tasksData = fetchResult.data?.map(item => ({
     id: item.id.toString(),
     title: item.name,
-    provider: item.taskProvider ? item.taskProvider.name : "No Provider",
+    provider: item.taskProvider ? item.taskProvider.fullname : "No Provider",
     label: item.category?.name || "No Category ",
     status: item.status,
+    date: item.datetimeAssigment,
     priority: item.priority
   }));
 
@@ -31,18 +33,20 @@ export default async function TaskPage() {
             <div className="hidden h-full flex-1 flex-col space-y-8 p-8 md:flex">
               <div className="flex items-center justify-between space-y-2">
                 <div>
-                  <h2 className="text-2xl font-bold tracking-tight">Welcome back!</h2>
+                  <h2 className="text-2xl font-bold tracking-tight">Tasks</h2>
                   <p className="text-muted-foreground">
                     Here&apos;s a list of all tasks!
                   </p>
                 </div>
               </div>
-              <DataTable
-                data={tasksData || []}
-                columns={columns}
-                inputQuery="title"
-                placeholder="Filter tasks..."
-              />
+              <CategoriesProvider>
+                <DataTable
+                  data={tasksData || []}
+                  columns={columns}
+                  inputQuery="title"
+                  placeholder="Filter tasks..."
+                />
+              </CategoriesProvider>
             </div>
           </div>
         </section>

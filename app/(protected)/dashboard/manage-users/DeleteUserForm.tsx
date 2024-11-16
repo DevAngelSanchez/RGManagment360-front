@@ -23,12 +23,12 @@ import AlertComponent from "@/components/custom/alert";
 
 const formSchema = z.object({
   id: z.number(),
-  name: z.string()
+  fullname: z.string().optional()
 });
 
 interface Props {
   id: number;
-  name: string;
+  name?: string;
 }
 
 export const DeleteUserForm: FC<Props> = ({ id, name }) => {
@@ -46,7 +46,7 @@ export const DeleteUserForm: FC<Props> = ({ id, name }) => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       id,
-      name
+      fullname: name
     },
   })
 
@@ -98,12 +98,12 @@ export const DeleteUserForm: FC<Props> = ({ id, name }) => {
         />
         <FormField
           control={form.control}
-          name="name"
+          name="fullname"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Name</FormLabel>
+              <FormLabel>Full Name</FormLabel>
               <FormControl>
-                <Input placeholder="John" disabled {...field} />
+                <Input placeholder="John Doe" disabled {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

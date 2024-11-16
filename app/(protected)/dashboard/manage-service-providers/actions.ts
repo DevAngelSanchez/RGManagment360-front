@@ -1,6 +1,6 @@
 import { apiUrl } from "@/auth.config";
 
-export async function CreateServiceProvider(name: string, lastname: string, username: string, email: string, password: string, phone: string, address: string, category: string, subcategory: string,) {
+export async function CreateServiceProvider(fullname: string, companyName: string, email: string, password: string, phone: string, address: string, category: string, subcategory: string,) {
   try {
     const result = await fetch(`${apiUrl}api/users/create-service-provider`, {
       method: "POST",
@@ -8,9 +8,8 @@ export async function CreateServiceProvider(name: string, lastname: string, user
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        name: name,
-        lastname: lastname,
-        username: username,
+        fullname: fullname,
+        companyName: companyName,
         email: email,
         password: password,
         phone: phone,

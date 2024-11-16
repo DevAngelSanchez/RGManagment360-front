@@ -32,7 +32,7 @@ import AlertComponent from "@/components/custom/alert";
 
 interface Customer {
   id: number;
-  name: string;
+  fullname: string;
   phone: string;
   email: string;
   role: string;
@@ -276,8 +276,8 @@ export function CreatePropertyForm() {
                     </FormControl>
                     <SelectContent>
                       {customers && customers.map((customer, index) => (
-                        <SelectItem key={index} textValue={customer.name} value={customer.id?.toString()}>
-                          {customer.name}
+                        <SelectItem key={index} textValue={customer.fullname} value={customer.id?.toString()}>
+                          {customer.fullname}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -287,6 +287,7 @@ export function CreatePropertyForm() {
               )}
             />
           </div>
+          {/* TODO: Hacer que el campo phone, tome el valor del phone del customer seleccionado */}
           <div className="w-full">
             <FormField
               control={form.control}

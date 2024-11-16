@@ -31,48 +31,7 @@ import EdirFormCategory from "./EditFormCategory";
 import { DeleteCategoryForm } from "./DeleteCategory";
 import { Category } from "@/lib/types";
 
-type TCategory = {
-  category: Category[] | null;
-};
-const tasks = [
-  {
-    id: "INV001",
-    service: "Electricity",
-    location: "Doral",
-    date: "10/15/2024",
-  },
-  {
-    id: "INV002",
-    service: "Gardering",
-    location: "Phoenix",
-    date: "11/20/2024",
-  },
-  {
-    id: "INV003",
-    service: "Plumbing",
-    location: "Alameda",
-    date: "10/4/2024",
-  },
-  {
-    id: "INV004",
-    service: "Floors",
-    location: "Jacksonville",
-    date: "12/1/2024",
-  },
-  {
-    id: "INV005",
-    service: "Pool",
-    location: "Oregon",
-    date: "11/30/2024",
-  },
-  {
-    id: "INV006",
-    service: "Electricity",
-    location: "Elwood",
-    date: "12/24/2024",
-  },
- 
-];
+
 export const TaskTable: FC = () => {
   return (
     <div className="flex flex-col space-y-10 md:space-y-0 md:flex-row md:space-x-10 justify-between w-full">

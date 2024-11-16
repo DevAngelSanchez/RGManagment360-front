@@ -1,6 +1,6 @@
 import { apiUrl } from "@/auth.config";
 
-export async function CreateUser(name: string, lastname: string, username: string, email: string, password: string, address: string, phone: string, role: string) {
+export async function CreateUser(fullname: string, email: string, password: string, address: string, phone: string, role: string) {
   try {
     const result = await fetch(`${apiUrl}api/users/create-user`, {
       method: "POST",
@@ -8,10 +8,8 @@ export async function CreateUser(name: string, lastname: string, username: strin
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        name,
-        lastname,
+        fullname,
         email,
-        username,
         password,
         address,
         phoneNumber: phone,
@@ -46,7 +44,7 @@ export async function DeleteUser(id: number) {
   }
 }
 
-export async function EditUser(id: number, name: string, lastname: string, username: string, email: string, phone: string, address: string, role: string, isActive: string) {
+export async function EditUser(id: number, fullname: string, email: string, phone: string, address: string, role: string, isActive: string) {
   try {
     const result = await fetch(`${apiUrl}api/users/update-user`, {
       method: "PUT",
@@ -55,9 +53,7 @@ export async function EditUser(id: number, name: string, lastname: string, usern
       },
       body: JSON.stringify({
         id: id,
-        name: name,
-        lastname: lastname,
-        username: username,
+        fullname: fullname,
         email: email,
         phone: phone,
         address: address,
