@@ -43,9 +43,7 @@ const formSchema = z.object({
   category: z.string({
     message: 'Select a category'
   }),
-  subcategory: z.string({
-    message: "Select a subcategory"
-  }),
+  subcategories: z.array(z.string()).min(1, "You must select at least one subcategory"),
   address: z.string().min(3, {
     message: "Minimun 3 characters"
   }).trim(),
@@ -110,7 +108,7 @@ export function CreateServiceProviderForm() {
       fullname: "",
       companyName: "",
       category: "",
-      subcategory: "",
+      subcategories: [],
       address: "",
       email: "",
       phone: "",
@@ -121,11 +119,11 @@ export function CreateServiceProviderForm() {
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
 
-    const { fullname, companyName, email, password, phone, address, category, subcategory } = values;
+    const { fullname, companyName, email, password, phone, address, category, subcategories } = values;
 
     try {
       setIsLoading(true);
-      const result = await CreateServiceProvider(fullname, companyName, email, password, phone, address, category, subcategory);
+      const result = await CreateServiceProvider(fullname, companyName, email, password, phone, address, category, subcategories);
       setIsLoading(false);
       if (result.type === "error") {
         resetAlert();
@@ -262,22 +260,36 @@ export function CreateServiceProviderForm() {
             <div className="w-full">
               <FormField
                 control={form.control}
-                name="subcategory"
+                name="subcategories" // Debe coincidir con el tipo definido en FormValues
                 render={({ field }) => (
-                  <FormItem className="">
-                    <FormLabel>Subcategory</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <FormItem>
+                    <FormLabel>Subcategories</FormLabel>
+                    <Select
+                      // Maneja la lógica para agregar o quitar valores
+                      onValueChange={(value) => {
+                        const currentValues = field.value || [];
+                        const newValues = currentValues.includes(value)
+                          ? currentValues.filter((item) => item !== value) // Remueve si ya está seleccionado
+                          : [...currentValues, value]; // Agrega si no está seleccionado
+                        field.onChange(newValues); // Actualiza el array
+                      }}
+                    >
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="Select a Subcategory" />
+                          <SelectValue>
+                            {field.value?.length
+                              ? field.value.join(", ") // Muestra los valores seleccionados separados por comas
+                              : "Select subcategories"}
+                          </SelectValue>
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {filteredSubcategories && filteredSubcategories.map(item => (
-                          <SelectItem key={item.id} value={item.name}>
-                            {item.name}
-                          </SelectItem>
-                        ))}
+                        {filteredSubcategories &&
+                          filteredSubcategories.map((item) => (
+                            <SelectItem key={item.id} value={item.name}>
+                              {item.name}
+                            </SelectItem>
+                          ))}
                       </SelectContent>
                     </Select>
                     <FormMessage />
