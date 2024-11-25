@@ -15,10 +15,6 @@ export default async function ServiceProvidersUI() {
       <div className="col-span-5">
         <ServiceProvidersList serviceProviders={serviceProviders} />
       </div>
-      {/* <div className="col-span-5 md:col-span-3 flex flex-col gap-2 border rounded-lg border-gray-200 shadow-md p-3">
-        <h2 className="text-xl font-semibold">Last invoices</h2>
-        <DashboardTable />
-      </div> */}
     </div>
   )
 }
