@@ -1,7 +1,5 @@
 import { promises as fs } from "fs";
 import path from "path";
-import { Metadata } from "next";
-import Image from "next/image";
 import { z } from "zod";
 import LayoutSelector from "@/components/custom/LayoutSelector";
 import { columns } from "./components/columns";
@@ -17,11 +15,8 @@ import {
 } from "@/components/ui/dialog";
 import { CreateInsidenceForm } from "./form";
 import { IconPlus } from "@tabler/icons-react";
-
-export const metadata: Metadata = {
-  title: "Tasks",
-  description: "A task and issue tracker built using Tanstack Table.",
-};
+import { auth } from "@/auth";
+import { Toaster } from "@/components/ui/toaster";
 
 // Fetch tasks from JSON file
 async function getTasks() {
@@ -62,6 +57,7 @@ export default async function TaskPage() {
           </Fragment>
         </section>
       </main>
+      <Toaster />
     </LayoutSelector>
   );
 }
@@ -84,7 +80,10 @@ function Header() {
 }
 
 // Dialog Component for Creating Incident
-function CreateIncidentDialog() {
+async function CreateIncidentDialog() {
+
+  const session = await auth();
+
   return (
     <Dialog>
       <DialogTrigger className="px-4 py-2 flex items-center gap-2 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition-all">
@@ -95,7 +94,7 @@ function CreateIncidentDialog() {
         <DialogHeader>
           <DialogTitle>Create a New Incident</DialogTitle>
         </DialogHeader>
-        <CreateInsidenceForm />
+        <CreateInsidenceForm clientId={session?.user.id} />
       </DialogContent>
     </Dialog>
   );

@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
-
+import { Toast } from "@/components/ui/toast";
 import { ChartComponent } from "@/components/custom/dashboard/Chart";
 import { DashboardTable } from "@/components/custom/dashboard/Table";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
