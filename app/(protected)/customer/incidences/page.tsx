@@ -1,10 +1,4 @@
-import { promises as fs } from "fs";
-import path from "path";
-import { z } from "zod";
 import LayoutSelector from "@/components/custom/LayoutSelector";
-import { columns } from "./components/columns";
-import { DataTable } from "./components/data-table";
-import { taskSchema } from "./data/schema";
 import { Fragment } from "react";
 import {
   Dialog,
@@ -17,28 +11,11 @@ import { CreateInsidenceForm } from "./form";
 import { IconPlus } from "@tabler/icons-react";
 import { auth } from "@/auth";
 import { Toaster } from "@/components/ui/toaster";
-
-// Fetch tasks from JSON file
-async function getTasks() {
-  try {
-    const data = await fs.readFile(
-      path.join(
-        process.cwd(),
-        "app/(protected)/service-provider/tasks/data/task.json"
-      )
-    );
-
-    const tasks = JSON.parse(data.toString());
-    return z.array(taskSchema).parse(tasks);
-  } catch (error) {
-    console.error("Error reading tasks:", error);
-    return [];
-  }
-}
+import { redirect } from "next/navigation";
+import IncidentsTable from "./incidentsTable";
 
 // Main Page Component
-export default async function TaskPage() {
-  const tasks = await getTasks();
+export default async function Page() {
 
   return (
     <LayoutSelector layout="customer">
@@ -52,7 +29,7 @@ export default async function TaskPage() {
               <Header />
 
               {/* Task Table */}
-              <DataTable data={tasks} columns={columns} />
+              <IncidentsTable />
             </div>
           </Fragment>
         </section>
@@ -69,7 +46,7 @@ function Header() {
       <div>
         <h2 className="text-2xl font-bold tracking-tight">Welcome back!</h2>
         <p className="text-muted-foreground">
-          Here's a list of your tasks for this month!
+          Here's a list of your incidents for this month!
         </p>
       </div>
       <div className="flex items-center space-x-2">
@@ -84,6 +61,12 @@ async function CreateIncidentDialog() {
 
   const session = await auth();
 
+  const userId = session?.user.id;
+
+  if (!userId) {
+    redirect("/login");
+  }
+
   return (
     <Dialog>
       <DialogTrigger className="px-4 py-2 flex items-center gap-2 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition-all">
@@ -94,7 +77,7 @@ async function CreateIncidentDialog() {
         <DialogHeader>
           <DialogTitle>Create a New Incident</DialogTitle>
         </DialogHeader>
-        <CreateInsidenceForm clientId={session?.user.id} />
+        <CreateInsidenceForm clientId={userId} />
       </DialogContent>
     </Dialog>
   );

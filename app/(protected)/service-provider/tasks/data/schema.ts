@@ -53,7 +53,6 @@ export const myTaskSchema = z.object({
   datetimeEnd: z.date()
 })
 
-
 export const propertySchema = z.object({
   id: z.number(),
   name: z.string(),
@@ -63,9 +62,53 @@ export const propertySchema = z.object({
   state: z.string(),
   zipPostalCode: z.string(),
   ownerId: z.string().optional(),
+  owner: z.object({
+    id: z.number(),
+    fullname: z.string(),
+    email: z.string(),
+    phone: z.string().nullable().optional(),
+    address: z.string().nullable().optional(),
+  }),
 })
+
+export const customerSchema = z.object({
+  id: z.number(),
+  fullname: z.string(),
+  phone: z.string().optional(),
+  address: z.string().optional(),
+  role: z.string(),
+  email: z.string().email(),
+  statusAccount: z.string(),
+});
+
+
+export const incidentSchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  description: z.string(),
+  image: z.string(),
+  property: z.object({
+    id: z.number(),
+    name: z.string(),
+    address: z.string(),
+    phone: z.string(),
+    city: z.string(),
+    state: z.string(),
+    zipPostalCode: z.string(),
+    ownerId: z.number().optional(), // Ajustado para aceptar números y opcionalidad
+  }),
+  client: z.object({
+    id: z.number(),
+    fullname: z.string(),
+    email: z.string(),
+    phone: z.string().nullable().optional(),
+    address: z.string().nullable().optional(),
+    statusAccount: z.string(),
+  }),
+});
 
 
 export type Task = z.infer<typeof taskSchema>
 export type SubcategoryType = z.infer<typeof subcategorySchema>
 export type PropertyType = z.infer<typeof propertySchema>
+export type IncidentType = z.infer<typeof incidentSchema>

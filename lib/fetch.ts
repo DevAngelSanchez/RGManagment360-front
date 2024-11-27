@@ -1,6 +1,6 @@
 import { apiUrl } from "@/auth.config";
 import { Category, Property, Subcategory, Supplier, Task, User } from "./types";
-import { SubcategoryType } from "@/app/(protected)/service-provider/tasks/data/schema";
+import { IncidentType, SubcategoryType } from "@/app/(protected)/service-provider/tasks/data/schema";
 import { UserType } from "./schemas/userSchema";
 
 interface FetchResult<Type> {
@@ -47,7 +47,7 @@ export const fetchTasksByProvider = (id: string) => {
   if (!id) {
     return null;
   }
-
   return fetchData<Task[]>(`${apiUrl}api/tasks/${id}`)
 };
+export const fetchIncidents = () => fetchData<IncidentType[]>(`${apiUrl}api/incidents`);
 

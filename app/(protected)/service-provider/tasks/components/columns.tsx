@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 
 import { labels, priorities, statuses } from "../data/data";
-import { PropertyType, SubcategoryType, Task } from "../data/schema";
+import { IncidentType, PropertyType, SubcategoryType, Task } from "../data/schema";
 import { DataTableColumnHeader } from "./data-table-column-header";
 import { DataTableRowActions } from "./data-table-row-actions";
 import { Category } from "@/lib/types";
@@ -712,7 +712,8 @@ export const propertiesColumns: ColumnDef<PropertyType>[] = [
     },
   },
   {
-    accessorKey: "ownerId",
+    accessorFn: (row) => row.owner.fullname,
+    id: "owner.fullname",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Owner" />
     ),
@@ -720,7 +721,7 @@ export const propertiesColumns: ColumnDef<PropertyType>[] = [
       return (
         <div className="flex space-x-2">
           <span className="max-w-[500px] truncate font-medium">
-            {row.getValue("ownerId")}
+            {row.getValue("owner.fullname")}
           </span>
         </div>
       );
@@ -754,6 +755,141 @@ export const propertiesColumns: ColumnDef<PropertyType>[] = [
                 zipPostalCode: row.original.zipPostalCode,
                 ownerId: row.original.ownerId,
               }} />
+            </DialogClose>
+          </DialogContent>
+        </Dialog>
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button variant="destructive" className="w-8 h-8 p-0">
+              <IconTrash className="p-0" height={16} />
+            </Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Delete Property?</DialogTitle>
+              <DialogDescription>
+                Are you sure do you want to delete this property?
+              </DialogDescription>
+            </DialogHeader>
+            <DialogClose asChild>
+              <DeletePropertyForm
+                id={Number(row.original.id)}
+                name={row.original.name}
+              />
+            </DialogClose>
+          </DialogContent>
+        </Dialog>
+      </div>
+    ),
+  },
+];
+
+export const incidentsColumns: ColumnDef<IncidentType>[] = [
+  {
+    id: "select",
+    header: ({ table }) => (
+      <Checkbox
+        checked={
+          table.getIsAllPageRowsSelected() ||
+          (table.getIsSomePageRowsSelected() && "indeterminate")
+        }
+        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+        aria-label="Select all"
+        className="translate-y-[2px]"
+      />
+    ),
+    cell: ({ row }) => (
+      <Checkbox
+        checked={row.getIsSelected()}
+        onCheckedChange={(value) => row.toggleSelected(!!value)}
+        aria-label="Select row"
+        className="translate-y-[2px]"
+      />
+    ),
+    enableSorting: false,
+    enableHiding: false,
+  },
+  {
+    accessorKey: "name",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Subject" />
+    ),
+    cell: ({ row }) => {
+      return (
+        <div className="flex space-x-2">
+          <span className="max-w-[500px] truncate font-medium">
+            {row.getValue("name")}
+          </span>
+        </div>
+      );
+    },
+  },
+  {
+    accessorKey: "description",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Problem Description" />
+    ),
+    cell: ({ row }) => {
+      return (
+        <div className="flex space-x-2">
+          <span className="max-w-[500px] truncate font-medium">
+            {row.getValue("description")}
+          </span>
+        </div>
+      );
+    },
+  },
+  {
+    accessorFn: (row) => row.property.name,
+    id: "property.name",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Property" />
+    ),
+    cell: ({ row }) => {
+      return (
+        <div className="flex space-x-2">
+          <span className="max-w-[500px] truncate font-medium">
+            {row.getValue("property.name")}
+          </span>
+        </div>
+      );
+    },
+  },
+  {
+    accessorFn: (row) => row.client.fullname,
+    id: "client.fullname",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Customer" />
+    ),
+    cell: ({ row }) => {
+      return (
+        <div className="flex space-x-2">
+          <span className="max-w-[500px] truncate font-medium">
+            {row.getValue("client.fullname")}
+          </span>
+        </div>
+      );
+    },
+  },
+  {
+    id: "actions",
+    cell: ({ row }) => (
+      <div className="flex justify-between items-center">
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button variant="secondary" className="w-8 h-8 p-0">
+              <IconEdit className="p-0" height={17} />
+            </Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Edit Property</DialogTitle>
+              <DialogDescription>
+                Make the changes that you want to this property
+              </DialogDescription>
+            </DialogHeader>
+            <DialogClose asChild>
+              Aqui va un formulario
             </DialogClose>
           </DialogContent>
         </Dialog>

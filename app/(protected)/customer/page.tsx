@@ -1,16 +1,8 @@
 import LayoutSelector from "@/components/custom/LayoutSelector";
 import { redirect } from "next/navigation";
-
 import { Suspense } from "react";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Event } from "@/lib/types";
-
 import MyCalendar from "./calendar";
-import dayjs from "dayjs";
 import { auth } from "@/auth";
-
-
-import { CreateTaskForm } from "./form";
 
 export default async function page() {
   const session = await auth();
