@@ -8,7 +8,7 @@ interface FetchResult<Type> {
   error?: string;
 }
 
-const fetchData = async <Type>(url: string): Promise<FetchResult<Type>> => {
+export const fetchData = async <Type>(url: string): Promise<FetchResult<Type>> => {
   try {
     const response = await fetch(url, {
       method: "GET",

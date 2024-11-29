@@ -4,23 +4,19 @@ import { useState, useEffect, useCallback } from "react";
 import { z } from "zod";
 import { DataTable } from "@/app/(protected)/service-provider/tasks/components/data-table";
 import { incidentsColumns } from "@/app/(protected)/service-provider/tasks/components/columns";
-import { incidentSchema, IncidentType } from "../../service-provider/tasks/data/schema";
+import { incidentSchema, IncidentType } from "@/app/(protected)/service-provider/tasks/data/schema";
 import { fetchData } from "@/lib/fetch";
 import { useToast } from "@/components/hooks/use-toast";
 import { apiUrl } from "@/auth.config";
 
-interface Props {
-  clientId: string;
-}
-
 // Main Page Component
-export default function IncidentsTable({ clientId }: Props) {
+export default function IncidentsTable() {
 
   const [incidents, setIncidents] = useState<IncidentType[]>([]);
   const { toast } = useToast();
 
   const fetchIncidents = useCallback(async () => {
-    const response = await fetchData<IncidentType[]>(`${apiUrl}api/incidents/by-client/${clientId}`);
+    const response = await fetchData<IncidentType[]>(`${apiUrl}api/incidents`);
 
     if (!response.data) {
       toast({
@@ -49,7 +45,7 @@ export default function IncidentsTable({ clientId }: Props) {
         variant: "destructive",
       });
     }
-  }, [clientId, toast]);
+  }, []);
 
   useEffect(() => {
     fetchIncidents();

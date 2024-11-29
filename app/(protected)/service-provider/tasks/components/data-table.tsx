@@ -35,6 +35,7 @@ interface DataTableProps<TData, TValue> {
   inputQuery: string
   placeholder: string
   categories?: Category[]
+  callback?: () => void;
 }
 
 export function DataTable<TData, TValue>({
@@ -43,6 +44,7 @@ export function DataTable<TData, TValue>({
   inputQuery,
   placeholder,
   categories,
+  callback,
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({})
   const [columnVisibility, setColumnVisibility] =

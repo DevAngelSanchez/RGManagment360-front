@@ -15,3 +15,21 @@ export function fileToBase64(file: File): Promise<string> {
     reader.onerror = (error) => reject(error);
   });
 }
+
+export function base64ToBlob(base64: string): Blob {
+  const [metadata, base64Data] = base64.split(",");
+  const contentType = metadata.match(/data:(.*?);base64/)?.[1] || "";
+  const binaryString = atob(base64Data); // Decodificar Base64
+  const byteArray = new Uint8Array(binaryString.length);
+
+  for (let i = 0; i < binaryString.length; i++) {
+    byteArray[i] = binaryString.charCodeAt(i);
+  }
+
+  return new Blob([byteArray], { type: contentType });
+}
+
+export function base64ToFile(base64: string, fileName: string): File {
+  const blob = base64ToBlob(base64);
+  return new File([blob], fileName, { type: blob.type });
+}

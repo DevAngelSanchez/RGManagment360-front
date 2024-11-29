@@ -2,15 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -27,43 +19,39 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/components/hooks/use-toast";
 import { Property } from "@/lib/types";
 import { apiUrl } from "@/auth.config";
 import { useRouter } from "next/navigation";
-import { IconPlus } from "@tabler/icons-react";
+import { IconEdit, IconPlus } from "@tabler/icons-react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createIncident } from "./actions";
+import { editIncident } from "../actions";
 import AlertComponent from "@/components/custom/alert";
+import { IncidentType } from "../../../service-provider/tasks/data/schema";
 
 interface Props {
-  clientId: string;
+  incident: IncidentType;
+  clientId: string | undefined;
 }
 
 const formSchema = z.object({
   subject: z.string().min(1, "Subject is required"),
   propertyId: z.string().min(1, "Property is required"),
   description: z.string().min(1, "Description is required"),
-  image: z
-    .instanceof(File)
-    .refine((file) => !file || file.size <= 5 * 1024 * 1024, {
+  image: z.union([
+    z.instanceof(File).refine((file) => file.size <= 5 * 1024 * 1024, {
       message: "The file must be less than 5MB",
-    })
-    .refine((file) => !file || ["image/jpeg", "image/png"].includes(file.type), {
+    }).refine((file) => ["image/jpeg", "image/png"].includes(file.type), {
       message: "The file must be a JPG or PNG image",
     }),
+    z.string(), // Permitir cadenas de texto para imágenes existentes
+  ]),
 });
 
-export function CreateInsidenceForm({ clientId }: Props) {
+export function EditIncidentForm({ clientId, incident }: Props) {
   const router = useRouter();
-  const [formData, setFormData] = useState({
-    subject: "",
-    propertyId: "",
-    description: "",
-    image: null as File | null,
-  });
   const [properties, setProperties] = useState<Property[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [alert, setAlert] = useState({ title: "", description: "", type: "default", show: false });
@@ -78,7 +66,7 @@ export function CreateInsidenceForm({ clientId }: Props) {
         if (!clientId) {
           toast({
             title: "Error",
-            description: "Client ID is required",
+            description: "Client ID is required. Unable to load properties for this client",
             variant: "destructive", // Estilo de error
           });
           return;
@@ -107,6 +95,7 @@ export function CreateInsidenceForm({ clientId }: Props) {
 
         // Procesar la respuesta en formato JSON
         const data = await response.json();
+        console.log("Properties: ", data)
 
         // Verificar si los datos están vacíos
         if (!data || data.length === 0) {
@@ -144,27 +133,32 @@ export function CreateInsidenceForm({ clientId }: Props) {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
       setIsLoading(true);
-      const result = await createIncident(values.subject, values.description, values.propertyId, values.image, clientId)
+      const result = await editIncident(incident.id, values.subject, values.description, values.propertyId, values.image)
       setIsLoading(false);
       if (result.type === "error") {
-        resetAlert();
-        setAlert({ title: result.title, description: result.msg, type: result.type, show: true });
-        setTimeout(() => {
-          resetAlert();
-        }, 3000);
+        toast({
+          title: result.type,
+          description: result.msg,
+          variant: "destructive",
+        });
         return null;
       }
-      setAlert({ title: result.title, description: result.msg, type: result.type, show: true });
-      setTimeout(() => {
-        resetAlert();
-      }, 3000);
-      router.refresh();
+      toast({
+        title: result.title,
+        description: result.msg,
+      });
+      window.location.reload()
     } catch (error) {
       resetAlert();
-      setAlert({ title: "Error!", description: "Error trying to create this incident", type: "error", show: true });
+      setAlert({ title: "Error!", description: "Error trying to edit this incident", type: "error", show: true });
       setTimeout(() => {
         resetAlert()
       }, 3000);
+      toast({
+        title: "Error!",
+        description: "Error trying to edit this incident",
+        variant: "destructive",
+      });
       console.log(error);
       setIsLoading(false);
       return;
@@ -174,10 +168,10 @@ export function CreateInsidenceForm({ clientId }: Props) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      subject: "",
-      description: "",
-      propertyId: "",
-      image: undefined,
+      subject: incident.name,
+      description: incident.description,
+      propertyId: incident.propertyId,
+      image: incident.image,
     },
   });
 
@@ -258,10 +252,45 @@ export function CreateInsidenceForm({ clientId }: Props) {
             <FormItem>
               <FormLabel>Upload an image</FormLabel>
               <FormControl>
-                <Input
-                  type="file"
-                  onChange={(e) => field.onChange(e.target.files?.[0])}
-                />
+                {field.value ? (
+                  <div className="relative">
+                    <img
+                      src={
+                        typeof field.value === "string"
+                          ? field.value // Para casos donde la imagen ya exista (URL)
+                          : URL.createObjectURL(field.value) // Para previsualizar nuevas imágenes
+                      }
+                      alt="Selected image"
+                      className="mb-2 h-24 w-24 object-cover rounded-lg"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => field.onChange(null)} // Limpia la imagen seleccionada
+                      className="absolute top-1 right-1 bg-red-500 text-white text-xs rounded-full p-1"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                ) : (
+                  <label
+                    htmlFor="image-upload"
+                    className="flex items-center justify-center w-64 h-40 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50"
+                  >
+                    <span className="text-gray-500">Click to select an image</span>
+                    <Input
+                      id="image-upload"
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          field.onChange(file); // Almacena el archivo seleccionado
+                        }
+                      }}
+                      className="hidden"
+                    />
+                  </label>
+                )}
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -275,17 +304,16 @@ export function CreateInsidenceForm({ clientId }: Props) {
               <span className="spinner-border animate-spin inline-block w-4 h-4 border-2 rounded-full"></span>
             ) : (
               <>
-                <IconPlus size={24} />
-                <span>Create Incident</span>
+                <IconEdit size={24} />
+                <span>Edit Incident</span>
               </>
             )}
           </Button>
         </div>
+        {alert.show && (
+          <AlertComponent title={alert.title} msg={alert.description} type={alert.type} show={true} />
+        )}
       </form>
-
-      {alert.show && (
-        <AlertComponent title={alert.title} msg={alert.description} type={alert.type} show={true} />
-      )}
     </Form>
   );
 }

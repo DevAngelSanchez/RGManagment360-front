@@ -105,6 +105,8 @@ export const incidentSchema = z.object({
     address: z.string().nullable().optional(),
     statusAccount: z.string(),
   }),
+  propertyId: z.string().optional(),
+  clientId: z.string().optional(),
 });
 
 

@@ -27,6 +27,8 @@ import { UserType } from "@/lib/schemas/userSchema";
 import { EditPropertyForm } from "@/app/(protected)/dashboard/manage-properties/editForm";
 import { DeletePropertyForm } from "@/app/(protected)/dashboard/manage-properties/deleteForm";
 import { useCategories } from "@/components/contexts/categoriesContext";
+import { EditIncidentForm } from "@/app/(protected)/customer/incidences/forms/edit";
+import { DeleteIncidentForm } from "@/app/(protected)/customer/incidences/forms/delete";
 
 export const columns: ColumnDef<Task>[] = [
   {
@@ -885,11 +887,23 @@ export const incidentsColumns: ColumnDef<IncidentType>[] = [
             <DialogHeader>
               <DialogTitle>Edit Property</DialogTitle>
               <DialogDescription>
-                Make the changes that you want to this property
+                Make the changes that you want to this incident
               </DialogDescription>
             </DialogHeader>
             <DialogClose asChild>
-              Aqui va un formulario
+              <EditIncidentForm
+                incident={{
+                  id: row.original.id,
+                  name: row.original.name,
+                  description: row.original.description,
+                  image: row.original.image,
+                  propertyId: row.original.propertyId,
+                  clientId: row.original.client.id.toString(),
+                  property: row.original.property,
+                  client: row.original.client
+                }}
+                clientId={row.original.client.id.toString()}
+              />
             </DialogClose>
           </DialogContent>
         </Dialog>
@@ -907,9 +921,10 @@ export const incidentsColumns: ColumnDef<IncidentType>[] = [
               </DialogDescription>
             </DialogHeader>
             <DialogClose asChild>
-              <DeletePropertyForm
-                id={Number(row.original.id)}
-                name={row.original.name}
+              <DeleteIncidentForm
+                incidentId={Number(row.original.id)}
+                incidentName={row.original.name}
+                propertyName={row.original.property.name}
               />
             </DialogClose>
           </DialogContent>

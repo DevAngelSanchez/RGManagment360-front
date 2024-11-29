@@ -2,7 +2,6 @@ import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { Toast } from "@/components/ui/toast";
 import { ChartComponent } from "@/components/custom/dashboard/Chart";
-import { DashboardTable } from "@/components/custom/dashboard/Table";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import LayoutSelector from "@/components/custom/LayoutSelector";
 import {
@@ -17,6 +16,7 @@ import DirectoryItem from "@/components/custom/dashboard/DirectoryItem";
 
 import { fetchServiceProviders } from "@/lib/fetch";
 import { User } from "@/lib/types";
+import IncidentsTable from "./IncidentsTable";
 
 export default async function Dashboard() {
   const session = await auth();
@@ -49,7 +49,7 @@ export default async function Dashboard() {
                   <CardTitle>Last 6 months’ data chart</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <ChartComponent />
+                  <IncidentsTable />
                 </CardContent>
               </Card>
             </div>
@@ -64,8 +64,8 @@ export default async function Dashboard() {
                     A list of the most important suppliers
                   </CardDescription>
                 </CardHeader>
-                <CardContent>
-                  <ScrollArea className="h-[490px]">
+                <CardContent className="h-full">
+                  <ScrollArea className="h-[450px]">
                     <div className="h-max pr-4">
                       {servicesProviders &&
                         servicesProviders.map((item) => (
@@ -81,17 +81,6 @@ export default async function Dashboard() {
                   </ScrollArea>
                 </CardContent>
               </Card>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-4">
-            <div className="md:col-span-1 col-span-2 gap-2 border rounded-lg border-gray-200 shadow-md p-3">
-              <h2 className="text-xl font-semibold">Last invoices</h2>
-              <DashboardTable />
-            </div>
-            <div className="md:col-span-1 col-span-2 gap-2 border rounded-lg border-gray-200 shadow-md p-3">
-              <h2 className="text-xl font-semibold">Last Employees</h2>
-              <DashboardTable />
             </div>
           </div>
         </section>

@@ -1,10 +1,10 @@
 import { apiUrl } from "@/auth.config";
 import { fileToBase64 } from "@/lib/utils";
 
-export async function createIncident(subject: string, description: string, propertyId: string, image: File, clientId: string) {
+export async function createIncident(subject: string, description: string, propertyId: string, image: File | string, clientId: string) {
   try {
 
-    const base64Image = await fileToBase64(image);
+    const base64Image = typeof image === "string" ? image : await fileToBase64(image);
 
     const result = await fetch(`${apiUrl}api/incidents/create-incident`, {
       method: "POST",
@@ -29,16 +29,22 @@ export async function createIncident(subject: string, description: string, prope
   }
 }
 
-export async function EditCategory(id: number, name: string) {
+export async function editIncident(id: string | number, subject: string, description: string, propertyId: string, image: File | string) {
   try {
-    const result = await fetch(`${apiUrl}api/incidents/update-category`, {
+
+    const base64Image = typeof image === "string" ? image : await fileToBase64(image);
+
+    const result = await fetch(`${apiUrl}api/incidents/update-incident`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
         id,
-        name
+        name: subject,
+        description,
+        propertyId,
+        image: base64Image,
       }),
     });
 
@@ -46,14 +52,14 @@ export async function EditCategory(id: number, name: string) {
 
     return data;
   } catch (error) {
-    console.log(error);
-    throw new Error("Error trying to edit this category");
+    console.error(error);
+    throw error;
   }
 }
 
-export async function DeleteCategory(id: number) {
+export async function DeleteIncident(id: number) {
   try {
-    const result = await fetch(`${apiUrl}api/incidents/delete-category`, {
+    const result = await fetch(`${apiUrl}api/incidents/delete-incident`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -66,6 +72,6 @@ export async function DeleteCategory(id: number) {
     return result.json();
   } catch (error) {
     console.log(error);
-    throw new Error("Error trying to delete this category");
+    throw new Error("Error trying to delete this Incident");
   }
 }
