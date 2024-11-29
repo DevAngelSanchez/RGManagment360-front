@@ -37,7 +37,7 @@ export default async function Page() {
                 <div>
                   <h2 className="text-2xl font-bold tracking-tight">Welcome back!</h2>
                   <p className="text-muted-foreground">
-                    Here's a list of your incidents for this month!
+                    Here&apos;s a list of your incidents for this month!
                   </p>
                 </div>
                 <div className="flex items-center space-x-2">

@@ -11,13 +11,13 @@ export const metadata: Metadata = {
 
 export default async function TaskPage() {
   const fetchResult = await fetchTasks();
-  
-    
+
+
 
   const tasksData = fetchResult.data?.map((item) => ({
     id: item.id.toString(),
     title: item.name,
-    provider: item.taskProvider ? item.taskProvider.name : "No Provider",
+    provider: item.taskProvider ? item.taskProvider.fullname : "No Provider",
     label: item.category?.name || "No Category ",
     status: item.status,
     priority: item.priority,
@@ -29,7 +29,7 @@ export default async function TaskPage() {
     address: "123 Main St, Anytown, USA",
     customerName: "Jane Doe",
     phoneNumber: "555-555-5555",
-    email: "T0k6o@example.com", 
+    email: "T0k6o@example.com",
     description: "This is a description of the property. It may include details such as size, location, and any other relevant information.",
 
   };

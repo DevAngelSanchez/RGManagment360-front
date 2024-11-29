@@ -11,13 +11,13 @@ export const metadata: Metadata = {
 
 export default async function TaskPage() {
   const fetchResult = await fetchTasks();
-  
-    
+
+
 
   const tasksData = fetchResult.data?.map((item) => ({
     id: item.id.toString(),
     title: item.name,
-    provider: item.taskProvider ? item.taskProvider.name : "No Provider",
+    provider: item.taskProvider ? item.taskProvider.fullname : "No Provider",
     label: item.category?.name || "No Category ",
     status: item.status,
     priority: item.priority,

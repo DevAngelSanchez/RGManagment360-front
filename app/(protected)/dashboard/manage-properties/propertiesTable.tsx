@@ -1,11 +1,12 @@
 "use client"
 
-import { fetchProperties, } from "@/lib/fetch";
+import { fetchData, fetchProperties, } from "@/lib/fetch";
 
 import { Fragment, useEffect, useState } from "react";
 import { DataTable } from "../../service-provider/tasks/components/data-table";
 import { propertiesColumns } from "../../service-provider/tasks/components/columns";
 import { PropertyType } from "../../service-provider/tasks/data/schema";
+import { apiUrl } from "@/auth.config";
 
 export default async function PropertiesTable() {
 
@@ -13,7 +14,7 @@ export default async function PropertiesTable() {
 
   useEffect(() => {
     const get = async () => {
-      const response = await fetchProperties();
+      const response = await fetchData<PropertyType[]>(`${apiUrl}api/properties`);
       if (response.data) {
         setProperties(response.data)
       }

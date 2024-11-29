@@ -29,6 +29,8 @@ import { DeletePropertyForm } from "@/app/(protected)/dashboard/manage-propertie
 import { useCategories } from "@/components/contexts/categoriesContext";
 import { EditIncidentForm } from "@/app/(protected)/customer/incidences/forms/edit";
 import { DeleteIncidentForm } from "@/app/(protected)/customer/incidences/forms/delete";
+import { fetchData } from "@/lib/fetch";
+import { apiUrl } from "@/auth.config";
 
 export const columns: ColumnDef<Task>[] = [
   {
@@ -69,9 +71,15 @@ export const columns: ColumnDef<Task>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Title" />
     ),
-    cell: ({ row }) => {
-      const categories = useCategories(); // Accede a las categorías aquí
-      const label = categories.find((label) => label.name === row.original.label);
+    cell: async ({ row }) => {
+      const getCategories = async () => {
+        const response = await fetchData<Category[]>(`${apiUrl}api/categories`);
+        if (response.data) {
+          return response.data;
+        }
+      }
+      const categories = await getCategories();
+      const label = categories?.find((label) => label.name === row.original.label);
 
       return (
         <div className="flex space-x-2">

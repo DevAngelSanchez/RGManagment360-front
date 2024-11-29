@@ -9,9 +9,10 @@ type Props = {
   phone?: string;
   category?: Category[];
   subcategory?: Subcategory[];
+  image?: string;
 }
 
-const DirectoryItem: React.FC<Props> = ({ name, email, phone, category, subcategory }) => {
+const DirectoryItem: React.FC<Props> = ({ name, email, phone, category, subcategory, image }) => {
 
   let mainCategory: string | undefined = ""
   let mainSubcategory: string | undefined = ""
@@ -26,7 +27,7 @@ const DirectoryItem: React.FC<Props> = ({ name, email, phone, category, subcateg
   return (
     <div className="flex items-center justify-between gap-4 mb-6 ">
       <div className="flex items-center gap-4">
-        <UserAvatar name={name} />
+        <UserAvatar name={name} image={image} />
         <div className="flex flex-col justify-center">
           <h4 className="font-semibold">{name}</h4>
           <a href={`mailto:${email}`} className="mt-2 text-xs text-gray-500 hover:text-primary transition-all">{email}</a>
