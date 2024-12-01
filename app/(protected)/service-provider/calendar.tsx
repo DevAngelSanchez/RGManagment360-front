@@ -103,32 +103,6 @@ const MyCalendar: React.FC<Props> = ({ accessToken }) => {
         onSelectSlot={handleSelectSlot}
         className="bg-white rounded-lg shadow-md"
       />
-      {/* <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogTrigger asChild></DialogTrigger>
-        <DialogContent className="bg-white rounded-lg">
-          <DialogTitle className="text-lg font-bold mb-4 px-3">
-            Add task.
-          </DialogTitle>
-          <DialogDescription>
-            <Input
-              type="text"
-              placeholder="Título del evento"
-              value={newEvent.title}
-              onChange={(e) =>
-                setNewEvent({ ...newEvent, title: e.target.value })
-              }
-              className="w-full p-2 border border-gray-300 rounded mb-4"
-            />
-            <Button
-              onClick={handleSaveEvent}
-              className="bg-green-500 text-white px-4 py-2 rounded-lg cursor-pointer"
-            >
-              Save
-            </Button>
-            <CreateTaskForm />
-          </DialogDescription>
-        </DialogContent>
-      </Dialog> */}
     </div>
   );
 };

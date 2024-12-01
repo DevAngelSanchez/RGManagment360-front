@@ -46,7 +46,7 @@ export default async function Dashboard() {
             <div className="md:col-span-3 col-span-5">
               <Card>
                 <CardHeader>
-                  <CardTitle>Last 6 months’ data chart</CardTitle>
+                  <CardTitle>Last incidents</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <IncidentsTable />
