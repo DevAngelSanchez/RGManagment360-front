@@ -533,7 +533,6 @@ export function CreateTaskForm({ accessToken, selectedDate }: Props) {
                       selectedDate={day}
                       onChange={handleDateChange}
                     />
-                    {/* <CalendarTest /> */}
                   </div>
                 </FormItem>
               </div>

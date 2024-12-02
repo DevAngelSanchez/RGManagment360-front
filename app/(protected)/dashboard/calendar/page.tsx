@@ -13,7 +13,6 @@ import {
   DialogTrigger,
   DialogHeader,
 } from "@/components/ui/dialog";
-import { CalendarTest } from "./calendartest";
 
 import { IconPlus } from "@tabler/icons-react";
 import { CreateTaskForm } from "./form";
@@ -32,27 +31,22 @@ export default async function page() {
           <div className="flex flex-col w-full gap-2 mb-6">
             <div className="flex justify-between items-center gap-2 w-full">
               <h1 className="text-4xl font-bold">Calendar</h1>
-              <CalendarTest />
-              
-                <Dialog>
-                  <DialogTrigger className="px-4 py-2 flex items-center gap-2 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition-all">
-                    <IconPlus size={24} />
-                    Add New Task
-                  </DialogTrigger>
-                  <div className="z-50">
-                  <DialogContent>
-                    <DialogHeader>
-                      <DialogTitle>Create a new task</DialogTitle>
-                      <DialogClose asChild>
-                        <CreateTaskForm
-                          accessToken={session?.user?.accessToken}
-                        />
-                      </DialogClose>
-                    </DialogHeader>
-                  </DialogContent>
-                  </div>
-                </Dialog>
-              
+              {/* <Dialog>
+                <DialogTrigger className="px-4 py-2 flex items-center gap-2 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition-all">
+                  <IconPlus size={24} />
+                  Add New Task
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Create a new task</DialogTitle>
+                    <DialogClose asChild>
+                      <CreateTaskForm
+                        accessToken={session?.user?.accessToken}
+                      />
+                    </DialogClose>
+                  </DialogHeader>
+                </DialogContent>
+              </Dialog> */}
             </div>
             <Suspense fallback="Loading Calendar...">
               <MyCalendar accessToken={session?.user?.accessToken} />
