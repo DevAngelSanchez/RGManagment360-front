@@ -26,7 +26,6 @@ import { DeleteUserForm } from "@/app/(protected)/dashboard/manage-users/DeleteU
 import { UserType } from "@/lib/schemas/userSchema";
 import { EditPropertyForm } from "@/app/(protected)/dashboard/manage-properties/editForm";
 import { DeletePropertyForm } from "@/app/(protected)/dashboard/manage-properties/deleteForm";
-import { useCategories } from "@/components/contexts/categoriesContext";
 import { EditIncidentForm } from "@/app/(protected)/customer/incidences/forms/edit";
 import { DeleteIncidentForm } from "@/app/(protected)/customer/incidences/forms/delete";
 import { fetchData } from "@/lib/fetch";

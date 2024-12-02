@@ -30,14 +30,13 @@ const ServiceProviderLayout: React.FC<DashboardLayoutProps> = async ({
       <div className="flex h-screen w-full">
         <Sidebar sidebarItems={[{
           href: "/service-provider",
+          icon: <IconHome />,
+          text: "Home"
+        }, {
+          href: "/service-provider/calendar",
           icon: <IconCalendar />,
           text: "Calendar"
         },
-        {
-          href: "/service-provider/manage-tasks",
-          icon: <IconChecklist />,
-          text: "Tasks"
-        }
         ]} />
         {children}
       </div>

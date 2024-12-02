@@ -8,10 +8,9 @@ import {
   SlotInfo,
 } from "react-big-calendar";
 import "react-big-calendar/lib/css/react-big-calendar.css";
-//import { Event } from '@/lib/types';
-import moment from "moment";
 import dayjs from "dayjs";
 import { apiUrl } from "@/auth.config";
+import { useToast } from "@/components/hooks/use-toast";
 
 import "./index.css";
 
@@ -42,6 +41,7 @@ const MyCalendar: React.FC<Props> = ({ accessToken }) => {
     start: new Date(),
     end: new Date(),
   });
+  const { toast } = useToast();
 
   const handleSelectSlot = (slotInfo: SlotInfo) => {
     setNewEvent({ ...newEvent, start: slotInfo.start, end: slotInfo.end });
@@ -73,7 +73,11 @@ const MyCalendar: React.FC<Props> = ({ accessToken }) => {
         console.log("Data: ", data)
 
         if (data.type === 'error') {
-          alert("No events found");
+          toast({
+            title: "No events found!",
+            description: "This user no have any event assigned",
+            variant: "destructive"
+          })
           return;
         }
 
