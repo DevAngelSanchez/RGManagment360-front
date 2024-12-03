@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import {
   Card,
@@ -7,6 +8,7 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import ServiceProviderBill from "./ServiceProviderBill";
 
 interface TaskProps {
   title: string;
@@ -28,6 +30,7 @@ type Props =
   | { mode: "propertie"; propertie: PropertieProps; task?: never };
 const SingularView: React.FC<Props> = ({ mode, task, propertie }) => {
   if (mode === "task" && task) {
+    const [isComplete, setIsComplete] = React.useState(false);
     return (
       <Card className=" mx-12 shadow-lg rounded-lg border border-gray-200">
         <CardHeader className="bg-gray-100 p-4 rounded-t-lg">
@@ -48,11 +51,16 @@ const SingularView: React.FC<Props> = ({ mode, task, propertie }) => {
               <span className="font-medium">Status:</span> {task.status}
             </p>
           </div>
+          <div className="mt-4">{isComplete && <ServiceProviderBill />}</div>
         </CardContent>
         <CardFooter className="bg-gray-100 p-4 flex justify-end items-center">
           <div className="flex justify-end text-end gap-2">
-            <Button variant="outline">Edit Task</Button>
-            <Button variant="destructive">Delete Task</Button>
+            <Button
+              variant={isComplete ? "outline" : "default"}
+              onClick={() => setIsComplete(!isComplete)}
+            >
+              {isComplete ? "Cancel" : "Complete Task"}
+            </Button>
           </div>
         </CardFooter>
       </Card>
@@ -77,14 +85,13 @@ const SingularView: React.FC<Props> = ({ mode, task, propertie }) => {
         </CardHeader>
         <CardContent className="p-4">
           <p className="text-gray-700">{propertie.description}</p>
-         <div className="text-sm text-gray-500 mt-2">
-         <p>Own by: {propertie.customerName}</p>
-          <p>email: {propertie.email}</p>
-          <p>phone: {propertie.phoneNumber}</p>
-         </div>
+          <div className="text-sm text-gray-500 mt-2">
+            <p>Own by: {propertie.customerName}</p>
+            <p>email: {propertie.email}</p>
+            <p>phone: {propertie.phoneNumber}</p>
+          </div>
         </CardContent>
         <CardFooter className="bg-gray-100 p-4 flex justify-end items-center">
-          
           <div className="flex justify-end text-end gap-2">
             <Button variant="outline">Edit propertie</Button>
             <Button variant="destructive">Delete propertie</Button>
