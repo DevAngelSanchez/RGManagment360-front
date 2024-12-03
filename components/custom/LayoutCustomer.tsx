@@ -7,6 +7,8 @@ import {
   IconMessagePlus,
   IconChecklist,
   IconCalendar,
+  IconFile,
+  IconHome,
 } from "@tabler/icons-react";
 
 type DashboardLayoutProps = {
@@ -20,20 +22,25 @@ const ServiceProviderLayout: React.FC<DashboardLayoutProps> = async ({
 
   return (
     <div className="w-full ">
-      <Header name={session?.user.name} email={session ? session.user?.email : "Fullname"} image={session?.user.image} />
+      <Header name={session?.user.name} email={session ? session.user?.email : "Fullname"} image={session?.user.image} role={session?.user.role} />
 
       <div className="flex h-screen w-full">
         <Sidebar
           sidebarItems={[
             {
               href: "/customer",
-              icon: <IconCalendar />,
-              text: "Calendar",
+              icon: <IconHome />,
+              text: "Home",
             },
             {
-              href: "/customer/incidences",
-              icon: <IconMessagePlus />,
-              text: "Incidences",
+              href: "/customer/tasks",
+              icon: <IconFile />,
+              text: "Tasks",
+            },
+            {
+              href: "/customer/calendar",
+              icon: <IconCalendar />,
+              text: "Calendar",
             },
           ]}
         />

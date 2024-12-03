@@ -10,9 +10,10 @@ type HeaderProps = {
   name?: string | null | undefined;
   email?: string | null | undefined;
   image?: string | null | undefined;
+  role?: string | null | undefined;
 };
 
-export default function Header({ name, email, image }: HeaderProps) {
+export default function Header({ name, email, image, role }: HeaderProps) {
 
   const handleClick = async () => {
     await signOut({
@@ -27,7 +28,10 @@ export default function Header({ name, email, image }: HeaderProps) {
         <Button variant="outline" className="p-0 rounded-full">
           <UserAvatar image={image} name={name} />
         </Button>
-        <h2 className=" text-gray-800 font-bold text-2xl">{name}</h2>
+        <div className="flex flex-col gap-0">
+          <h2 className=" text-gray-800 font-bold text-2xl">{name}</h2>
+          <p className="text-slate-700 font-semibold xl">{role}</p>
+        </div>
       </div>
       <LogoutButton handleClick={handleClick} />
     </header>

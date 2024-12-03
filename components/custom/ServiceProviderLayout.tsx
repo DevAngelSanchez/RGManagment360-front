@@ -25,7 +25,7 @@ const ServiceProviderLayout: React.FC<DashboardLayoutProps> = async ({
 
   return (
     <div className="w-full ">
-      <Header name={session?.user.name} email={session ? session.user?.email : "Fullname"} image={session?.user.image} />
+      <Header name={session?.user.name} email={session ? session.user?.email : "Fullname"} image={session?.user.image} role={session?.user.role} />
 
       <div className="flex h-screen w-full">
         <Sidebar sidebarItems={[{

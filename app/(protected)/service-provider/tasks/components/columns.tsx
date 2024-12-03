@@ -206,6 +206,197 @@ export const columns: ColumnDef<Task>[] = [
   },
 ];
 
+export const customerTaskListColumns: ColumnDef<Task>[] = [
+  {
+    id: "select",
+    header: ({ table }) => (
+      <Checkbox
+        checked={
+          table.getIsAllPageRowsSelected() ||
+          (table.getIsSomePageRowsSelected() && "indeterminate")
+        }
+        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+        aria-label="Select all"
+        className="translate-y-[2px]"
+      />
+    ),
+    cell: ({ row }) => (
+      <Checkbox
+        checked={row.getIsSelected()}
+        onCheckedChange={(value) => row.toggleSelected(!!value)}
+        aria-label="Select row"
+        className="translate-y-[2px]"
+      />
+    ),
+    enableSorting: false,
+    enableHiding: false,
+  },
+  {
+    accessorKey: "id",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Task ID" />
+    ),
+    cell: ({ row }) => <div className="w-[80px]">{row.getValue("id")}</div>,
+    enableSorting: true,
+    enableHiding: false,
+  },
+  {
+    accessorKey: "title",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Title" />
+    ),
+    cell: async ({ row }) => {
+      const getCategories = async () => {
+        const response = await fetchData<Category[]>(`${apiUrl}api/categories`);
+        if (response.data) {
+          return response.data;
+        }
+      }
+      const categories = await getCategories();
+      const label = categories?.find((label) => label.name === row.original.label);
+
+      return (
+        <div className="flex space-x-2">
+          {label && <Badge variant="outline">{label.name}</Badge>}
+          <span className="max-w-[500px] truncate font-medium">
+            {row.getValue("title")}
+          </span>
+        </div>
+      );
+    },
+  },
+  {
+    accessorKey: "property",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Property" />
+    ),
+    cell: ({ row }) => {
+
+      return (
+        <div className="flex space-x-2">
+          <span className="max-w-[500px] truncate font-medium">
+            {row.getValue("property")}
+          </span>
+        </div>
+      );
+    },
+  },
+  {
+    accessorKey: "provider",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Provider" />
+    ),
+    cell: ({ row }) => {
+
+      return (
+        <div className="flex space-x-2">
+          <span className="max-w-[500px] truncate font-medium">
+            {row.getValue("provider")}
+          </span>
+        </div>
+      );
+    },
+  },
+  {
+    accessorKey: "date",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Assigned Date" />
+    ),
+    cell: ({ row }) => {
+      const assignedDate = row.getValue("date");
+
+      // Verificamos que assignedDate sea un valor válido
+      const formattedDate =
+        assignedDate instanceof Date
+          ? assignedDate.toLocaleDateString()
+          : typeof assignedDate === "string" || typeof assignedDate === "number"
+            ? new Date(assignedDate).toLocaleDateString()
+            : "N/A";
+
+      return (
+        <span className="text-sm text-muted-foreground">
+          {formattedDate}
+        </span>
+      );
+    },
+  },
+  {
+    accessorKey: "status",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Status" />
+    ),
+    cell: ({ row }) => {
+      const status = statuses.find(
+        (status) => status.value === row.getValue("status")
+      );
+
+      if (!status) {
+        return null;
+      }
+
+      let statusColor: string = "bg-indigo-500/50 ";
+
+      switch (status.value) {
+        case "in progress":
+          statusColor = "bg-yellow-500/50 ";
+          break;
+        case "done":
+          statusColor = "bg-green-500/50 ";
+          break;
+        case "canceled":
+          statusColor = "bg-red-500/50 ";
+          break;
+        default:
+          statusColor = "bg-indigo-500/50 ";
+          break;
+      }
+
+      return (
+        <div className={"flex w-fit max-w-[120px] items-center rounded-full px-2 py-1 border " + statusColor}>
+          {status.icon && (
+            <status.icon className="mr-2 h-4 w-4 text-muted-foreground" />
+          )}
+          <span>{status.label}</span>
+        </div>
+      );
+    },
+    filterFn: (row, id, value) => {
+      return value.includes(row.getValue(id));
+    },
+  },
+  {
+    accessorKey: "priority",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Priority" />
+    ),
+    cell: ({ row }) => {
+      const priority = priorities.find(
+        (priority) => priority.value === row.getValue("priority")
+      );
+
+      if (!priority) {
+        return null;
+      }
+
+      return (
+        <div className="flex items-center">
+          {priority.icon && (
+            <priority.icon className="mr-2 h-4 w-4 text-muted-foreground" />
+          )}
+          <span>{priority.label}</span>
+        </div>
+      );
+    },
+    filterFn: (row, id, value) => {
+      return value.includes(row.getValue(id));
+    },
+  },
+  {
+    id: "actions",
+    cell: ({ row }) => <DataTableRowActions row={row} />,
+  },
+];
+
 export const categoryColums: ColumnDef<Category>[] = [
   {
     id: "select",
