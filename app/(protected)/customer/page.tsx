@@ -4,7 +4,7 @@ import { Suspense } from "react";
 import { auth } from "@/auth";
 import { Toast } from "@radix-ui/react-toast";
 import TaskDashboard from "./TaskDasboard";
-import TaskTable from "./TaskTable";
+import TaskTable from "./Tasktable";
 
 export default async function page() {
   const session = await auth();
