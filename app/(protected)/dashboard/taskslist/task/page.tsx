@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import LayoutSelector from "@/components/custom/LayoutSelector";
 
 import { fetchTasks } from "@/lib/fetch";
-import SingularView from "@/components/custom/SingularView";
+// import SingularView from "@/components/custom/SingularView";
 
 export const metadata: Metadata = {
   title: "Tasks",
@@ -37,7 +37,7 @@ export default async function TaskPage() {
       <main className="w-full h-full bg-slate-50 ">
         <section className="p-4 overflow-y-auto">
           <div>
-            <SingularView mode="task" task={task} /> {/* task={tasksData?.[0]} */}
+            {/* <SingularView mode="task" task={task} />  */}
           </div>
         </section>
       </main>
