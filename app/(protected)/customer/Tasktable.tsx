@@ -50,7 +50,7 @@ export default function TaskTable({ clientId }: Props) {
             provider: task.taskProvider ? task.taskProvider.fullname : "No Provider",
             label: task.category?.name || "No Category ",
             status: task.status,
-            date: task.datetimeAssigment,
+            date: task.datetimeAssigment || "No date",
             priority: task.priority,
             property: task.property?.name
           }));

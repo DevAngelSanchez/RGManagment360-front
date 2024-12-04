@@ -1,4 +1,3 @@
-import { TaskTable } from "./TaskTable";
 import { Category, Subcategory } from "@/lib/types";
 import { fetchCategories, fetchSubcategories } from "@/lib/fetch";
 
@@ -31,7 +30,7 @@ export default async function ServicesUI() {
       </div>
       <div className="flex flex-col items-start w-full mt-4 gap-8 mb-6 md:flex-row">
         <div className=" w-full">
-          <TaskTable />
+          {/* <TaskTable /> */}
         </div>
         {/* <div className="lg:w-3/5 w-full">
           <SubCategoryTable

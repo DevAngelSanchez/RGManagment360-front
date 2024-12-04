@@ -31,7 +31,6 @@ import AlertComponent from "@/components/custom/alert";
 import { Category, Property, Subcategory } from "@/lib/types";
 
 import { User } from "@prisma/client";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Textarea } from "@/components/ui/textarea";
 
 import type { TimePickerProps } from 'antd';
