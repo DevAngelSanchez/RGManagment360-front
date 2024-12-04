@@ -13,6 +13,15 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   },
   callbacks: {
     async jwt({ token, user, account }) {
+
+      const allowedHosts = ["www.services-flow.com", "services-flow.com"];
+      const currentHost = new URL(process.env.NEXTAUTH_URL!).hostname;
+
+      if (!allowedHosts.includes(currentHost)) {
+        console.error(`Untrusted Host: ${currentHost}`);
+        throw new Error("Untrusted Host detected. Access denied.");
+      }
+
       // Si el usuario ha iniciado sesión por primera vez
       if (user) {
         token.accessToken = user.accessToken || account?.access_token;
@@ -58,6 +67,17 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         emailVerified: null, // Valor predeterminado si no está disponible
       };
       return session
+    },
+  },
+  trustHost: true,
+  cookies: {
+    sessionToken: {
+      name: `__Secure-next-auth.session-token`,
+      options: {
+        httpOnly: true,
+        sameSite: "none", // Cambia a "none" si usas HTTPS en producción
+        secure: process.env.NODE_ENV === "production", // Solo en producción
+      },
     },
   },
   ...authConfig,
